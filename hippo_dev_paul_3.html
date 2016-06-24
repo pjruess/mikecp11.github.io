@@ -107,7 +107,6 @@
             "alias": "DATETIME"
           }
         ]
-        drawPolygon([-88.3125,34.96875]);
       };
 
       var featureCollection = {
@@ -152,6 +151,7 @@
         navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
         navigator.geolocation.watchPosition(showLocation, locationError);
       }
+      drawPolygon([-88.3125,34.96875]);
     }
 
     function locationError(error){
