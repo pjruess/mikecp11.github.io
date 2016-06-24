@@ -149,8 +149,9 @@
         
         var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210));
         var shelter = new Graphic(dest2, destSymbol2);
-        map.graphics.add(shelter);
-   
+        
+        map.addLayer(shelter);
+        
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         
