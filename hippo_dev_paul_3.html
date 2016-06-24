@@ -59,7 +59,7 @@
       zoom: 15
     });
     map.on("load", mapLoadedHandler);
-    map.on("load", drawPolygon);
+    // map.on("load", drawPolygon);
 
     function drawPolygon(location){
       var myPolygon = {"geometry":{"rings":[[[-88.3125,34.96875],[-86.4453125,34.96875],
@@ -107,6 +107,7 @@
             "alias": "DATETIME"
           }
         ]
+        drawPolygon([-88.3125,34.96875]);
       };
 
       var featureCollection = {
