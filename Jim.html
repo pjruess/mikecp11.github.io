@@ -23,8 +23,8 @@
             //This event is called when the DOM is fully loaded
             window.addEvent("domready",function(){
                 $.get( "https://mikecp11.github.io/test.csv", function( data ) {
-  						$("#csvResponse").value = data;
-  						alert( "Load was performed." );
+  						$("#csvResponse").val(data);
+
 						});
             });
         </script>
