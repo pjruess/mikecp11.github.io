@@ -10,8 +10,8 @@
     <title>HIPPO</title>
 
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/fileupload.css">
+   <!-- <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/fileupload.css">-->
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
 
     <style>
@@ -73,7 +73,7 @@
 
         esriConfig.defaults.io.proxyUrl = "/proxy/";
 
-        on(dom.byId("uploadForm"), "change", function (event) {
+        /*on(dom.byId("uploadForm"), "change", function (event) {
           var fileName = event.target.value.toLowerCase();
 
           if (sniff("ie")) { //filename is full path in IE so extract the file name
@@ -86,7 +86,7 @@
           else {
             dom.byId('upload-status').innerHTML = '<p style="color:red">Add shapefile as .zip file</p>';
           }
-        });
+        });*/
 
         var map, featureLayer;
         var OBJECTID_COUNTER = 1000;
@@ -104,11 +104,14 @@
           zoom: 15
         });
         map.on("load", mapLoadedHandler);
+        //map.on("ProxyShelters.zip",generateFeatureCollection);
 
         function mapLoadedHandler(maploadEvent){
           console.log("map loaded", maploadEvent);
 
           //create a layer definition for the gps points
+
+          //test
           var layerDefinition = {
             "objectIdField": "OBJECTID",
             "trackIdField": "TrackID",
@@ -182,6 +185,8 @@
             navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
             navigator.geolocation.watchPosition(showLocation, locationError);
           }
+
+          generateFeatureCollection("ProxyShelters.zip");
         }
 
         function locationError(error){
@@ -242,23 +247,24 @@
           }
         }
         function generateFeatureCollection (fileName) {
-          var name = fileName.split(".");
+          console.log(fileName);
+          //var name = fileName.split(".");
           //Chrome and IE add c:\fakepath to the value - we need to remove it
           //See this link for more info: http://davidwalsh.name/fakepath
-          name = name[0].replace("c:\\fakepath\\", "");
+          //name = name[0].replace("c:\\fakepath\\", "");
 
-          dom.byId('upload-status').innerHTML = '<b>Loading… </b>' + name;
+          //dom.byId('upload-status').innerHTML = '<b>Loading… </b>' + name;
 
           //Define the input params for generate see the rest doc for details
           //http://www.arcgis.com/apidocs/rest/index.html?generate.html
           var params = {
-            'name': name,
+            'name': fileName,
             'targetSR': map.spatialReference,
             'maxRecordCount': 1000,
             'enforceInputFileSizeLimit': true,
             'enforceOutputJsonSizeLimit': true
           };
-
+          console.log("params created");
           //generalize features for display Here we generalize at 1:40,000 which is approx 10 meters
           //This should work well when using web mercator.
           var extent = scaleUtils.getExtentForScale(map, 40000);
@@ -268,22 +274,24 @@
           params.reducePrecision = true;
           params.numberOfDigitsAfterDecimal = 0;
 
+          console.log("Extent=",extent);
           var myContent = {
             'filetype': 'shapefile',
             'publishParameters': JSON.stringify(params),
             'f': 'json',
             'callback.html': 'textarea'
           };
-
+          console.log("WE came till here");
           //use the rest generate operation to generate a feature collection from the zipped shapefile
-          request({
+          /*request({
             url: portalUrl + '/sharing/rest/content/features/generate',
             content: myContent,
             form: dom.byId('uploadForm'),
             handleAs: 'json',
             load: lang.hitch(this, function (response) {
               if (response.error) {
-                errorHandler(response.error);
+                console.log(url);
+		errorHandler(response.error);
                 return;
               }
               var layerName = response.featureCollection.layers[0].layerDefinition.name;
@@ -291,7 +299,18 @@
               addShapefileToMap(response.featureCollection);
             }),
             error: lang.hitch(this, errorHandler)
-          });
+          });*/
+          request("fileName").then(
+              function(fileName){
+                var layerName = response.featureCollection.layers[0].layerDefinition.name;
+              dom.byId('upload-status').innerHTML = '<b>Loaded: </b>' + layerName;
+              addShapefileToMap(response.featureCollection);
+              console.log("WE came till here");
+              },
+              function(error){
+              console.log("You dead: " + error);
+              }
+              );
         }
 
         function errorHandler (error) {
@@ -325,7 +344,7 @@
           map.addLayers(layers);
           map.setExtent(fullExtent.expand(1.25), true);
 
-          dom.byId('upload-status').innerHTML = "";
+          dom.byId('upload-status').innerHTML = "ADDED THE DAMN THING";
         }
 
         function changeRenderer (layer) {
