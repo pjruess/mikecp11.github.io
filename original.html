@@ -58,7 +58,7 @@
       center: [-87.569, 33.210],
       zoom: 15
     });
-    map.on("load", mapLoadedHandler);
+    map.on("load", mapLoadedHandler, drawPolygon);
 
     function drawPolygon(location){
       var myPolygon = {"geometry":{"rings":[[[-115.3125,37.96875],[-111.4453125,37.96875],
