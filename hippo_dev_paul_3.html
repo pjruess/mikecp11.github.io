@@ -38,12 +38,14 @@
     "esri/renderers/TimeClassBreaksAger",
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleMarkerSymbol",
+    "esri/symbols/SimpleFillSymbol",
     "esri/TimeExtent",
     "dojo/domReady!"
   ], function (Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
     TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent){
 
     var map, featureLayer;
+    var polygonBarrierSymbol = new SimpleFillSymbol().setColor(new Color([255, 0, 0])).setSize(8);
     var OBJECTID_COUNTER = 1000;
     var TRACKID_COUNTER = 1;
     //onorientationchange doesn't always fire in a timely manner in Android so check for both orientationchange and resize
@@ -67,7 +69,7 @@
         "symbol":{"color":[0,0,0,64],"outline":{"color":[0,0,0,255],
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
-      var poly = new Graphic(polygon);
+      var poly = new Graphic(polygon, polygonBarrierSymbol);
 
       // featureLayer.applyEdits([poly], null, null, function (adds){
       //   map.setTimeExtent(new TimeExtent(null, new Date()));
