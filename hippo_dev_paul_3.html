@@ -45,7 +45,9 @@
     TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent){
 
     var map, featureLayer;
-    var polygonBarrierSymbol = new SimpleFillSymbol().setColor(new Color([255, 0, 0])).setSize(8);
+    var polygonBarrierSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                    new Color([112, 112, 112]), 1), new Color([136, 136, 136, 0.25]));
     var OBJECTID_COUNTER = 1000;
     var TRACKID_COUNTER = 1;
     //onorientationchange doesn't always fire in a timely manner in Android so check for both orientationchange and resize
