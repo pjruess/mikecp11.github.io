@@ -41,7 +41,7 @@
     "esri/TimeExtent",
     "dojo/domReady!"
   ], function (Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
-    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent, Polygon){
+    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent){
 
     var map, featureLayer;
     var OBJECTID_COUNTER = 1000;
@@ -67,7 +67,7 @@
         "symbol":{"color":[0,0,0,64],"outline":{"color":[0,0,0,255],
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
-      var poly = new Polygon(myPolygon);
+      var poly = new Graphic(myPolygon);
 
       featureLayer.applyEdits([poly], null, null, function (adds){
         map.setTimeExtent(new TimeExtent(null, new Date()));
