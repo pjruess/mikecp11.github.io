@@ -289,7 +289,8 @@
             handleAs: 'json',
             load: lang.hitch(this, function (response) {
               if (response.error) {
-                errorHandler(response.error);
+                console.log(url);
+		errorHandler(response.error);
                 return;
               }
               var layerName = response.featureCollection.layers[0].layerDefinition.name;
