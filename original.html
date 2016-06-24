@@ -1,171 +1,207 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no">
-    <title>HIPPO - High Inundation Proactive Prevention Operation</title>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Geolocation API</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
-    
-    <style>
-      html, body {
-        height: 100%;
-        margin: 0px;
-        padding: 0px;
-        width: 100%;
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Geolocate</title>
+
+<link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
+<style>
+  html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+  }
+
+  #map {
+    height: 100%;
+    width: 100%;
+  }
+</style>
+
+<script src="//js.arcgis.com/3.17compact/"></script>
+<script>
+  require([
+    "esri/Color",
+    "esri/geometry/Point",
+    "esri/geometry/webMercatorUtils",
+    "esri/graphic",
+    "esri/layers/FeatureLayer",
+    "esri/map",
+    "esri/renderers/SimpleRenderer",
+    "esri/renderers/TemporalRenderer",
+    "esri/renderers/TimeClassBreaksAger",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/symbols/SimpleMarkerSymbol",
+    "esri/TimeExtent",
+    "dojo/domReady!"
+  ], function (Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
+    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent){
+
+    var map, featureLayer;
+    var OBJECTID_COUNTER = 1000;
+    var TRACKID_COUNTER = 1;
+    //onorientationchange doesn't always fire in a timely manner in Android so check for both orientationchange and resize
+    var supportsOrientationChange = "onorientationchange" in window, orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
+
+    window.addEventListener(orientationEvent, function (){
+      orientationChanged();
+    }, false);
+
+    map = new Map("map", {
+      basemap: "streets",
+      center: [-87.569, 33.210],
+      zoom: 15
+    });
+    map.on("load", mapLoadedHandler);
+
+    function mapLoadedHandler(maploadEvent){
+      console.log("map loaded", maploadEvent);
+
+      //create a layer definition for the gps points
+      var layerDefinition = {
+        "objectIdField": "OBJECTID",
+        "trackIdField": "TrackID",
+        "geometryType": "esriGeometryPoint",
+        "timeInfo": {
+          "startTimeField": "DATETIME",
+          "endTimeField": null,
+          "timeExtent": [1277412330365],
+          "timeInterval": 1,
+          "timeIntervalUnits": "esriTimeUnitsMinutes"
+        },
+        "fields": [
+          {
+            "name": "OBJECTID",
+            "type": "esriFieldTypeOID",
+            "alias": "OBJECTID",
+            "sqlType": "sqlTypeOther"
+          },
+          {
+            "name": "TrackID",
+            "type": "esriFieldTypeInteger",
+            "alias": "TrackID"
+          },
+          {
+            "name": "DATETIME",
+            "type": "esriFieldTypeDate",
+            "alias": "DATETIME"
+          }
+        ]
+      };
+
+      var featureCollection = {
+        layerDefinition: layerDefinition,
+        featureSet: null
+      };
+      featureLayer = new FeatureLayer(featureCollection);
+
+      //setup a temporal renderer
+      var sms = new SimpleMarkerSymbol().setColor(new Color([255, 0, 0])).setSize(8);
+      var observationRenderer = new SimpleRenderer(sms);
+      var latestObservationRenderer = new SimpleRenderer(new SimpleMarkerSymbol());
+      var infos = [
+        {
+          minAge: 0,
+          maxAge: 1,
+          color: new Color([255, 0, 0])
+        }, {
+          minAge: 1,
+          maxAge: 5,
+          color: new Color([255, 153, 0])
+        }, {
+          minAge: 5,
+          maxAge: 10,
+          color: new Color([255, 204, 0])
+        }, {
+          minAge: 10,
+          maxAge: Infinity,
+          color: new Color([0, 0, 0, 0])
+        }
+      ];
+      var ager = new TimeClassBreaksAger(infos, TimeClassBreaksAger.UNIT_MINUTES);
+      var sls = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+        new Color([255, 0, 0]), 3);
+      var trackRenderer = new SimpleRenderer(sls);
+      var renderer = new TemporalRenderer(observationRenderer, latestObservationRenderer,
+        trackRenderer, ager);
+      featureLayer.setRenderer(renderer);
+      map.addLayer(featureLayer);
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
+        navigator.geolocation.watchPosition(showLocation, locationError);
       }
+    }
 
-     @-webkit-keyframes
-       pulse
-      {
-        0%
-        {
-          opacity: 1.0;
+    function locationError(error){
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("Location not provided");
+          break;
 
-        }
-        45%
-        {
-          opacity: .20;
+        case error.POSITION_UNAVAILABLE:
+          alert("Current location not available");
+          break;
 
-        }
-        100%
-        {
-          opacity: 1.0;
+        case error.TIMEOUT:
+          alert("Timeout");
+          break;
 
-        }
+        default:
+          alert("unknown error");
+          break;
       }
-     @-moz-keyframes
-       pulse
-      {
-        0%
-        {
-          opacity: 1.0;
-        }
-        45%
-        {
-          opacity: .20;
+    }
 
-        }
-        100%
-        {
-          opacity: 1.0;
-        }
-      }
+    function zoomToLocation(location){
+      var pt = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude,
+        location.coords.latitude));
+      map.centerAndZoom(pt, 16);
+    }
 
-      #map_graphics_layer {
-        -webkit-animation-duration: 3s;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-name: pulse;
-        -moz-animation-duration: 3s;
-        -moz-animation-iteration-count: infinite;
-        -moz-animation-name: pulse;
-      }
-    </style>
+    function showLocation(location){
+      if (location.coords.accuracy <= 500) {
+        var now = new Date();
+        var attributes = {};
+        attributes.OBJECTID = OBJECTID_COUNTER;
+        attributes.DATETIME = now.getTime();
+        attributes.TrackID = TRACKID_COUNTER;
 
-    <script src="https://js.arcgis.com/3.16compact/"> </script>
-    <script>
-      var map;
-      var graphic;
-      var currLocation;
-      var watchId;
-      require([
-        "esri/map", "esri/geometry/Point", 
-        "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol",
-        "esri/graphic", "esri/Color", "dojo/domReady!"
-      ], function(
-        Map, Point,
-        SimpleMarkerSymbol, SimpleLineSymbol,
-        Graphic, Color
-      ) {
-        map = new Map("map", {
-          basemap: "oceans",
-          center: [-85.957, 17.140],
-          zoom: 2
+        OBJECTID_COUNTER++;
+        TRACKID_COUNTER++;
+
+        var pt = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude,
+          location.coords.latitude));
+        var graphic = new Graphic(new Point(pt, map.spatialReference), null, attributes);
+
+        featureLayer.applyEdits([graphic], null, null, function (adds){
+          map.setTimeExtent(new TimeExtent(null, new Date()));
+          map.centerAt(graphic.geometry);
         });
-        map.on("load", initFunc);
+      }
+      else {
+        console.warn("Point not added due to low accuracy: " + location.coords.accuracy);
+      }
+    }
 
-        function orientationChanged() {
-          if(map){
-            map.reposition();
-            map.resize();
-          }
-        }
+    function orientationChanged(){
+      if (map) {
+        map.reposition();
+        map.resize();
+      }
+    }
 
-        function initFunc(map) {
-          if( navigator.geolocation ) {  
-            navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
-            watchId = navigator.geolocation.watchPosition(showLocation, locationError);
-          } else {
-            alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
-          }
-        }
+  });
+</script>
+</head>
 
-        function locationError(error) {
-          //error occurred so stop watchPosition
-          if( navigator.geolocation ) {
-            navigator.geolocation.clearWatch(watchId);
-          }
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              alert("Location not provided");
-              break;
-
-            case error.POSITION_UNAVAILABLE:
-              alert("Current location not available");
-              break;
-
-            case error.TIMEOUT:
-              alert("Timeout");
-              break;
-
-            default:
-              alert("unknown error");
-              break;
-          }
-        }
-
-        function zoomToLocation(location) {
-          var pt = new Point(location.coords.longitude, location.coords.latitude);
-          addGraphic(pt);
-          map.centerAndZoom(pt, 12);
-        }
-
-        function showLocation(location) {
-          //zoom to the users location and add a graphic
-          var pt = new Point(location.coords.longitude, location.coords.latitude);
-          if ( !graphic ) {
-            addGraphic(pt);
-          } else { // move the graphic if it already exists
-            graphic.setGeometry(pt);
-          }
-          map.centerAt(pt);
-        }
-        
-        function addGraphic(pt){
-          var symbol = new SimpleMarkerSymbol(
-            SimpleMarkerSymbol.STYLE_CIRCLE, 
-            12, 
-            new SimpleLineSymbol(
-              SimpleLineSymbol.STYLE_SOLID,
-              new Color([210, 105, 30, 0.5]), 
-              8
-            ), 
-            new Color([210, 105, 30, 0.9])
-          );
-          graphic = new Graphic(pt, symbol);
-          map.graphics.add(graphic);
-        }
-      });
-    </script>
-  </head>
-  
-  <body onorientationchange="orientationChanged();">
-    <div id="map" style="width:100%; height:100%;"></div>
-  </body>
-
+<body>
+  <div id="map"></div>
+</body>
 </html>
