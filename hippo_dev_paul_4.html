@@ -49,7 +49,7 @@
 
     var map, featureLayer;
     var polygonBarrierSymbol = new SimpleFillSymbol();
-    var pointSymbol = new SimpleMarkerSymbol();
+    var destSymbol = new SimpleMarkerSymbol();
     var OBJECTID_COUNTER = 1000;
     var TRACKID_COUNTER = 1;
     //onorientationchange doesn't always fire in a timely manner in Android so check for both orientationchange and resize
@@ -81,14 +81,14 @@
 
     function drawShelter(location){
       console.log("Shelter point test");
-      var point = {"geometry":{"x":-87.569,"y":33.210,
+      var dest = {"geometry":{"x":-87.569,"y":33.210,
         "spatialReference":{"wkid":4326}},
         //"attributes":{"XCoord":-87.569, "YCoord":33.210,"Plant":"Mesa Mint"},
         "symbol":{"color":[0,0,0,255],
         //"size":12,"angle":0,"xoffset":0,"yoffset":0,"type":"esriSMS","style":"esriSMSSquare",
         "outline":{"color":[0,0,0,255],"width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriLFS","style":"esriSLSSolid"}};
-      var shelter = new Graphic(point, pointSymbol);
+      var shelter = new Graphic(dest, destSymbol);
       map.graphics.add(shelter);
       console.log("Shelter created");
     }
