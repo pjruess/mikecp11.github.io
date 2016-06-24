@@ -88,7 +88,7 @@
         //angle":0,"xoffset":0,"yoffset":0,"type":"esriSMS","style":"esriSMSSquare",
         "outline":{"color":[255,255,255,255],"width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriLFS","style":"esriSLSSolid"}};
-      var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210, new SpatialReference({ wkid:4326})));
+      var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210));
       var shelter = new Graphic(dest2, destSymbol);
       map.graphics.add(shelter);
       console.log("Shelter created");
@@ -171,7 +171,7 @@
         navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
         navigator.geolocation.watchPosition(showLocation, locationError);
       }
-      // drawFlood([-88.3125,34.96875]);
+      drawFlood([-88.3125,34.96875]);
       drawShelter(-88.3125,34.96875);
     }
 
