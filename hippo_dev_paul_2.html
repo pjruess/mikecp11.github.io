@@ -248,7 +248,7 @@
         }
         function generateFeatureCollection (fileName) {
           console.log(fileName);
-          var name = fileName.split(".");
+          //var name = fileName.split(".");
           //Chrome and IE add c:\fakepath to the value - we need to remove it
           //See this link for more info: http://davidwalsh.name/fakepath
           //name = name[0].replace("c:\\fakepath\\", "");
@@ -258,7 +258,7 @@
           //Define the input params for generate see the rest doc for details
           //http://www.arcgis.com/apidocs/rest/index.html?generate.html
           var params = {
-            'name': name,
+            'name': fileName,
             'targetSR': map.spatialReference,
             'maxRecordCount': 1000,
             'enforceInputFileSizeLimit': true,
