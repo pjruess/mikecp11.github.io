@@ -89,8 +89,7 @@
         "outline":{"color":[255,255,255,255],"width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriLFS","style":"esriSLSSolid"}};
       var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210, new SpatialReference({ wkid:4326})));
-      var dest3 = new Point(-87.569,33.210, new SpatialReference({ wkid:4326}));
-      var shelter = new Graphic(dest3, destSymbol);
+      var shelter = new Graphic(dest2, destSymbol);
       map.graphics.add(shelter);
       console.log("Shelter created");
     }
