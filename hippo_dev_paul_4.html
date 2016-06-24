@@ -84,8 +84,8 @@
       var dest = {"geometry":{"x":-87.569,"y":33.210,
         "spatialReference":{"wkid":4326}},
         //"attributes":{"XCoord":-87.569, "YCoord":33.210,"Plant":"Mesa Mint"},
-        "symbol":{"color":[0,0,0,255],
-        //"size":12,"angle":0,"xoffset":0,"yoffset":0,"type":"esriSMS","style":"esriSMSSquare",
+        "symbol":{"color":[0,0,0,255], "size": 12,
+        //angle":0,"xoffset":0,"yoffset":0,"type":"esriSMS","style":"esriSMSSquare",
         "outline":{"color":[0,0,0,255],"width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriLFS","style":"esriSLSSolid"}};
       var shelter = new Graphic(dest, destSymbol);
@@ -171,7 +171,7 @@
         navigator.geolocation.watchPosition(showLocation, locationError);
       }
       drawFlood([-88.3125,34.96875]);
-      // drawShelter(-88.3125,34.96875);
+      drawShelter(-88.3125,34.96875);
     }
 
     function locationError(error){
