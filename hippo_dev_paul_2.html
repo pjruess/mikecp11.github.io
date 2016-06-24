@@ -282,10 +282,10 @@
           };
 
           //use the rest generate operation to generate a feature collection from the zipped shapefile
-          request({
+          /*request({
             url: portalUrl + '/sharing/rest/content/features/generate',
             content: myContent,
-            //form: dom.byId('uploadForm'),
+            form: dom.byId('uploadForm'),
             handleAs: 'json',
             load: lang.hitch(this, function (response) {
               if (response.error) {
@@ -298,7 +298,17 @@
               addShapefileToMap(response.featureCollection);
             }),
             error: lang.hitch(this, errorHandler)
-          });
+          });*/
+          request("fileName").then(
+              function(fileName){
+                var layerName = response.featureCollection.layers[0].layerDefinition.name;
+              dom.byId('upload-status').innerHTML = '<b>Loaded: </b>' + layerName;
+              addShapefileToMap(response.featureCollection);
+              },
+              function(error){
+              console.log("You dead: " + error);
+              }
+              );
         }
 
         function errorHandler (error) {
