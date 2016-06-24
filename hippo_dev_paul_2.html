@@ -304,6 +304,7 @@
                 var layerName = response.featureCollection.layers[0].layerDefinition.name;
               dom.byId('upload-status').innerHTML = '<b>Loaded: </b>' + layerName;
               addShapefileToMap(response.featureCollection);
+              console.log("WE came till here");
               },
               function(error){
               console.log("You dead: " + error);
