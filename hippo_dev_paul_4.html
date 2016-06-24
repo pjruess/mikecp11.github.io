@@ -68,6 +68,7 @@
     // map.on("load", drawFlood);
 
     function drawFlood(location){
+      console.log("Flood polygon test");
       var polygon = {"geometry":{"rings":[[[-88.3125,34.96875],[-86.4453125,34.96875],
         [-86.84375,33.2109375],[-88.84375,33.90625]]],"spatialReference":{"wkid":4326}},
         "symbol":{"color":[0,0,255,0],"outline":{"color":[0,0,255,0],
@@ -78,6 +79,7 @@
     }
 
     function drawShelter(location){
+      console.log("Shelter point test");
       var point = {"geometry":{"x":-87.569,"y":33.210,
         "spatialReference":{"wkid":4326}},
         //"attributes":{"XCoord":-87.569, "YCoord":33.210,"Plant":"Mesa Mint"},
