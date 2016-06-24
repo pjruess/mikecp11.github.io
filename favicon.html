@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,7 +18,6 @@
     padding: 0px;
     width: 100%;
   }
-
   #map {
     height: 100%;
     width: 100%;
@@ -42,27 +42,22 @@
     "dojo/domReady!"
   ], function (Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
     TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent){
-
     var map, featureLayer;
     var OBJECTID_COUNTER = 1000;
     var TRACKID_COUNTER = 1;
     //onorientationchange doesn't always fire in a timely manner in Android so check for both orientationchange and resize
     var supportsOrientationChange = "onorientationchange" in window, orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
-
     window.addEventListener(orientationEvent, function (){
       orientationChanged();
     }, false);
-
     map = new Map("map", {
       basemap: "streets",
       center: [-87.569, 33.210],
       zoom: 15
     });
     map.on("load", mapLoadedHandler);
-
     function mapLoadedHandler(maploadEvent){
       console.log("map loaded", maploadEvent);
-
       //create a layer definition for the gps points
       var layerDefinition = {
         "objectIdField": "OBJECTID",
@@ -94,13 +89,11 @@
           }
         ]
       };
-
       var featureCollection = {
         layerDefinition: layerDefinition,
         featureSet: null
       };
       featureLayer = new FeatureLayer(featureCollection);
-
       //setup a temporal renderer
       var sms = new SimpleMarkerSymbol().setColor(new Color([255, 0, 0])).setSize(8);
       var observationRenderer = new SimpleRenderer(sms);
@@ -132,39 +125,32 @@
         trackRenderer, ager);
       featureLayer.setRenderer(renderer);
       map.addLayer(featureLayer);
-
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
         navigator.geolocation.watchPosition(showLocation, locationError);
       }
     }
-
     function locationError(error){
       switch (error.code) {
         case error.PERMISSION_DENIED:
           alert("Location not provided");
           break;
-
         case error.POSITION_UNAVAILABLE:
           alert("Current location not available");
           break;
-
         case error.TIMEOUT:
           alert("Timeout");
           break;
-
         default:
           alert("unknown error");
           break;
       }
     }
-
     function zoomToLocation(location){
       var pt = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude,
         location.coords.latitude));
       map.centerAndZoom(pt, 16);
     }
-
     function showLocation(location){
       if (location.coords.accuracy <= 500) {
         var now = new Date();
@@ -172,14 +158,11 @@
         attributes.OBJECTID = OBJECTID_COUNTER;
         attributes.DATETIME = now.getTime();
         attributes.TrackID = TRACKID_COUNTER;
-
         OBJECTID_COUNTER++;
         TRACKID_COUNTER++;
-
         var pt = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude,
           location.coords.latitude));
         var graphic = new Graphic(new Point(pt, map.spatialReference), null, attributes);
-
         featureLayer.applyEdits([graphic], null, null, function (adds){
           map.setTimeExtent(new TimeExtent(null, new Date()));
           map.centerAt(graphic.geometry);
@@ -189,14 +172,12 @@
         console.warn("Point not added due to low accuracy: " + location.coords.accuracy);
       }
     }
-
     function orientationChanged(){
       if (map) {
         map.reposition();
         map.resize();
       }
     }
-
   });
 </script>
 </head>
@@ -205,3 +186,5 @@
   <div id="map"></div>
 </body>
 </html>
+Status API Training Shop Blog About
+© 2016 GitHub, Inc. Terms Privacy Secur
