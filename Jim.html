@@ -140,11 +140,6 @@
         map.addLayer(facilitiesGraphicsLayer);
         
         facilitiesGraphicsLayer.add(new Graphic(new Point(-13625960,4549921,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-13626184,4549247,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-13626477,4549415,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-13625385,4549659,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-13624374,4548254,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-13624891,4548565,map.spatialReference))); 
    
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
@@ -246,7 +241,8 @@
           <option>5</option>
       </select> closest facilities to the input point.</b> 
       <div id="directionsDiv"></div>
-
+<textarea rows="1000" cols="11" id="csvResponse">
+</textarea>
     </div>
  </div>
 </body>
