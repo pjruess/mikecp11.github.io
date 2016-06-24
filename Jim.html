@@ -47,36 +47,28 @@
       
       "dijit/form/ComboBox",
       "dijit/layout/BorderContainer",
-      "dijit/layout/ContentPane",
-      
-      "esri/geometry/webMercatorUtils"
-          
-    ], function(
-      dom, array, Color, parser, registry,
-      urlUtils, Map, esriLang, Graphic, InfoTemplate, GraphicsLayer, SimpleRenderer, 
-      Point, FeatureSet, 
-      ClosestFacilityTask, ClosestFacilityParameters, webMercatorUtils,
-      SimpleMarkerSymbol, SimpleLineSymbol
-    ) {
+       "esri/symbols/SimpleFillSymbol",
+      "dijit/layout/ContentPane"
+    ], function( dom, array, Color, parser, registry, urlUtils, Map, esriLang, Graphic, InfoTemplate, GraphicsLayer, SimpleRenderer, Point, FeatureSet, ClosestFacilityTask, ClosestFacilityParameters, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol) {
       var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
-   
-    var destSymbol2 = new SimpleMarkerSymbol({
-      "color": [0,0,0,255],
-      "size": 8,
-      "angle": 0,
-      "xoffset": 0,
-      "yoffset": 0,
-      "type": "esriSMS",
-      "style": "esriSMSCircle",
-      "outline": {
-        "color": [0,0,0,255],
-        "width": 1,
-        "type": "esriSLS",
-        "style": "esriSLSSolid"
-      }
-    });
-   
+      
+      //var polygonBarrierSymbol = new SimpleFillSymbol();
+      
       parser.parse();
+      
+      
+
+        // var polygon = {"geometry":{"rings":[[[-87.546723,33.2216],[-87.546551,33.21862],
+        //   [-87.545393,33.214886],[-87.543547,33.213019],[-87.538183,33.211978],[-87.537324,33.20986],
+        //   [-87.538655,33.2081],[-87.542861,33.207705],[-87.54638,33.206449],[-87.550585,33.205479],
+        //   [-87.553675,33.208603],[-87.553461,33.212122],[-87.556551,33.214815],[-87.560585,33.217472],
+        //   [-87.554061,33.219626],[-87.549813,33.220667],[-87.546723,33.2216]]],"spatialReference":{"wkid":4326}},
+        //   "symbol":{"color":[0,0,255,0.25],"outline":{"color":[0,0,255,0.25],
+        //   "width":1,"type":"esriSLS","style":"esriSLSSolid"},
+        //   "type":"esriSFS","style":"esriSFSSolid"}};
+        // var flood = new Graphic(polygon, polygonBarrierSymbol);
+        // map.graphics.add(flood);
+      
       
       urlUtils.addProxyRule({
         urlPrefix: "route.arcgis.com",  
@@ -85,9 +77,9 @@
         
       map = new Map("map", { 
         basemap: "streets", 
-        center: [-122.4, 37.785],
-        zoom: 14, 
-        showInfoWindowOnClick: false 
+        center: [-87.5692, 33.2098],
+        zoom: 12//, 
+        // showInfoWindowOnClick: false 
       });
 
       map.on("click", mapClickHandler);
@@ -145,13 +137,15 @@
        
         map.addLayer(facilitiesGraphicsLayer);
         
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-13625960,4549921,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9743953.389,3922946.035,map.spatialReference)));  
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744714.068,3921960.46,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747345.023,3923959.722,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747345.023,3923959.722,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9746485.126,3923070.059,map.spatialReference)));
+
         
-        var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210));
-        var shelter = new Graphic(dest2, destSymbol2);
-        
-        map.addLayer(shelter);
-        
+   
+   
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         
