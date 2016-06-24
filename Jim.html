@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +5,7 @@
   
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
   <title>Closest Facilities</title>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js"></script>
+
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
   <style> 
@@ -17,17 +16,8 @@
       border: 2px solid #86942A;
       margin: 5px;
     }
-  </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript">
-            //This event is called when the DOM is fully loaded
-            window.addEvent("domready",function(){
-                $.get( "https://mikecp11.github.io/test.csv", function( data ) {
-  						$("#csvResponse").val(data);
+  </style> 
 
-						});
-            });
-        </script>
   <script src="https://js.arcgis.com/3.17/"></script>
   <script>
     var map, params;
@@ -57,12 +47,15 @@
       
       "dijit/form/ComboBox",
       "dijit/layout/BorderContainer",
-      "dijit/layout/ContentPane"
+      "dijit/layout/ContentPane",
+      
+      "esri/geometry/webMercatorUtils"
+          
     ], function(
       dom, array, Color, parser, registry,
       urlUtils, Map, esriLang, Graphic, InfoTemplate, GraphicsLayer, SimpleRenderer, 
       Point, FeatureSet, 
-      ClosestFacilityTask, ClosestFacilityParameters, 
+      ClosestFacilityTask, ClosestFacilityParameters, webMercatorUtils,
       SimpleMarkerSymbol, SimpleLineSymbol
     ) {
       var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
@@ -137,6 +130,10 @@
         map.addLayer(facilitiesGraphicsLayer);
         
         facilitiesGraphicsLayer.add(new Graphic(new Point(-13625960,4549921,map.spatialReference)));
+        
+        var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210));
+        var shelter = new Graphic(dest2, destSymbol2);
+        map.graphics.add(shelter);
    
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
@@ -238,8 +235,7 @@
           <option>5</option>
       </select> closest facilities to the input point.</b> 
       <div id="directionsDiv"></div>
-<textarea rows="1000" cols="11" id="csvResponse">
-</textarea>
+
     </div>
  </div>
 </body>
