@@ -141,7 +141,7 @@
        
       });
       
-      closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      closestFacilityTask = new ClosestFacilityTask("http://utility.arcgis.com/usrsvcs/appservices/sSySbCyuAnWZM67X/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
       registry.byId("numLocations").on("change", function() {
         params.defaultTargetFacilityCount = this.value;
