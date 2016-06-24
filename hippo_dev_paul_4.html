@@ -76,6 +76,7 @@
         "type":"esriSFS","style":"esriSFSSolid"}};
       var flood = new Graphic(polygon, polygonBarrierSymbol);
       map.graphics.add(flood);
+      console.log("Flood created");
     }
 
     function drawShelter(location){
@@ -89,6 +90,7 @@
         "type":"esriLFS","style":"esriSLSSolid"}};
       var shelter = new Graphic(point, pointSymbol);
       map.graphics.add(shelter);
+      console.log("Shelter created");
     }
 
     function mapLoadedHandler(maploadEvent){
