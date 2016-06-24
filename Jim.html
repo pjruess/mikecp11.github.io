@@ -59,10 +59,10 @@
    
       parser.parse();
       
-      urlUtils.addProxyRule({
-        urlPrefix: "route.arcgis.com",  
-        proxyUrl: "/sproxy/"
-      });
+      // urlUtils.addProxyRule({
+      //   urlPrefix: "route.arcgis.com",  
+      //   proxyUrl: "/sproxy/"
+      // });
         
       map = new Map("map", { 
         basemap: "streets", 
@@ -141,7 +141,7 @@
        
       });
       
-      closestFacilityTask = new ClosestFacilityTask("http://utility.arcgis.com/usrsvcs/appservices/sSySbCyuAnWZM67X/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/sSySbCyuAnWZM67X/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
       registry.byId("numLocations").on("change", function() {
         params.defaultTargetFacilityCount = this.value;
