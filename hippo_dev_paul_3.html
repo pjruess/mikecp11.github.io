@@ -69,9 +69,10 @@
         "type":"esriSFS","style":"esriSFSSolid"}};
       var poly = new Graphic(polygon);
 
-      featureLayer.applyEdits([poly], null, null, function (adds){
-        map.setTimeExtent(new TimeExtent(null, new Date()));
-      });
+      // featureLayer.applyEdits([poly], null, null, function (adds){
+      //   map.setTimeExtent(new TimeExtent(null, new Date()));
+      // });
+      map.graphics.add(poly);
     }
 
     function mapLoadedHandler(maploadEvent){
