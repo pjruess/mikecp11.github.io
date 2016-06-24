@@ -13,5 +13,4 @@ When floods strike HIPPO is here to help.
 
 All you need to do is load the webpage and allow the marvels of modern technology to take you away.
 
-*Love,*
-*Mike, Jim and Paul*
+*Love Mike, Jim, and Paul*
