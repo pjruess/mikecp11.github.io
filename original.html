@@ -41,7 +41,7 @@
     "esri/TimeExtent",
     "dojo/domReady!"
   ], function (Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
-    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent, Polygon){
+    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent){
 
     var map, featureLayer;
     var OBJECTID_COUNTER = 1000;
@@ -58,20 +58,7 @@
       center: [-87.569, 33.210],
       zoom: 15
     });
-    map.on("load", mapLoadedHandler, drawPolygon);
-
-    function drawPolygon(location){
-      var myPolygon = {"geometry":{"rings":[[[-88.3125,34.96875],[-86.4453125,34.96875],
-        [-86.84375,33.2109375],[-88.84375,33.90625]]],"spatialReference":{"wkid":4326}},
-        "symbol":{"color":[0,0,0,64],"outline":{"color":[0,0,0,255],
-        "width":1,"type":"esriSLS","style":"esriSLSSolid"},
-        "type":"esriSFS","style":"esriSFSSolid"}};
-      var poly = new Polygon(myPolygon);
-
-      featureLayer.applyEdits([poly], null, null, function (adds){
-        map.setTimeExtent(new TimeExtent(null, new Date()));
-      });
-    }
+    map.on("load", mapLoadedHandler);
 
     function mapLoadedHandler(maploadEvent){
       console.log("map loaded", maploadEvent);
