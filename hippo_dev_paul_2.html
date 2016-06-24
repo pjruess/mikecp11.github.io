@@ -264,7 +264,7 @@
             'enforceInputFileSizeLimit': true,
             'enforceOutputJsonSizeLimit': true
           };
-
+          console.log("params created");
           //generalize features for display Here we generalize at 1:40,000 which is approx 10 meters
           //This should work well when using web mercator.
           var extent = scaleUtils.getExtentForScale(map, 40000);
@@ -274,13 +274,14 @@
           params.reducePrecision = true;
           params.numberOfDigitsAfterDecimal = 0;
 
+          console.log("Extent=",extent);
           var myContent = {
             'filetype': 'shapefile',
             'publishParameters': JSON.stringify(params),
             'f': 'json',
             'callback.html': 'textarea'
           };
-
+          console.log("WE came till here");
           //use the rest generate operation to generate a feature collection from the zipped shapefile
           /*request({
             url: portalUrl + '/sharing/rest/content/features/generate',
