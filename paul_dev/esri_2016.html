@@ -36,18 +36,6 @@
     "esri/graphic",
     "esri/layers/FeatureLayer",
     "esri/map",
-
-    "esri/urlUtils",
-    "esri/tasks/RouteTask",            
-    "esri/tasks/RouteParameters",
-    "esri/tasks/FeatureSet",            
-    "dojo/on",
-    "dijit/registry",
-    "dijit/layout/BorderContainer",
-    "dijit/layout/ContentPane",
-    "dijit/form/HorizontalSlider",
-    "dijit/form/HorizontalRuleLabels"
-
     "esri/renderers/SimpleRenderer",
     "esri/renderers/TemporalRenderer",
     "esri/renderers/TimeClassBreaksAger",
@@ -56,19 +44,15 @@
     "esri/symbols/SimpleFillSymbol",
     "esri/TimeExtent",
     "dojo/domReady!"
-  ], function (
-    urlUtils, RouteTask, RouteParameters, FeatureSet, on, registry,
-    Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
-    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent, SimpleFillSymbol
-  ){
+  ], function (Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
+    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent, SimpleFillSymbol){
 
     var map, featureLayer;
-
-    var routeTask, routeParams;
-
     var polygonBarrierSymbol = new SimpleFillSymbol();
-    var routeSymbol = new SimpleLineSymbol().setColor(new dojo.Color([0, 255, 0, 140])).setWidth(5);
-    var destSymbol = new SimpleMarkerSymbol({
+
+    var destSymbol = new SimpleMarkerSymbol();
+    
+    var destSymbol2 = new SimpleMarkerSymbol({
       "color": [0,255,0,100],
       "size": 8,
       "angle": 0,
@@ -82,11 +66,6 @@
         "type": "esriSLS",
         "style": "esriSLSSolid"
       }
-    });
-
-    urlUtils.addProxyRule({
-      urlPrefix: "route.arcgis.com",
-      proxyUrl: "/sproxy/"
     });
 
     var OBJECTID_COUNTER = 1000;
@@ -103,29 +82,17 @@
       center: [-87.569, 33.210],
       zoom: 15
     });
-
     map.on("load", mapLoadedHandler);
     // map.on("load", drawFlood);
 
-    routeTask = new RouteTask("https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
-
-    routeParams = new RouteParameters();
-    routeParams.stops = new FeatureSet();
-    routeParams.outSpatialReference = {
-      "wkid" : 4326
-      // "wkid" : 102100
-    };
-
-    routeTask.on("solve-complete", showRoute);
-    routeTask.on("error", routeErrorHandler);
-
     function drawFlood(location){
       console.log("Flood polygon test");
-      var polygon = {"geometry":{"rings":[[[-87.546723,33.2216],[-87.546551,33.21862],
-        [-87.545393,33.214886],[-87.543547,33.213019],[-87.538183,33.211978],[-87.537324,33.20986],
-        [-87.538655,33.2081],[-87.542861,33.207705],[-87.54638,33.206449],[-87.550585,33.205479],
-        [-87.553675,33.208603],[-87.553461,33.212122],[-87.556551,33.214815],[-87.560585,33.217472],
-        [-87.554061,33.219626],[-87.549813,33.220667],[-87.546723,33.2216]]],"spatialReference":{"wkid":4326}},
+      var polygon = {"geometry":{"rings":[[[-117.162936,32.710340],[-117.161121,32.713027],
+        [-117.159233,32.715915],[-117.159748,32.720031],[-117.159147,32.723497],[-117.162580,32.726025],
+        [-117.165284,32.727200],[-117.169018,32.727453],[-117.170606,32.726442],[-117.173181,32.723734],
+        [-117.173524,32.719474],[-117.173481,32.716621],[-87.556551,33.214815],[-87.560585,33.217472],
+        [-117.173653,32.713893],[-117.172537,32.710643],[-117.167215,32.708621],[-117.162936,32.710340]]],
+        "spatialReference":{"wkid":4326}},
         "symbol":{"color":[0,255,255,100],"outline":{"color":[0,255,255,100],
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
@@ -143,24 +110,14 @@
       //   //angle":0,"xoffset":0,"yoffset":0,"type":"esriSMS","style":"esriSMSSquare",
       //   "outline":{"color":[255,255,255,255],"width":1,"type":"esriSLS","style":"esriSLSSolid"},
       //   "type":"esriLFS","style":"esriSLSSolid"}};
-      var dest = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210));
-      var shelter = new Graphic(dest, destSymbol);
-      var stop = map.graphics.add(shelter);
-      routeParams.stops.features.push(stop);
-
-      if (routeParams.stops.features.length >= 1) {
-        routeTask.solve(routeParams);
-        lastStop = routeParams.stops.features.splice(0, 1)[0];
-      }
+      var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210));
+      var shelter = new Graphic(dest2, destSymbol2);
+      map.graphics.add(shelter);
       console.log("Shelter created");
     }
 
-    function showRoute(location){
-      map.graphics.add(evt.result.routeResults[0].route.setSymbol(routeSymbol));
-    }
-
     function mapLoadedHandler(maploadEvent){
-      console.log("Map loaded", maploadEvent);
+      console.log("map loaded", maploadEvent);
 
       //create a layer definition for the gps points
       var layerDefinition = {
