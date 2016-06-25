@@ -21,12 +21,6 @@
   <script src="https://js.arcgis.com/3.17/"></script>
   <script>
     var map, params;
-    
-    var info = new ArcGISOAuthInfo({
-      appId: "AO8NutTgOiKKisjZ",
-      popup: true
-    });
-    esriId.registerOAuthInfos([info]);
 
     require([
       "dojo/dom",
@@ -77,7 +71,7 @@
       
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
-      params.defaultCutoff= 7.0;      
+      params.defaultCutoff= 50;      
       params.returnIncidents=false;
       params.returnRoutes=true;
       params.returnDirections=true;
