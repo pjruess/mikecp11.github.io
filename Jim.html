@@ -60,9 +60,13 @@
       parser.parse();
       
       urlUtils.addProxyRule({
-        urlPrefix: "https://mikecp11.github.io/Jim.html",  
-        proxyUrl: "/sproxy/"
+        urlPrefix: "route.arcgis.com",
+        proxyUrl: "https://mikecp11.github.io/Jim.htm"
       });
+      // urlUtils.addProxyRule({
+      //   urlPrefix: "https://mikecp11.github.io/Jim.html",  
+      //   proxyUrl: "/sproxy/"
+      // });
         
       map = new Map("map", { 
         basemap: "streets", 
