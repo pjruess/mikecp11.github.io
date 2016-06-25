@@ -110,7 +110,7 @@
       //   //angle":0,"xoffset":0,"yoffset":0,"type":"esriSMS","style":"esriSMSSquare",
       //   "outline":{"color":[255,255,255,255],"width":1,"type":"esriSLS","style":"esriSLSSolid"},
       //   "type":"esriLFS","style":"esriSLSSolid"}};
-      var dest2 = webMercatorUtils.geographicToWebMercator(new Point(location));
+      var dest2 = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude, location.coords.latitude));
       var shelter = new Graphic(dest2, destSymbol2);
       map.graphics.add(shelter);
       console.log("Shelter created");
