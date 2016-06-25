@@ -50,9 +50,9 @@
     var map, featureLayer;
     var polygonBarrierSymbol = new SimpleFillSymbol();
 
-    // var destSymbol = new SimpleMarkerSymbol();
+    var destSymbol = new SimpleMarkerSymbol();
     
-    var destSymbol2destSymbol = new SimpleMarkerSymbol({
+    var destSymbol2 = new SimpleMarkerSymbol({
       "color": [0,255,0,100],
       "size": 8,
       "angle": 0,
@@ -110,8 +110,8 @@
       //   //angle":0,"xoffset":0,"yoffset":0,"type":"esriSMS","style":"esriSMSSquare",
       //   "outline":{"color":[255,255,255,255],"width":1,"type":"esriSLS","style":"esriSLSSolid"},
       //   "type":"esriLFS","style":"esriSLSSolid"}};
-      var dest = webMercatorUtils.geographicToWebMercator(new Point(-87.5692,33.2098));
-      var shelter = new Graphic(dest, destSymbol);
+      var dest2 = webMercatorUtils.geographicToWebMercator(new Point(-87.569,33.210));
+      var shelter = new Graphic(dest2, destSymbol2);
       map.graphics.add(shelter);
       console.log("Shelter created");
     }
@@ -194,7 +194,7 @@
         navigator.geolocation.watchPosition(showLocation, locationError);
       }
       drawFlood([-88.3125,34.96875]);
-      drawShelter(-87.5692,33.2098);
+      drawShelter(-88.3125,34.96875);
     }
 
     function locationError(error){
