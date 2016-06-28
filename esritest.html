@@ -1,106 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
+  <head>
+  <style>
+  body {
+    background-image: "images/logo.png";
+  }
+  </style>
+    <meta charset="UTF-8">
+    <title>HIPPO - High Inudation Proactive Pretection Organization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Welcome to HIPPO!</h1>
+      <h2 class="project-tagline">Removing you from water's way!</h2>
+    </section>
 
-<head>
-    <title>Live Map</title>
-    <meta charset="utf-8">
-    <meta name="fragment" content="!">
-    <!-- Define the versions of IE that will be used to render the page. See Microsoft documentation for details. Optional. -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Responsive -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <!-- End Responsive -->
-    <!-- Use protocol relative urls that way if the browser is viewing the page via HTTPS the js/css file will be requested using the HTTPS protocol -->
-    <link rel="stylesheet" href="//js.arcgis.com/3.17/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="//js.arcgis.com/3.17/esri/css/esri.css">
-    <!-- Load any application specific styles -->
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="js/SmartCards/css/SmartCards.css">
-    <link rel="stylesheet" href="js/SmartTip/css/SmartTip.css">
-</head>
+    <section class="main-content">
+      <h3>
 
-<body class="claro app-loading">
-    <div class="loading-indicator">
-        <div class="loading-message" id="loading_message"></div>
-    </div>
-    <!-- PANEL MAP -->
-    <div id="panelMap" dir="ltr"></div>
-    <!-- PANEL TIP -->
-    <div id="panelSmartTip"></div>
-    <!-- PANEL ATTRIBUTION -->
-    <div id="panelAttribution" class="feedAttribution"></div>
-    <!-- PANEL BOTTOM -->
-    <div id="panelBottom">
-        <div id="panelInner">
-            <div id="panelContent">
-            </div>
-        </div>
-    </div>
-    <!-- PANEL TOP -->
-    <div id="panelTop" class="shadow">
-        <div id="panelText">
-            <div id="panelTitle">LIVE MAP</div>
-            <div id="panelSubtitle">ArcGIS Template</div>
-            <div id="panelCounter"></div>
-        </div>
-        <div id="panelButtons">
-            <div id="btnToggle" class="panelBtn"></div>
-        </div>
-    </div>
-    <!-- </div> -->
-    <script type="text/javascript">
-    var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-    var dojoConfig = {
-        async: true,
-        // The locationPath logic below may look confusing but all its doing is
-        // enabling us to load the api from a CDN and load local modules from the correct location.
-        packages: [{
-            name: "application",
-            location: package_path + '/js'
-        }, {
-            name: "config",
-            location: package_path + '/config'
-        }, {
-            name: "arcgis_templates",
-            location: package_path + '/..'
-        }]
-    };
-    var urlLocale = location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : null;
-    if (urlLocale) {
-        dojoConfig.locale = urlLocale;
+ <style>
+    div.container {
+      display:inline-block;
     }
-    </script>
-    <script type="text/javascript" src="//js.arcgis.com/3.17/"></script>
-    <script type="text/javascript">
-    require([
-        "config/templateConfig",
-        "application/template",
-        "application/main"
-    ], function(
-        templateConfig,
-        Template,
-        Main
-    ) {
-        // create the template. This will take care of all the logic required for template applications
-        var myTemplate = new Template(templateConfig);
-        // create my main application. Start placing your logic in the main.js file.
-        var myApp = new Main();
-        // start template
-        myTemplate.startup().then(function(config) {
-            // The config object contains the following properties: helper services, (optionally)
-            // i18n, appid, webmap and any custom values defined by the application.
-            // In this example we have one called theme.
-            myApp.startup(config);
-        }, function(error) {
-            // something went wrong. Let's report it.
-            myApp.reportError(error);
-        });
-    });
-    </script>
-</body>
+  </style>
+  </style>
+</head>
+<body>
 
-</html>
+<div class="container">
+<style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 100%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}</style><div class="embed-container"><iframe width="250" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="US Flooding-Copy" src="//nerdherd.maps.arcgis.com/apps/Embed/index.html?webmap=bd13c296e9f24251891bbf2fd3fbf521&amp;extent=-134.7282,14.8162,-48.5954,54.136&amp;zoom=true&amp;scale=true&amp;search=true&amp;searchextent=true&amp;legend=true&amp;basemap_toggle=true&amp;alt_basemap=streets&amp;disable_scroll=true&amp;theme=dark"></iframe></div>
+</style>
+
+<div class="container">
+       <a class="twitter-timeline"  href="https://twitter.com/hashtag/flooding" data-widget-id="746464398735212544">Flood News Tweets data-chrome="no footer noheader"</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</div>
+          
+  <br>Get Alerts <a href="https://twitter.com/FloodHippo">here</a><br>
+  <br>Get See who is talking about flooding <a href="http://nerdherd.maps.arcgis.com/apps/LiveMaps/index.html?appid=2435eba8f6f04b659f1cd05004a2355e">here</a><br>
+  
+  <a class="twitter-follow-button"
+  href="https://twitter.com/FloodHippo"
+  data-size="large">
+Follow @FloodHippo</a> <br>
+
+
+
 
