@@ -21,7 +21,6 @@
   <script src="https://js.arcgis.com/3.17/"></script>
   <script>
     var map, params;
-
     require([
       "dojo/dom",
       "dojo/_base/array",
@@ -59,6 +58,11 @@
       var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
    
       parser.parse();
+      
+      urlUtils.addProxyRule({
+        urlPrefix: "route.arcgis.com",  
+        proxyUrl: "/sproxy/"
+      });
         
       map = new Map("map", { 
         basemap: "streets", 
@@ -71,10 +75,11 @@
       
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
-      params.defaultCutoff= 50;      
+      params.defaultCutoff= 7.0;      
       params.returnIncidents=false;
       params.returnRoutes=true;
       params.returnDirections=true;
+      params.defaultTargetFacilityCount=5;
       
       map.on("load", function(evtObj) {
         var map = evtObj.target;
@@ -137,7 +142,7 @@
        
       });
       
-      closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/ktP0RcxejVP8I5Kk/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
       registry.byId("numLocations").on("change", function() {
         params.defaultTargetFacilityCount = this.value;
