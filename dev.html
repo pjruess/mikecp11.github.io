@@ -113,6 +113,7 @@
         facilitiesGraphicsLayer.setRenderer(facilityRenderer);
         map.addLayer(facilitiesGraphicsLayer);
         
+        // Add facilities to facilities layer
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
@@ -153,7 +154,7 @@
         params.facilities = facilities;
         params.outSpatialReference = map.spatialReference;
 
-        // clearGraphics();
+        clearGraphics();
         dom.byId("directionsDiv").innerHTML="";
         // var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
         var inPoint = new Point(location.coords.longitude, location.coords.latitude, map.spatialReference);
@@ -168,16 +169,16 @@
         
         map.graphics.enableMouseEvents();
        
-        routeGraphicLayer.on("mouse-over", function(location){
+        routeGraphicLayer.on("mouse-over", function(evt){
           //clear existing directions and highlight symbol
           map.graphics.clear();
           dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
           
           var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
-          var highlightGraphic = new Graphic(location.graphic.geometry,highlightSymbol);
+          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
           
           map.graphics.add(highlightGraphic);
-          dom.byId("directionsDiv").innerHTML = esriLang.substitute(location.graphic.attributes,"${*}");
+          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });
 
         //solve 
@@ -204,7 +205,7 @@
           //display any messages
           if(solveResult.messages.length > 0){
             dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
-          }      
+          }  
         });
        
       });
