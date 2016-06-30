@@ -35,13 +35,10 @@
       "esri/InfoTemplate",
       "esri/layers/GraphicsLayer",
       "esri/renderers/SimpleRenderer",
-
       "esri/geometry/Point",
       "esri/tasks/FeatureSet",
-
       "esri/tasks/ClosestFacilityTask",
       "esri/tasks/ClosestFacilityParameters",
-
       "esri/symbols/SimpleMarkerSymbol",
       "esri/symbols/SimpleLineSymbol",
       
@@ -70,7 +67,6 @@
         zoom: 14, 
         showInfoWindowOnClick: false 
       });
-
       map.on("click", mapClickHandler);
       
       params = new ClosestFacilityParameters();
@@ -92,7 +88,6 @@
           ),
           new Color([130,159,83,0.40])
         ); 
-
         var incidentPointSymbol = new SimpleMarkerSymbol(
           SimpleMarkerSymbol.STYLE_CIRCLE, 
           16,
@@ -102,13 +97,11 @@
           ),
           new Color([130,159,83,0.40])
         );  
-
         incidentsGraphicsLayer = new GraphicsLayer();
         
         var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
         incidentsGraphicsLayer.setRenderer(incidentsRenderer);
         map.addLayer(incidentsGraphicsLayer);
-
         routeGraphicLayer = new GraphicsLayer();
         
         var routePolylineSymbol = new SimpleLineSymbol(
@@ -118,9 +111,7 @@
         );
         var routeRenderer = new SimpleRenderer(routePolylineSymbol);
         routeGraphicLayer.setRenderer(routeRenderer);
-
         map.addLayer(routeGraphicLayer);
-
         var facilitiesGraphicsLayer = new GraphicsLayer();
         var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
         facilitiesGraphicsLayer.setRenderer(facilityRenderer);
@@ -143,12 +134,10 @@
       });
       
       closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
-
       registry.byId("numLocations").on("change", function() {
         params.defaultTargetFacilityCount = this.value;
         clearGraphics();
       });
-
       function clearGraphics() {
         //clear graphics
         dom.byId("directionsDiv").innerHTML= "";
@@ -156,7 +145,6 @@
         routeGraphicLayer.clear();
         incidentsGraphicsLayer.clear();    
       } 
-
       function mapClickHandler(evt) {
         clearGraphics();
         dom.byId("directionsDiv").innerHTML= "";
@@ -183,7 +171,6 @@
           map.graphics.add(highlightGraphic);
           dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });
-
         //solve 
         closestFacilityTask.solve(params, function(solveResult){
           array.forEach(solveResult.routes, function(route, index){
