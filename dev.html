@@ -168,7 +168,7 @@
         params.facilities = facilities;
         params.outSpatialReference = map.spatialReference;
 
-        clearGraphics();
+        // clearGraphics();
         dom.byId("directionsDiv").innerHTML= "";
         var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
         var location = new Graphic(inPoint);
