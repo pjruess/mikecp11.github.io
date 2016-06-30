@@ -71,7 +71,7 @@
         showInfoWindowOnClick: false 
       });
 
-      map.on("click", mapClickHandler);
+      // map.on("click", mapClickHandler);
       
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
@@ -167,6 +167,30 @@
         
         params.facilities = facilities;
         params.outSpatialReference = map.spatialReference;
+
+        dom.byId("directionsDiv").innerHTML= "";
+        var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
+        var location = new Graphic(inPoint);
+        incidentsGraphicsLayer.add(location);
+        
+        var features = [];
+        features.push(location);
+        var incidents = new FeatureSet();
+        incidents.features = features;
+        params.incidents = incidents;
+        
+        map.graphics.enableMouseEvents();
+       
+        routeGraphicLayer.on("mouse-over", function(evt){
+          //clear existing directions and highlight symbol
+          map.graphics.clear();
+          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
+          
+          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
+          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
+          
+          map.graphics.add(highlightGraphic);
+          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
        
       });
 
@@ -261,32 +285,32 @@
         incidentsGraphicsLayer.clear();    
       } 
 
-      function mapClickHandler(evt) {
-        clearGraphics();
-        dom.byId("directionsDiv").innerHTML= "";
-        var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
-        var location = new Graphic(inPoint);
-        incidentsGraphicsLayer.add(location);
+      // function mapClickHandler(evt) {
+      //   clearGraphics();
+      //   dom.byId("directionsDiv").innerHTML= "";
+      //   var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
+      //   var location = new Graphic(inPoint);
+      //   incidentsGraphicsLayer.add(location);
         
-        var features = [];
-        features.push(location);
-        var incidents = new FeatureSet();
-        incidents.features = features;
-        params.incidents = incidents;
+      //   var features = [];
+      //   features.push(location);
+      //   var incidents = new FeatureSet();
+      //   incidents.features = features;
+      //   params.incidents = incidents;
         
-        map.graphics.enableMouseEvents();
+      //   map.graphics.enableMouseEvents();
        
-        routeGraphicLayer.on("mouse-over", function(evt){
-          //clear existing directions and highlight symbol
-          map.graphics.clear();
-          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
+      //   routeGraphicLayer.on("mouse-over", function(evt){
+      //     //clear existing directions and highlight symbol
+      //     map.graphics.clear();
+      //     dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
           
-          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
-          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
+      //     var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
+      //     var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
           
-          map.graphics.add(highlightGraphic);
-          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
-        });
+      //     map.graphics.add(highlightGraphic);
+      //     dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
+      //   });
 
         //solve 
         var destinationArray = [];
