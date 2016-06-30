@@ -4,8 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-  <title>Flood HIPPO</title>
-  <link rel="icon" href="../images/logo.png" >
+  <title>Closest Facilities</title>
 
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
@@ -41,7 +40,7 @@
       "esri/tasks/ClosestFacilityTask",
       "esri/tasks/ClosestFacilityParameters",
       "esri/symbols/SimpleMarkerSymbol",
-      "esri/tasks/RouteTask/polygonBarriers",
+      "esri/symbols/SimpleLineSymbol",
       
       "dijit/form/ComboBox",
       "dijit/layout/BorderContainer",
@@ -51,8 +50,7 @@
       urlUtils, Map, esriLang, Graphic, InfoTemplate, GraphicsLayer, SimpleRenderer, 
       Point, FeatureSet, 
       ClosestFacilityTask, ClosestFacilityParameters, 
-      SimpleMarkerSymbol, SimpleLineSymbol,
-      RouteTask, PolygonBarriers
+      SimpleMarkerSymbol, SimpleLineSymbol
     ) {
       var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
    
@@ -65,20 +63,19 @@
         
       map = new Map("map", { 
         basemap: "streets", 
-        center: [-87.540526, 33.215858],
-        zoom: 13, 
+        center: [-122.4, 37.785],
+        zoom: 14, 
         showInfoWindowOnClick: false 
       });
       map.on("click", mapClickHandler);
       
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
-      params.defaultCutoff= 400;      
+      params.defaultCutoff= 7.0;      
       params.returnIncidents=false;
       params.returnRoutes=true;
       params.returnDirections=true;
-      params.returnPolygonBarriers = true;
-      //params.defaultTargetFacilityCount=5;
+      params.defaultTargetFacilityCount=5;
       
       map.on("load", function(evtObj) {
         var map = evtObj.target;
@@ -112,7 +109,6 @@
           new Color([89,95,35]), 
           4.0
         );
-
         var routeRenderer = new SimpleRenderer(routePolylineSymbol);
         routeGraphicLayer.setRenderer(routeRenderer);
         map.addLayer(routeGraphicLayer);
@@ -122,45 +118,13 @@
        
         map.addLayer(facilitiesGraphicsLayer);
         
-        
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736724,3915954,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9730781,3920702,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9733535,3926914,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740003,3923150,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741618,3925577,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9737357,3927660,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9742319,3929506,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745587,3926974,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747498,3925474,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9748919,3929392,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9751928,3931523,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749396,3926593,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9755206,3927204,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9753961,3919552,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749212,3919246,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744368,3919733,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739447,3916112,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9732664,3917186,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9731322,3924282,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736491,3922677,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739739,3921100,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741564,3921033,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744947,3921339,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747249,3923021,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747001,3923661,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745042,3923470,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9743504,3922839,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
-        
-        facilitiesGraphicsLayer.add(new Graphic(polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282) )));
-
-        var polygonBarrier = solveResult;
-
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13625960,4549921,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13626184,4549247,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13626477,4549415,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13625385,4549659,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13624374,4548254,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13624891,4548565,map.spatialReference))); 
+   
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         
@@ -168,8 +132,8 @@
         params.outSpatialReference = map.spatialReference;
        
       });
-      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
-      closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      
+      closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
       registry.byId("numLocations").on("change", function() {
         params.defaultTargetFacilityCount = this.value;
         clearGraphics();
@@ -208,7 +172,6 @@
           dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });
         //solve 
-        var destinationArray = [];
         closestFacilityTask.solve(params, function(solveResult){
           array.forEach(solveResult.routes, function(route, index){
             //build an array of route info
@@ -219,24 +182,17 @@
             
             route.setInfoTemplate(infoTemplate);
             route.setAttributes(attr);
-            //alert(JSON.stringify(route.attributes[route.attributes.length - 1], null, 4));
-            destinationArray.push(route.attributes[route.attributes.length - 1])
-            
             
             routeGraphicLayer.add(route);
             dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
           });
-          alert(destinationArray.toString());
           
           //display any messages
           if(solveResult.messages.length > 0){
             dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
           }      
         });
-      
-        
       }
-      //alert(JSON.stringify(destinationArray[destinationArray.length - 1], null, 4));
     });
   </script>
 </head>
@@ -256,14 +212,14 @@
          data-dojo-props="region:'bottom'" class="panel" 
          style="height:250px;">
 
-      <b>Click the map to find names and addresses for the
+      <b>Click the map to find routes for the
       <select id="numLocations" name="numLocations" data-dojo-type="dijit/form/ComboBox" value="1" style="width:60px;">
           <option selected="selected">1</option>
           <option>2</option>
           <option>3</option>
           <option>4</option>
           <option>5</option>
-      </select> closest shelters to your location.</b> 
+      </select> closest facilities to the input point.</b> 
       <div id="directionsDiv"></div>
 
     </div>

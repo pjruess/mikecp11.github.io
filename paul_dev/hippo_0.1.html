@@ -1,160 +1,273 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>HIPPO 0.1</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>Flood HIPPO</title>
   <link rel="icon" href="../images/logo.png" >
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-    
-    #paneDiv {
-      position: absolute;
-      top: 10px;
-      left: 62px;
-      padding: 0 12px 0 12px;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-    }
-  </style>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.0/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.0/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
+  <style> 
+    body,html,#main{margin:0;padding:0;height:100%;width:100%;}
+    .panel {
+      border-radius: 6px;
+      box-shadow: 0px 6px 3px -3px #888;
+      border: 2px solid #86942A;
+      margin: 5px;
+    }
+  </style> 
 
+  <script src="https://js.arcgis.com/3.17/"></script>
   <script>
+    var map, params;
     require([
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/Graphic",
+      "dojo/dom",
+      "dojo/_base/array",
+      "esri/Color",
+      "dojo/parser",
+      "dijit/registry",
+      
+      "esri/urlUtils",
+      "esri/map",
+      "esri/lang",
+      "esri/graphic",
+      "esri/InfoTemplate",
       "esri/layers/GraphicsLayer",
-      "esri/tasks/RouteTask",
-
+      "esri/renderers/SimpleRenderer",
+      "esri/geometry/Point",
+      "esri/tasks/FeatureSet",
       "esri/tasks/ClosestFacilityTask",
       "esri/tasks/ClosestFacilityParameters",
-
-      "esri/tasks/support/RouteParameters",
-      "esri/tasks/support/FeatureSet",
       "esri/symbols/SimpleMarkerSymbol",
-      "esri/symbols/SimpleLineSymbol",
-      "esri/Color",
-      "esri/core/urlUtils",
-      "dojo/on",
-      "dojo/domReady!"
+      "esri/symbols/SimpleLineSymbol"
+      "esri/tasks/RouteTask/polygonBarriers",
+      
+      "dijit/form/ComboBox",
+      "dijit/layout/BorderContainer",
+      "dijit/layout/ContentPane"
     ], function(
-      Map, MapView, Graphic, GraphicsLayer, RouteTask, RouteParameters,
-      FeatureSet, SimpleMarkerSymbol, SimpleLineSymbol, Color, urlUtils, on,
-      ClosestFacilityTask, ClosestFacilityParameters
+      dom, array, Color, parser, registry,
+      urlUtils, Map, esriLang, Graphic, InfoTemplate, GraphicsLayer, SimpleRenderer, 
+      Point, FeatureSet, 
+      ClosestFacilityTask, ClosestFacilityParameters, 
+      SimpleMarkerSymbol, SimpleLineSymbol,
+      RouteTask
     ) {
-
-      // proxy the route requests to avoid prompt for log in
+      var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
+   
+      parser.parse();
+      
       urlUtils.addProxyRule({
-        urlPrefix: "utility.arcgis.com",
+        urlPrefix: "route.arcgis.com",  
         proxyUrl: "/sproxy/"
       });
-
-      // Point the URL to a valid ClosestFacility service
-      var closestFacilityTask = new ClosestFacilityTask({
-        url: "http://utility.arcgis.com/usrsvcs/appservices/ktP0RcxejVP8I5Kk/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World"
+        
+      map = new Map("map", { 
+        basemap: "streets", 
+        center: [-87.540526, 33.215858],
+        zoom: 13, 
+        showInfoWindowOnClick: false 
       });
+      map.on("click", mapClickHandler);
+      
+      params = new ClosestFacilityParameters();
+      params.impedenceAttribute= "Miles";      
+      params.defaultCutoff= 400;      
+      params.returnIncidents=false;
+      params.returnRoutes=true;
+      params.returnDirections=true;
+      // params.returnPolygonBarriers = true;
+      //params.defaultTargetFacilityCount=5;
+      
+      map.on("load", function(evtObj) {
+        var map = evtObj.target;
+        var facilityPointSymbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_SQUARE, 
+          20,
+          new SimpleLineSymbol(
+            SimpleLineSymbol.STYLE_SOLID,
+            new Color([89,95,35]), 2
+          ),
+          new Color([130,159,83,0.40])
+        ); 
+        var incidentPointSymbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_CIRCLE, 
+          16,
+          new SimpleLineSymbol(
+            SimpleLineSymbol.STYLE_SOLID,
+            new Color([89,95,35]), 2
+          ),
+          new Color([130,159,83,0.40])
+        );  
+        incidentsGraphicsLayer = new GraphicsLayer();
+        
+        var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
+        incidentsGraphicsLayer.setRenderer(incidentsRenderer);
+        map.addLayer(incidentsGraphicsLayer);
+        routeGraphicLayer = new GraphicsLayer();
+        
+        var routePolylineSymbol = new SimpleLineSymbol(
+          SimpleLineSymbol.STYLE_SOLID, 
+          new Color([89,95,35]), 
+          4.0
+        );
 
-/*
-      var routeTask = new RouteTask({
-        url: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
+        var routeRenderer = new SimpleRenderer(routePolylineSymbol);
+        routeGraphicLayer.setRenderer(routeRenderer);
+        map.addLayer(routeGraphicLayer);
+        var facilitiesGraphicsLayer = new GraphicsLayer();
+        var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
+        facilitiesGraphicsLayer.setRenderer(facilityRenderer);
+       
+        map.addLayer(facilitiesGraphicsLayer);
+        
+        
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736724,3915954,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9730781,3920702,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9733535,3926914,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740003,3923150,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741618,3925577,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9737357,3927660,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9742319,3929506,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745587,3926974,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747498,3925474,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9748919,3929392,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9751928,3931523,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749396,3926593,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9755206,3927204,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9753961,3919552,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749212,3919246,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744368,3919733,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739447,3916112,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9732664,3917186,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9731322,3924282,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736491,3922677,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739739,3921100,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741564,3921033,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744947,3921339,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747249,3923021,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747001,3923661,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745042,3923470,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9743504,3922839,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
+        
+        facilitiesGraphicsLayer.add(new Graphic(polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282) )));
+
+        var polygonBarrier = solveResult;
+
+        var facilities = new FeatureSet();
+        facilities.features = facilitiesGraphicsLayer.graphics;
+        
+        params.facilities = facilities;
+        params.outSpatialReference = map.spatialReference;
+       
       });
-*/
-
-      // The stops and route result will be stored in this layer
-      var closestFacilityLyr = new GraphicsLayer();
-
-/*
-      var routeLyr = new GraphicsLayer();
-
-*/
-
-      // Setup the route parameters
-      var params = new ClosestFacilityParameters({
-        stops: new FeatureSet(),
-        outSpatialReference: { // autocasts as new SpatialReference()
-          wkid: 4326
-        }
+      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
+      closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      registry.byId("numLocations").on("change", function() {
+        params.defaultTargetFacilityCount = this.value;
+        clearGraphics();
       });
-
-/*
-      var routeParams = new RouteParameters({
-        stops: new FeatureSet(),
-        outSpatialReference: { // autocasts as new SpatialReference()
-          wkid: 3857
-        }
-      });
-*/
-
-      // Define the symbology used to display the stops
-      var stopSymbol = new SimpleMarkerSymbol({
-        style: "cross",
-        size: 15,
-        outline: { // autocasts as new SimpleLineSymbol()
-          width: 4
-        }
-      });
-
-      // Define the symbology used to display the route
-      var routeSymbol = new SimpleLineSymbol({
-        color: [0, 0, 255, 0.5],
-        width: 5
-      });
-
-      var map = new Map({
-        basemap: "streets",
-        layers: [closestFacilityLyr] // Add the route layer to the map
-      });
-      var view = new MapView({
-        container: "viewDiv", // Reference to the scene div created in step 5
-        map: map, // Reference to the map object created before the scene
-        center: [-87.569, 33.210],
-        zoom: 14
-      });
-
-      // Adds a graphic when the user clicks the map. If 2 or more points exist, route is solved.
-      on(view, "click", addStop);
-
-      function addStop(evt) {
-        // Add a point at the location of the map click
-        var stop = new Graphic({
-          geometry: evt.mapPoint,
-          symbol: stopSymbol
+      function clearGraphics() {
+        //clear graphics
+        dom.byId("directionsDiv").innerHTML= "";
+        map.graphics.clear();
+        routeGraphicLayer.clear();
+        incidentsGraphicsLayer.clear();    
+      } 
+      function mapClickHandler(evt) {
+        clearGraphics();
+        dom.byId("directionsDiv").innerHTML= "";
+        var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
+        var location = new Graphic(inPoint);
+        incidentsGraphicsLayer.add(location);
+        
+        var features = [];
+        features.push(location);
+        var incidents = new FeatureSet();
+        incidents.features = features;
+        params.incidents = incidents;
+        
+        map.graphics.enableMouseEvents();
+       
+        routeGraphicLayer.on("mouse-over", function(evt){
+          //clear existing directions and highlight symbol
+          map.graphics.clear();
+          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
+          
+          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
+          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
+          
+          map.graphics.add(highlightGraphic);
+          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });
-        closestFacilityLyr.add(stop);
-
-        // Execute the route task if 2 or more stops are input
-        routeParams.stops.features.push(stop);
-        if (routeParams.stops.features.length >= 2) {
-          routeTask.solve(routeParams).then(showRoute);
-        }
+        //solve 
+        var destinationArray = [];
+        closestFacilityTask.solve(params, function(solveResult){
+          array.forEach(solveResult.routes, function(route, index){
+            //build an array of route info
+            var attr = array.map(solveResult.directions[index].features, function(feature){
+              return feature.attributes.text;
+            });
+            var infoTemplate = new InfoTemplate("Attributes", "${*}");
+            
+            route.setInfoTemplate(infoTemplate);
+            route.setAttributes(attr);
+            //alert(JSON.stringify(route.attributes[route.attributes.length - 1], null, 4));
+            destinationArray.push(route.attributes[route.attributes.length - 1])
+            
+            
+            routeGraphicLayer.add(route);
+            dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
+          });
+          alert(destinationArray.toString());
+          
+          //display any messages
+          if(solveResult.messages.length > 0){
+            dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
+          }      
+        });
+      
+        
       }
-      // Adds the solved route to the map as a graphic
-      function showRoute(data) {
-        var routeResult = data.routeResults[0].route;
-        routeResult.symbol = routeSymbol;
-        closestFacilityLyr.add(routeResult);
-      }
+      //alert(JSON.stringify(destinationArray[destinationArray.length - 1], null, 4));
     });
   </script>
 </head>
-<body>
-  <div id="viewDiv"></div>
-  <div id="paneDiv">
-    <div>
-      <p>Click on the map to add stops to the route. The route from the last stop to
-        the newly added stop is calculated. If a stop is not reachable, it is removed
-        and the last valid point is set as the starting point.</p>
+
+<body class="claro">      
+  <div data-dojo-type="dijit/layout/BorderContainer" 
+       data-dojo-props="design:'headline', gutters:false" 
+       style="width:100%;height:100%;margin:0px;">
+
+    <div id="map" 
+         data-dojo-type="dijit/layout/ContentPane" 
+         data-dojo-props="region:'center'" class="panel">
     </div>
-  </div>
+
+    <div id="directions" 
+         data-dojo-type="dijit/layout/ContentPane" 
+         data-dojo-props="region:'bottom'" class="panel" 
+         style="height:250px;">
+
+      <b>Click the map to find names and addresses for the
+      <select id="numLocations" name="numLocations" data-dojo-type="dijit/form/ComboBox" value="1" style="width:60px;">
+          <option selected="selected">1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+      </select> closest shelters to your location.</b> 
+      <div id="directionsDiv"></div>
+
+    </div>
+ </div>
 </body>
 </html>
