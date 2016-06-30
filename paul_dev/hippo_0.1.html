@@ -123,7 +123,7 @@
        
         map.addLayer(facilitiesGraphicsLayer);
         
-        map.addLayer(floodGraphicsLayer);
+        // map.addLayer(floodGraphicsLayer);
         
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
@@ -159,9 +159,9 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
         
-        floodGraphicsLayer.add(new Graphic(new polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282) )));
+        // floodGraphicsLayer.add(new Graphic(new polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282) )));
 
-        var polygonBarrier = solveResult;
+        // var polygonBarrier = solveResult;
 
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
