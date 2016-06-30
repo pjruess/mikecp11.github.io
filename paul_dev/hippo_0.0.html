@@ -112,8 +112,6 @@
           4.0
         );
 
-        var polygonBarrier = solveResult;
-
         var routeRenderer = new SimpleRenderer(routePolylineSymbol);
         routeGraphicLayer.setRenderer(routeRenderer);
         map.addLayer(routeGraphicLayer);
@@ -158,8 +156,9 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
         
-        facilitiesGraphicsLayer.add(new Graphic(new polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282) )));
+        facilitiesGraphicsLayer.add(new Graphic(polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282) )));
 
+        var polygonBarrier = solveResult;
 
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
