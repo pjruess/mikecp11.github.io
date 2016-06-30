@@ -1,228 +1,249 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>Closest Facilities</title>
 
-<link rel="icon" href="images/logo.png" >
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>HIPPO</title>
-
-<link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
-<style>
-  html, body {
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-  }
-
-  #map {
-    height: 100%;
-    width: 100%;
-  }
-</style>
-
-<script src="//js.arcgis.com/3.17compact/"></script>
-<script>
-  require([
-    "esri/Color",
-    "esri/geometry/Point",
-    "esri/geometry/webMercatorUtils",
-    "esri/graphic",
-    "esri/layers/FeatureLayer",
-    "esri/map",
-    "esri/renderers/SimpleRenderer",
-    "esri/renderers/TemporalRenderer",
-    "esri/renderers/TimeClassBreaksAger",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/symbols/SimpleMarkerSymbol",
-    "esri/symbols/SimpleFillSymbol",
-    "esri/TimeExtent",
-    "dojo/domReady!"
-  ], function (Color, Point, webMercatorUtils, Graphic, FeatureLayer, Map, SimpleRenderer, TemporalRenderer,
-    TimeClassBreaksAger, SimpleLineSymbol, SimpleMarkerSymbol, TimeExtent, SimpleFillSymbol){
-
-    var map, featureLayer;
-    var polygonBarrierSymbol = new SimpleFillSymbol();
-    var OBJECTID_COUNTER = 1000;
-    var TRACKID_COUNTER = 1;
-    //onorientationchange doesn't always fire in a timely manner in Android so check for both orientationchange and resize
-    var supportsOrientationChange = "onorientationchange" in window, orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
-
-    window.addEventListener(orientationEvent, function (){
-      orientationChanged();
-    }, false);
-
-    map = new Map("map", {
-      basemap: "streets",
-      center: [-87.569, 33.210],
-      zoom: 15
-    });
-    map.on("load", mapLoadedHandler);
-    // map.on("load", drawPolygon);
-
-    function drawPolygon(location){
-      var polygon = {"geometry":{"rings":[[[-88.3125,34.96875],[-86.4453125,34.96875],
-        [-86.84375,33.2109375],[-88.84375,33.90625]]],"spatialReference":{"wkid":4326}},
-        "symbol":{"color":[0,0,0,64],"outline":{"color":[0,0,0,255],
-        "width":1,"type":"esriSLS","style":"esriSLSSolid"},
-        "type":"esriSFS","style":"esriSFSSolid"}};
-      var poly = new Graphic(polygon, polygonBarrierSymbol);
-
-      // featureLayer.applyEdits([poly], null, null, function (adds){
-      //   map.setTimeExtent(new TimeExtent(null, new Date()));
-      // });
-      map.graphics.add(poly);
+  <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
+  <style> 
+    body,html,#main{margin:0;padding:0;height:100%;width:100%;}
+    .panel {
+      border-radius: 6px;
+      box-shadow: 0px 6px 3px -3px #888;
+      border: 2px solid #86942A;
+      margin: 5px;
     }
+  </style> 
 
-    function mapLoadedHandler(maploadEvent){
-      console.log("map loaded", maploadEvent);
+  <script src="https://js.arcgis.com/3.17/"></script>
+  <script>
+    var map, params;
+    require([
+      "dojo/dom",
+      "dojo/_base/array",
+      "esri/Color",
+      "dojo/parser",
+      "dijit/registry",
+      
+      "esri/urlUtils",
+      "esri/map",
+      "esri/lang",
+      "esri/graphic",
+      "esri/InfoTemplate",
+      "esri/layers/GraphicsLayer",
+      "esri/renderers/SimpleRenderer",
 
-      //create a layer definition for the gps points
-      var layerDefinition = {
-        "objectIdField": "OBJECTID",
-        "trackIdField": "TrackID",
-        "geometryType": "esriGeometryPoint",
-        "timeInfo": {
-          "startTimeField": "DATETIME",
-          "endTimeField": null,
-          "timeExtent": [1277412330365],
-          "timeInterval": 1,
-          "timeIntervalUnits": "esriTimeUnitsMinutes"
-        },
-        "fields": [
-          {
-            "name": "OBJECTID",
-            "type": "esriFieldTypeOID",
-            "alias": "OBJECTID",
-            "sqlType": "sqlTypeOther"
-          },
-          {
-            "name": "TrackID",
-            "type": "esriFieldTypeInteger",
-            "alias": "TrackID"
-          },
-          {
-            "name": "DATETIME",
-            "type": "esriFieldTypeDate",
-            "alias": "DATETIME"
-          }
-        ]
-      };
+      "esri/geometry/Point",
+      "esri/tasks/FeatureSet",
 
-      var featureCollection = {
-        layerDefinition: layerDefinition,
-        featureSet: null
-      };
-      featureLayer = new FeatureLayer(featureCollection);
+      "esri/tasks/ClosestFacilityTask",
+      "esri/tasks/ClosestFacilityParameters",
 
-      //setup a temporal renderer
-      var sms = new SimpleMarkerSymbol().setColor(new Color([255, 0, 0])).setSize(8);
-      var observationRenderer = new SimpleRenderer(sms);
-      var latestObservationRenderer = new SimpleRenderer(new SimpleMarkerSymbol());
-      var infos = [
-        {
-          minAge: 0,
-          maxAge: 1,
-          color: new Color([255, 0, 0])
-        }, {
-          minAge: 1,
-          maxAge: 5,
-          color: new Color([255, 153, 0])
-        }, {
-          minAge: 5,
-          maxAge: 10,
-          color: new Color([255, 204, 0])
-        }, {
-          minAge: 10,
-          maxAge: Infinity,
-          color: new Color([0, 0, 0, 0])
-        }
-      ];
-      var ager = new TimeClassBreaksAger(infos, TimeClassBreaksAger.UNIT_MINUTES);
-      var sls = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-        new Color([255, 0, 0]), 3);
-      var trackRenderer = new SimpleRenderer(sls);
-      var renderer = new TemporalRenderer(observationRenderer, latestObservationRenderer,
-        trackRenderer, ager);
-      featureLayer.setRenderer(renderer);
-      map.addLayer(featureLayer);
+      "esri/symbols/SimpleMarkerSymbol",
+      "esri/symbols/SimpleLineSymbol",
+      
+      "dijit/form/ComboBox",
+      "dijit/layout/BorderContainer",
+      "dijit/layout/ContentPane"
+    ], function(
+      dom, array, Color, parser, registry,
+      urlUtils, Map, esriLang, Graphic, InfoTemplate, GraphicsLayer, SimpleRenderer, 
+      Point, FeatureSet, 
+      ClosestFacilityTask, ClosestFacilityParameters, 
+      SimpleMarkerSymbol, SimpleLineSymbol
+    ) {
+      var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
+   
+      parser.parse();
+      
+      urlUtils.addProxyRule({
+        urlPrefix: "route.arcgis.com",  
+        proxyUrl: "/sproxy/"
+      });
+        
+      map = new Map("map", { 
+        basemap: "streets", 
+        center: [-122.4, 37.785],
+        zoom: 14, 
+        showInfoWindowOnClick: false 
+      });
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
-        navigator.geolocation.watchPosition(showLocation, locationError);
-      }
-      drawPolygon([-88.3125,34.96875]);
-    }
+      map.on("click", mapClickHandler);
+      
+      params = new ClosestFacilityParameters();
+      params.impedenceAttribute= "Miles";      
+      params.defaultCutoff= 50;      
+      params.returnIncidents=false;
+      params.returnRoutes=true;
+      params.returnDirections=true;
+      //params.defaultTargetFacilityCount=5;
+      
+      map.on("load", function(evtObj) {
+        var map = evtObj.target;
+        var facilityPointSymbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_SQUARE, 
+          20,
+          new SimpleLineSymbol(
+            SimpleLineSymbol.STYLE_SOLID,
+            new Color([89,95,35]), 2
+          ),
+          new Color([130,159,83,0.40])
+        ); 
 
-    function locationError(error){
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          alert("Location not provided");
-          break;
+        var incidentPointSymbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_CIRCLE, 
+          16,
+          new SimpleLineSymbol(
+            SimpleLineSymbol.STYLE_SOLID,
+            new Color([89,95,35]), 2
+          ),
+          new Color([130,159,83,0.40])
+        );  
 
-        case error.POSITION_UNAVAILABLE:
-          alert("Current location not available");
-          break;
+        incidentsGraphicsLayer = new GraphicsLayer();
+        
+        var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
+        incidentsGraphicsLayer.setRenderer(incidentsRenderer);
+        map.addLayer(incidentsGraphicsLayer);
 
-        case error.TIMEOUT:
-          alert("Timeout");
-          break;
+        routeGraphicLayer = new GraphicsLayer();
+        
+        var routePolylineSymbol = new SimpleLineSymbol(
+          SimpleLineSymbol.STYLE_SOLID, 
+          new Color([89,95,35]), 
+          4.0
+        );
+        var routeRenderer = new SimpleRenderer(routePolylineSymbol);
+        routeGraphicLayer.setRenderer(routeRenderer);
 
-        default:
-          alert("unknown error");
-          break;
-      }
-    }
+        map.addLayer(routeGraphicLayer);
 
-    function zoomToLocation(location){
-      var pt = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude,
-        location.coords.latitude));
-      map.centerAndZoom(pt, 16);
-    }
+        var facilitiesGraphicsLayer = new GraphicsLayer();
+        var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
+        facilitiesGraphicsLayer.setRenderer(facilityRenderer);
+       
+        map.addLayer(facilitiesGraphicsLayer);
+        
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13625960,4549921,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13626184,4549247,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13626477,4549415,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13625385,4549659,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13624374,4548254,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-13624891,4548565,map.spatialReference))); 
+   
+        var facilities = new FeatureSet();
+        facilities.features = facilitiesGraphicsLayer.graphics;
+        
+        params.facilities = facilities;
+        params.outSpatialReference = map.spatialReference;
+       
+      });
+      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
+      closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
-    function showLocation(location){
-      if (location.coords.accuracy <= 500) {
-        var now = new Date();
-        var attributes = {};
-        attributes.OBJECTID = OBJECTID_COUNTER;
-        attributes.DATETIME = now.getTime();
-        attributes.TrackID = TRACKID_COUNTER;
+      registry.byId("numLocations").on("change", function() {
+        params.defaultTargetFacilityCount = this.value;
+        clearGraphics();
+      });
 
-        OBJECTID_COUNTER++;
-        TRACKID_COUNTER++;
+      function clearGraphics() {
+        //clear graphics
+        dom.byId("directionsDiv").innerHTML= "";
+        map.graphics.clear();
+        routeGraphicLayer.clear();
+        incidentsGraphicsLayer.clear();    
+      } 
 
-        var pt = webMercatorUtils.geographicToWebMercator(new Point(location.coords.longitude,
-          location.coords.latitude));
-        var graphic = new Graphic(new Point(pt, map.spatialReference), null, attributes);
-
-        featureLayer.applyEdits([graphic], null, null, function (adds){
-          map.setTimeExtent(new TimeExtent(null, new Date()));
-          map.centerAt(graphic.geometry);
+      function mapClickHandler(evt) {
+        clearGraphics();
+        dom.byId("directionsDiv").innerHTML= "";
+        var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
+        var location = new Graphic(inPoint);
+        incidentsGraphicsLayer.add(location);
+        
+        var features = [];
+        features.push(location);
+        var incidents = new FeatureSet();
+        incidents.features = features;
+        params.incidents = incidents;
+        
+        map.graphics.enableMouseEvents();
+       
+        routeGraphicLayer.on("mouse-over", function(evt){
+          //clear existing directions and highlight symbol
+          map.graphics.clear();
+          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
+          
+          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
+          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
+          
+          map.graphics.add(highlightGraphic);
+          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });
-      }
-      else {
-        console.warn("Point not added due to low accuracy: " + location.coords.accuracy);
-      }
-    }
 
-    function orientationChanged(){
-      if (map) {
-        map.reposition();
-        map.resize();
+        //solve 
+        var destinationArray = [];
+        closestFacilityTask.solve(params, function(solveResult){
+          array.forEach(solveResult.routes, function(route, index){
+            //build an array of route info
+            var attr = array.map(solveResult.directions[index].features, function(feature){
+              return feature.attributes.text;
+            });
+            var infoTemplate = new InfoTemplate("Attributes", "${*}");
+            
+            route.setInfoTemplate(infoTemplate);
+            route.setAttributes(attr);
+            //alert(JSON.stringify(route.attributes[route.attributes.length - 1], null, 4));
+            destinationArray.push(route.attributes[route.attributes.length - 1])
+            
+            
+            routeGraphicLayer.add(route);
+            dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
+          });
+          alert(destinationArray.toString());
+          
+          //display any messages
+          if(solveResult.messages.length > 0){
+            dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
+          }      
+        });
+      
+        
       }
-    }
-
-  });
-</script>
+      //alert(JSON.stringify(destinationArray[destinationArray.length - 1], null, 4));
+    });
+  </script>
 </head>
 
-<body>
-  <div id="map"></div>
+<body class="claro">      
+  <div data-dojo-type="dijit/layout/BorderContainer" 
+       data-dojo-props="design:'headline', gutters:false" 
+       style="width:100%;height:100%;margin:0px;">
+
+    <div id="map" 
+         data-dojo-type="dijit/layout/ContentPane" 
+         data-dojo-props="region:'center'" class="panel">
+    </div>
+
+    <div id="directions" 
+         data-dojo-type="dijit/layout/ContentPane" 
+         data-dojo-props="region:'bottom'" class="panel" 
+         style="height:250px;">
+
+      <b>Click the map to find names and addresses for the
+      <select id="numLocations" name="numLocations" data-dojo-type="dijit/form/ComboBox" value="1" style="width:60px;">
+          <option selected="selected">1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+      </select> closest shelters to your location.</b> 
+      <div id="directionsDiv"></div>
+
+    </div>
+ </div>
 </body>
 </html>
