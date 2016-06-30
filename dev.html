@@ -168,6 +168,7 @@
         params.facilities = facilities;
         params.outSpatialReference = map.spatialReference;
 
+        clearGraphics();
         dom.byId("directionsDiv").innerHTML= "";
         var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
         var location = new Graphic(inPoint);
@@ -191,6 +192,34 @@
           
           map.graphics.add(highlightGraphic);
           dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
+        });
+
+        //solve 
+        var destinationArray = [];
+        closestFacilityTask.solve(params, function(solveResult){
+          array.forEach(solveResult.routes, function(route, index){
+            //build an array of route info
+            var attr = array.map(solveResult.directions[index].features, function(feature){
+              return feature.attributes.text;
+            });
+            var infoTemplate = new InfoTemplate("Attributes", "${*}");
+            
+            route.setInfoTemplate(infoTemplate);
+            route.setAttributes(attr);
+            //alert(JSON.stringify(route.attributes[route.attributes.length - 1], null, 4));
+            destinationArray.push(route.attributes[route.attributes.length - 1])
+            
+            
+            routeGraphicLayer.add(route);
+            dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
+          });
+          alert(destinationArray.toString());
+          
+          //display any messages
+          if(solveResult.messages.length > 0){
+            dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
+          }      
+        });
        
       });
 
@@ -312,32 +341,32 @@
       //     dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
       //   });
 
-        //solve 
-        var destinationArray = [];
-        closestFacilityTask.solve(params, function(solveResult){
-          array.forEach(solveResult.routes, function(route, index){
-            //build an array of route info
-            var attr = array.map(solveResult.directions[index].features, function(feature){
-              return feature.attributes.text;
-            });
-            var infoTemplate = new InfoTemplate("Attributes", "${*}");
+      //   //solve 
+      //   var destinationArray = [];
+      //   closestFacilityTask.solve(params, function(solveResult){
+      //     array.forEach(solveResult.routes, function(route, index){
+      //       //build an array of route info
+      //       var attr = array.map(solveResult.directions[index].features, function(feature){
+      //         return feature.attributes.text;
+      //       });
+      //       var infoTemplate = new InfoTemplate("Attributes", "${*}");
             
-            route.setInfoTemplate(infoTemplate);
-            route.setAttributes(attr);
-            //alert(JSON.stringify(route.attributes[route.attributes.length - 1], null, 4));
-            destinationArray.push(route.attributes[route.attributes.length - 1])
+      //       route.setInfoTemplate(infoTemplate);
+      //       route.setAttributes(attr);
+      //       //alert(JSON.stringify(route.attributes[route.attributes.length - 1], null, 4));
+      //       destinationArray.push(route.attributes[route.attributes.length - 1])
             
             
-            routeGraphicLayer.add(route);
-            dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
-          });
-          alert(destinationArray.toString());
+      //       routeGraphicLayer.add(route);
+      //       dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
+      //     });
+      //     alert(destinationArray.toString());
           
-          //display any messages
-          if(solveResult.messages.length > 0){
-            dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
-          }      
-        });
+      //     //display any messages
+      //     if(solveResult.messages.length > 0){
+      //       dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
+      //     }      
+      //   });
       
         
       }
