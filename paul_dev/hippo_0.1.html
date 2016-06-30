@@ -4,7 +4,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-  <title>Closest Facilities</title>
+  <title>Flood HIPPO</title>
+  <link rel="icon" href="../images/logo.png" >
 
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
@@ -35,15 +36,13 @@
       "esri/InfoTemplate",
       "esri/layers/GraphicsLayer",
       "esri/renderers/SimpleRenderer",
-
       "esri/geometry/Point",
       "esri/tasks/FeatureSet",
-
       "esri/tasks/ClosestFacilityTask",
       "esri/tasks/ClosestFacilityParameters",
-
       "esri/symbols/SimpleMarkerSymbol",
       "esri/symbols/SimpleLineSymbol",
+      // "esri/tasks/RouteTask",
       
       "dijit/form/ComboBox",
       "dijit/layout/BorderContainer",
@@ -54,6 +53,7 @@
       Point, FeatureSet, 
       ClosestFacilityTask, ClosestFacilityParameters, 
       SimpleMarkerSymbol, SimpleLineSymbol
+      // ,RouteTask
     ) {
       var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
    
@@ -70,7 +70,6 @@
         zoom: 13, 
         showInfoWindowOnClick: false 
       });
-
       map.on("click", mapClickHandler);
       
       params = new ClosestFacilityParameters();
@@ -79,6 +78,7 @@
       params.returnIncidents=false;
       params.returnRoutes=true;
       params.returnDirections=true;
+      params.returnPolygonBarriers = true;
       //params.defaultTargetFacilityCount=5;
       
       map.on("load", function(evtObj) {
@@ -92,7 +92,6 @@
           ),
           new Color([130,159,83,0.40])
         ); 
-
         var incidentPointSymbol = new SimpleMarkerSymbol(
           SimpleMarkerSymbol.STYLE_CIRCLE, 
           16,
@@ -102,13 +101,11 @@
           ),
           new Color([130,159,83,0.40])
         );  
-
         incidentsGraphicsLayer = new GraphicsLayer();
         
         var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
         incidentsGraphicsLayer.setRenderer(incidentsRenderer);
         map.addLayer(incidentsGraphicsLayer);
-
         routeGraphicLayer = new GraphicsLayer();
         
         var routePolylineSymbol = new SimpleLineSymbol(
@@ -116,17 +113,19 @@
           new Color([89,95,35]), 
           4.0
         );
+
         var routeRenderer = new SimpleRenderer(routePolylineSymbol);
         routeGraphicLayer.setRenderer(routeRenderer);
-
         map.addLayer(routeGraphicLayer);
-
         var facilitiesGraphicsLayer = new GraphicsLayer();
         var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
         facilitiesGraphicsLayer.setRenderer(facilityRenderer);
        
         map.addLayer(facilitiesGraphicsLayer);
         
+        map.addLayer(floodGraphicsLayer);
+
+        var sr = new SpatialReference(4326);
         
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
@@ -161,8 +160,11 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
-
         
+        floodGraphicsLayer.add(new Graphic(new polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282),map.spatialReference )));
+
+        // var polygonBarrier = solveResult;
+
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         
@@ -172,12 +174,10 @@
       });
       //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
       closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
-
       registry.byId("numLocations").on("change", function() {
         params.defaultTargetFacilityCount = this.value;
         clearGraphics();
       });
-
       function clearGraphics() {
         //clear graphics
         dom.byId("directionsDiv").innerHTML= "";
@@ -185,7 +185,6 @@
         routeGraphicLayer.clear();
         incidentsGraphicsLayer.clear();    
       } 
-
       function mapClickHandler(evt) {
         clearGraphics();
         dom.byId("directionsDiv").innerHTML= "";
@@ -212,7 +211,6 @@
           map.graphics.add(highlightGraphic);
           dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });
-
         //solve 
         var destinationArray = [];
         closestFacilityTask.solve(params, function(solveResult){
