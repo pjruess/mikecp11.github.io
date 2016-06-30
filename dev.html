@@ -84,31 +84,21 @@
       map.on("load", initFunc)
       map.on("load", function(evtObj) {
         var map = evtObj.target;
-        var facilityPointSymbol = new SimpleMarkerSymbol(
-          SimpleMarkerSymbol.STYLE_SQUARE, 
-          20,
-          new SimpleLineSymbol(
-            SimpleLineSymbol.STYLE_SOLID,
-            new Color([89,95,35]), 2
-          ),
+        var facilityPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20, 
+          new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([89,95,35]), 2), 
           new Color([130,159,83,0.40])
         ); 
 
-        var incidentPointSymbol = new SimpleMarkerSymbol(
-          SimpleMarkerSymbol.STYLE_CIRCLE, 
-          16,
-          new SimpleLineSymbol(
-            SimpleLineSymbol.STYLE_SOLID,
-            new Color([89,95,35]), 2
-          ),
-          new Color([130,159,83,0.40])
-        );  
+        // var incidentPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 16,
+        //   new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([89,95,35]), 2),
+        //   new Color([130,159,83,0.40])
+        // );  
 
-        incidentsGraphicsLayer = new GraphicsLayer();
+        // incidentsGraphicsLayer = new GraphicsLayer();
         
-        var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
-        incidentsGraphicsLayer.setRenderer(incidentsRenderer);
-        map.addLayer(incidentsGraphicsLayer);
+        // var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
+        // incidentsGraphicsLayer.setRenderer(incidentsRenderer);
+        // map.addLayer(incidentsGraphicsLayer);
 
         routeGraphicLayer = new GraphicsLayer();
         
