@@ -158,11 +158,11 @@
         dom.byId("directionsDiv").innerHTML="";
         // var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
         var inPoint = new Point(location.coords.longitude, location.coords.latitude, map.spatialReference);
-        var location = new Graphic(inPoint);
-        incidentsGraphicsLayer.add(location);
+        var startPoint = new Graphic(inPoint);
+        incidentsGraphicsLayer.add(startPoint);
         
         var features = [];
-        features.push(location);
+        features.push(startPoint);
         var incidents = new FeatureSet();
         incidents.features = features;
         params.incidents = incidents;
