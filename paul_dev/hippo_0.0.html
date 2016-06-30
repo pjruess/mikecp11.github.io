@@ -5,7 +5,7 @@
   
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
   <title>Flood HIPPO</title>
-  <link rel="icon" href="images/logo.png" >
+  <link rel="icon" href="../images/logo.png" >
 
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
   <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
@@ -41,7 +41,9 @@
       "esri/tasks/ClosestFacilityTask",
       "esri/tasks/ClosestFacilityParameters",
       "esri/symbols/SimpleMarkerSymbol",
-      "esri/symbols/SimpleLineSymbol",
+      "esri/tasks/polygonBarriers",
+
+      "esri/symbols/polygonBarrierSymbol",
       
       "dijit/form/ComboBox",
       "dijit/layout/BorderContainer",
@@ -51,7 +53,8 @@
       urlUtils, Map, esriLang, Graphic, InfoTemplate, GraphicsLayer, SimpleRenderer, 
       Point, FeatureSet, 
       ClosestFacilityTask, ClosestFacilityParameters, 
-      SimpleMarkerSymbol, SimpleLineSymbol
+      SimpleMarkerSymbol, SimpleLineSymbol, 
+      PolygonBarrierSymbol
     ) {
       var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
    
@@ -76,6 +79,7 @@
       params.returnIncidents=false;
       params.returnRoutes=true;
       params.returnDirections=true;
+      params.returnPolygonBarriers = true;
       //params.defaultTargetFacilityCount=5;
       
       map.on("load", function(evtObj) {
@@ -110,6 +114,9 @@
           new Color([89,95,35]), 
           4.0
         );
+
+        var polygonBarrier = solveResult
+
         var routeRenderer = new SimpleRenderer(routePolylineSymbol);
         routeGraphicLayer.setRenderer(routeRenderer);
         map.addLayer(routeGraphicLayer);
@@ -154,6 +161,9 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
         
+        facilitiesGraphicsLayer.add(new Graphic(new polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282) )));
+
+
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         
