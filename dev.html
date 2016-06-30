@@ -79,7 +79,7 @@
       params.returnIncidents=false;
       params.returnRoutes=true;
       params.returnDirections=true;
-      //params.defaultTargetFacilityCount=5;
+      params.defaultTargetFacilityCount=5;
       
       map.on("load", initFunc, function(evtObj) {
         var map = evtObj.target;
@@ -181,7 +181,6 @@
         incidents.features = features;
         params.incidents = incidents;
         
-        /*
         map.graphics.enableMouseEvents();
        
         routeGraphicLayer.on("mouse-over", function(evt){
@@ -195,7 +194,6 @@
           map.graphics.add(highlightGraphic);
           dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });
-        */
 
         //solve 
         var destinationArray = [];
@@ -304,10 +302,10 @@
       //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
       closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
-      registry.byId("numLocations").on("change", function() {
-        params.defaultTargetFacilityCount = this.value;
-        clearGraphics();
-      });
+      // registry.byId("numLocations").on("change", function() {
+      //   params.defaultTargetFacilityCount = this.value;
+      //   clearGraphics();
+      // });
 
       function clearGraphics() {
         //clear graphics
@@ -394,12 +392,12 @@
          style="height:250px;">
 
       <b>Click the map to find names and addresses for the
-      <select id="numLocations" name="numLocations" data-dojo-type="dijit/form/ComboBox" value="1" style="width:60px;">
+      <!-- <select id="numLocations" name="numLocations" data-dojo-type="dijit/form/ComboBox" value="1" style="width:60px;">
           <option selected="selected">1</option>
           <option>2</option>
           <option>3</option>
           <option>4</option>
-          <option>5</option>
+          <option>5</option> -->
       </select> closest shelters to your location.</b> 
       <div id="directionsDiv"></div>
 
