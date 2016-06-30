@@ -81,7 +81,8 @@
       params.returnDirections=true;
       params.defaultTargetFacilityCount=5;
       
-      map.on("load", initFunc, function(evtObj) {
+      map.on("load", initFunc)
+      map.on("load", function(evtObj) {
         var map = evtObj.target;
         var facilityPointSymbol = new SimpleMarkerSymbol(
           SimpleMarkerSymbol.STYLE_SQUARE, 
