@@ -123,7 +123,7 @@
        
         map.addLayer(facilitiesGraphicsLayer);
         
-        map.addLayer(floodGraphicsLayer);
+        // map.addLayer(floodGraphicsLayer);
 
         var sr = new SpatialReference(4326);
         
@@ -161,7 +161,7 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
         
-        floodGraphicsLayer.add(new Graphic(new polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282),map.spatialReference )));
+        facilitiesGraphicsLayer.add(new Graphic(new polygonBarrier( (-9740685,3923841),(-9741564,3921033),(-9731322,3924282),map.spatialReference )));
 
         // var polygonBarrier = solveResult;
 
