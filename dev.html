@@ -79,7 +79,16 @@
       params.returnDirections=true;
       params.defaultTargetFacilityCount=5;
       
+      function clearGraphics() {
+        //clear graphics
+        dom.byId("directionsDiv").innerHTML= "";
+        map.graphics.clear();
+        routeGraphicsLayer.clear();
+        incidentsGraphicsLayer.clear();    
+      }
+
       map.on("load", initFunc);
+      
       map.on("load", function(mapLoadEvent) {
         var map = mapLoadEvent.target;
 
@@ -299,14 +308,6 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
       }
-
-      function clearGraphics() {
-        //clear graphics
-        dom.byId("directionsDiv").innerHTML= "";
-        map.graphics.clear();
-        routeGraphicsLayer.clear();
-        incidentsGraphicsLayer.clear();    
-      } 
 
       // function mapClickHandler(evt) {
       //   clearGraphics();

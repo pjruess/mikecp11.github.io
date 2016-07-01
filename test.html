@@ -110,6 +110,7 @@
         routeGraphicLayer.setRenderer(routeRenderer);
         map.addLayer(routeGraphicLayer);
         
+        // Add facilities to facilities layer
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
@@ -143,7 +144,6 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
-
         
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
@@ -152,7 +152,7 @@
         params.outSpatialReference = map.spatialReference;
        
       });
-      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
+
       closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
       registry.byId("numLocations").on("change", function() {
