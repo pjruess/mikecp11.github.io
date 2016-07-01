@@ -20,7 +20,7 @@
 
   <script src="https://js.arcgis.com/3.17/"></script>
   <script>
-    var map, params;
+    var map, closestFacilityParams, routeParams;
     require([
       "dojo/dom",
       "dojo/_base/array",
@@ -73,13 +73,13 @@
 
       // map.on("click", mapClickHandler);
       
-      params = new ClosestFacilityParameters();
-      params.impedenceAttribute= "Miles";      
-      params.defaultCutoff= 400;      
-      params.returnIncidents=false;
-      params.returnRoutes=true;
-      params.returnDirections=true;
-      params.defaultTargetFacilityCount=5;
+      closestFacilityParams = new ClosestFacilityParameters();
+      closestFacilityParams.impedenceAttribute= "Miles";      
+      closestFacilityParams.defaultCutoff= 400;      
+      closestFacilityParams.returnIncidents=false;
+      closestFacilityParams.returnRoutes=true;
+      closestFacilityParams.returnDirections=true;
+      closestFacilityParams.defaultTargetFacilityCount=5;
       
       map.on("load", initFunc)
       map.on("load", function(evtObj) {
@@ -151,8 +151,8 @@
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         
-        params.facilities = facilities;
-        params.outSpatialReference = map.spatialReference;
+        closestFacilityParams.facilities = facilities;
+        closestFacilityParams.outSpatialReference = map.spatialReference;
 
         clearGraphics();
         dom.byId("directionsDiv").innerHTML="";
@@ -165,25 +165,11 @@
         features.push(startPoint);
         var incidents = new FeatureSet();
         incidents.features = features;
-        params.incidents = incidents;
+        closestFacilityParams.incidents = incidents;
         
-        map.graphics.enableMouseEvents();
-       
-        routeGraphicLayer.on("mouse-over", function(evt){
-          //clear existing directions and highlight symbol
-          map.graphics.clear();
-          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
-          
-          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
-          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
-          
-          map.graphics.add(highlightGraphic);
-          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
-        });
-
-        //solve 
+        // Solve route task 
         var destinationArray = [];
-        closestFacilityTask.solve(params, function(solveResult){
+        closestFacilityTask.solve(closestFacilityParams, function(solveResult){
           array.forEach(solveResult.routes, function(route, index){
             //build an array of route info
             var attr = array.map(solveResult.directions[index].features, function(feature){
@@ -205,8 +191,23 @@
           //display any messages
           if(solveResult.messages.length > 0){
             dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
-          }  
+          }
         });
+
+        map.graphics.enableMouseEvents();
+
+        // Show route directions on mouse-over
+        routeGraphicLayer.on("mouse-over", function(evt){
+          //clear existing directions and highlight symbol
+          map.graphics.clear();
+          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
+          
+          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
+          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
+          
+          map.graphics.add(highlightGraphic);
+          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
+        });        
        
       });
 
