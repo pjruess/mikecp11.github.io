@@ -100,7 +100,7 @@
         facilitiesGraphicsLayer.setRenderer(facilityRenderer);
         map.addLayer(facilitiesGraphicsLayer);
 
-        var sr = SpatialReference(4326);
+        var sr = new SpatialReference(4326);
         
         // Add facilities to facilities layer
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
