@@ -74,7 +74,7 @@
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
       params.defaultCutoff= 400;      
-      params.returnIncidents=true;
+      params.returnIncidents=false;
       params.returnRoutes=true;
       params.returnDirections=true;
       params.defaultTargetFacilityCount=5;
@@ -155,6 +155,7 @@
         
         // Solve route task 
         var destinationArray = [];
+        console.log("Destination array created");
         closestFacilityTask.solve(params, function(solveResult){
           console.log("Entered closest facility task");
           array.forEach(solveResult.routes, function(route, index){
@@ -182,7 +183,7 @@
         });
 
         map.graphics.enableMouseEvents();
-
+        console.log("Mouse events enabled");
         // Show route directions on mouse-over
         routeGraphicsLayer.on("mouse-over", function(evt){
           //clear existing directions and highlight symbol
