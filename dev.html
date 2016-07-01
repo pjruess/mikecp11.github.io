@@ -142,7 +142,7 @@
         params.facilities = facilities;
         params.outSpatialReference = map.spatialReference;
 
-        clearGraphics();
+        // clearGraphics();
         dom.byId("directionsDiv").innerHTML="";
         var inPoint = new Point(location.coords.longitude, location.coords.latitude, map.spatialReference);
         var startPoint = new Graphic(inPoint);
