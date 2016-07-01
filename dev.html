@@ -79,25 +79,13 @@
       params.returnDirections=true;
       params.defaultTargetFacilityCount=5;
       
+      map.on("load", initFunc)
       map.on("load", function(mapLoadEvent) {
         // var map = mapLoadEvent.target;
 
-        // Render routes layer
-        routeGraphicsLayer = new GraphicsLayer();
-        var routePolylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
-          new Color([89,95,35]), 4.0);
-        var routeRenderer = new SimpleRenderer(routePolylineSymbol);
-        routeGraphicsLayer.setRenderer(routeRenderer);
-        map.addLayer(routeGraphicsLayer);
+        renderRoutes();
 
-        // Render facilities layer
-        var facilityPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20, 
-          new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([89,95,35]), 2), 
-          new Color([130,159,83,0.40])); 
-        var facilitiesGraphicsLayer = new GraphicsLayer();
-        var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
-        facilitiesGraphicsLayer.setRenderer(facilityRenderer);
-        map.addLayer(facilitiesGraphicsLayer);
+        renderFacilities();
         
         // Add facilities to facilities layer
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
@@ -203,8 +191,6 @@
        
       });
 
-      map.on("load", initFunc)
-
       var currLocation;
       var watchId;
 
@@ -286,6 +272,27 @@
       //   params.defaultTargetFacilityCount = this.value;
       //   clearGraphics();
       // });
+
+      function renderRoutes() {
+        // Render routes layer
+        routeGraphicsLayer = new GraphicsLayer();
+        var routePolylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
+          new Color([89,95,35]), 4.0);
+        var routeRenderer = new SimpleRenderer(routePolylineSymbol);
+        routeGraphicsLayer.setRenderer(routeRenderer);
+        map.addLayer(routeGraphicsLayer);
+      }
+
+      function renderFacilities() {
+        // Render facilities layer
+        var facilitiesGraphicsLayer = new GraphicsLayer();
+        var facilityPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20, 
+          new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([89,95,35]), 2), 
+          new Color([130,159,83,0.40])); 
+        var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
+        facilitiesGraphicsLayer.setRenderer(facilityRenderer);
+        map.addLayer(facilitiesGraphicsLayer);
+      }
 
       function clearGraphics() {
         //clear graphics
