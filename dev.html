@@ -55,7 +55,7 @@
       ClosestFacilityTask, ClosestFacilityParameters, 
       SimpleMarkerSymbol, SimpleLineSymbol
     ) {
-      var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
+      var incidentsGraphicsLayer, routeGraphicsLayer, closestFacilityTask;
    
       parser.parse();
       
@@ -74,22 +74,22 @@
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
       params.defaultCutoff= 400;      
-      params.returnIncidents=false;
+      params.returnIncidents=true;
       params.returnRoutes=true;
       params.returnDirections=true;
       params.defaultTargetFacilityCount=5;
       
       map.on("load", initFunc)
-      map.on("load", function(evtObj) {
-        // var map = evtObj.target;
+      map.on("load", function(mapLoadEvent) {
+        // var map = mapLoadEvent.target;
 
         // Render routes layer
-        routeGraphicLayer = new GraphicsLayer();
+        routeGraphicsLayer = new GraphicsLayer();
         var routePolylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
           new Color([89,95,35]), 4.0);
         var routeRenderer = new SimpleRenderer(routePolylineSymbol);
-        routeGraphicLayer.setRenderer(routeRenderer);
-        map.addLayer(routeGraphicLayer);
+        routeGraphicsLayer.setRenderer(routeRenderer);
+        map.addLayer(routeGraphicsLayer);
 
         // Render facilities layer
         var facilityPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20, 
@@ -170,7 +170,7 @@
             destinationArray.push(route.attributes[route.attributes.length - 1])
             
             
-            routeGraphicLayer.add(route);
+            routeGraphicsLayer.add(route);
             dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
           });
           alert(destinationArray.toString());
@@ -184,7 +184,7 @@
         map.graphics.enableMouseEvents();
 
         // Show route directions on mouse-over
-        routeGraphicLayer.on("mouse-over", function(evt){
+        routeGraphicsLayer.on("mouse-over", function(evt){
           //clear existing directions and highlight symbol
           map.graphics.clear();
           dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
@@ -284,7 +284,7 @@
         //clear graphics
         dom.byId("directionsDiv").innerHTML= "";
         map.graphics.clear();
-        routeGraphicLayer.clear();
+        routeGraphicsLayer.clear();
         incidentsGraphicsLayer.clear();    
       } 
 
@@ -303,7 +303,7 @@
         
       //   map.graphics.enableMouseEvents();
        
-      //   routeGraphicLayer.on("mouse-over", function(evt){
+      //   routeGraphicsLayer.on("mouse-over", function(evt){
       //     //clear existing directions and highlight symbol
       //     map.graphics.clear();
       //     dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
@@ -331,7 +331,7 @@
       //       destinationArray.push(route.attributes[route.attributes.length - 1])
             
             
-      //       routeGraphicLayer.add(route);
+      //       routeGraphicsLayer.add(route);
       //       dom.byId("directionsDiv").innerHTML = "Hover over the route to view directions";
       //     });
       //     alert(destinationArray.toString());
