@@ -83,34 +83,50 @@
       
       map.on("load", function(evtObj) {
         var map = evtObj.target;
+        var facilityPointSymbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_SQUARE, 
+          20,
+          new SimpleLineSymbol(
+            SimpleLineSymbol.STYLE_SOLID,
+            new Color([89,95,35]), 2
+          ),
+          new Color([130,159,83,0.40])
+        ); 
 
-        // Initialize incidents layer
-        incidentsGraphicsLayer = new GraphicsLayer();  
-        var incidentPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 16,
-          new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,new Color([89,95,35]), 2),
-          new Color([130,159,83,0.40]));  
+        var incidentPointSymbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_CIRCLE, 
+          16,
+          new SimpleLineSymbol(
+            SimpleLineSymbol.STYLE_SOLID,
+            new Color([89,95,35]), 2
+          ),
+          new Color([130,159,83,0.40])
+        );  
+
+        incidentsGraphicsLayer = new GraphicsLayer();
+        
         var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
         incidentsGraphicsLayer.setRenderer(incidentsRenderer);
         map.addLayer(incidentsGraphicsLayer);
-        
-        // Initialize facilities layer
-        var facilitiesGraphicsLayer = new GraphicsLayer();
-        var facilityPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20,
-          new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,new Color([89,95,35]), 2),
-          new Color([130,159,83,0.40])); 
-        var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
-        facilitiesGraphicsLayer.setRenderer(facilityRenderer);
-        map.addLayer(facilitiesGraphicsLayer);
 
-        // Initialize routes layer
         routeGraphicLayer = new GraphicsLayer();
-        var routePolylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
-          new Color([89,95,35]), 4.0);
+        
+        var routePolylineSymbol = new SimpleLineSymbol(
+          SimpleLineSymbol.STYLE_SOLID, 
+          new Color([89,95,35]), 
+          4.0
+        );
         var routeRenderer = new SimpleRenderer(routePolylineSymbol);
         routeGraphicLayer.setRenderer(routeRenderer);
+
         map.addLayer(routeGraphicLayer);
+
+        var facilitiesGraphicsLayer = new GraphicsLayer();
+        var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
+        facilitiesGraphicsLayer.setRenderer(facilityRenderer);
+       
+        map.addLayer(facilitiesGraphicsLayer);
         
-        // Add facilities to facilities layer
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
@@ -144,6 +160,7 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
+
         
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
@@ -152,7 +169,7 @@
         params.outSpatialReference = map.spatialReference;
        
       });
-
+      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
       closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
       registry.byId("numLocations").on("change", function() {
