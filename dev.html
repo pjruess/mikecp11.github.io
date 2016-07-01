@@ -138,7 +138,7 @@
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         console.log("Facilities featureset initialized");
-        
+
         params.facilities = facilities;
         params.outSpatialReference = map.spatialReference;
 
@@ -148,6 +148,8 @@
         var startPoint = new Graphic(inPoint);
         incidentsGraphicsLayer.add(startPoint);
         
+        console.log("Test");
+
         var features = [];
         features.push(startPoint);
         var incidents = new FeatureSet();
