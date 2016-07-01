@@ -87,42 +87,9 @@
 
         renderFacilities();
         
-        console.log("Routes and Facilities rendered successfully");
+        addFacilities();
 
-        // Add facilities to facilities layer
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736724,3915954,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9730781,3920702,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9733535,3926914,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740003,3923150,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741618,3925577,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9737357,3927660,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9742319,3929506,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745587,3926974,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747498,3925474,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9748919,3929392,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9751928,3931523,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749396,3926593,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9755206,3927204,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9753961,3919552,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749212,3919246,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744368,3919733,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739447,3916112,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9732664,3917186,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9731322,3924282,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736491,3922677,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739739,3921100,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741564,3921033,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744947,3921339,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747249,3923021,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747001,3923661,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745042,3923470,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9743504,3922839,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
+        console.log("Routes and Facilities rendered successfully");
         
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
@@ -294,6 +261,43 @@
         var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
         facilitiesGraphicsLayer.setRenderer(facilityRenderer);
         map.addLayer(facilitiesGraphicsLayer);
+      }
+
+      function addFacilities() {
+        // Add facilities to facilities layer
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736724,3915954,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9730781,3920702,map.spatialReference))); 
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9733535,3926914,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740003,3923150,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741618,3925577,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9737357,3927660,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9742319,3929506,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745587,3926974,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747498,3925474,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9748919,3929392,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9751928,3931523,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749396,3926593,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9755206,3927204,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9753961,3919552,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749212,3919246,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744368,3919733,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739447,3916112,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9732664,3917186,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9731322,3924282,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736491,3922677,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739739,3921100,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741564,3921033,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744947,3921339,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747249,3923021,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747001,3923661,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745042,3923470,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9743504,3922839,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
+        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
       }
 
       function clearGraphics() {
