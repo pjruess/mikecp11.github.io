@@ -79,7 +79,6 @@
       params.returnDirections=true;
       params.defaultTargetFacilityCount=5;
       
-      map.on("load", initFunc)
       map.on("load", function(mapLoadEvent) {
         // var map = mapLoadEvent.target;
 
@@ -144,11 +143,11 @@
 
         console.log("Facilities added to parameters");
 
-        // clearGraphics();
-        // dom.byId("directionsDiv").innerHTML="";
+        clearGraphics();
+        dom.byId("directionsDiv").innerHTML="";
         var inPoint = new Point(location.coords.longitude, location.coords.latitude, map.spatialReference);
         var startPoint = new Graphic(inPoint);
-        // incidentsGraphicsLayer.add(startPoint);
+        incidentsGraphicsLayer.add(startPoint);
         
         console.log("Test");
 
@@ -203,6 +202,8 @@
         });        
        
       });
+
+      map.on("load", initFunc)
 
       var currLocation;
       var watchId;
@@ -276,8 +277,7 @@
           new Color([210, 105, 30, 0.9])
         );
         graphic = new Graphic(pt, symbol);
-        // map.graphics.add(graphic);
-        incidentsGraphicsLayer.add(graphic);
+        map.graphics.add(graphic);
       }
 
       closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
