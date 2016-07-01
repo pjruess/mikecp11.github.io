@@ -20,7 +20,7 @@
 
   <script src="https://js.arcgis.com/3.17/"></script>
   <script>
-    var map, closestFacilityParams, routeParams;
+    var map, params;
     require([
       "dojo/dom",
       "dojo/_base/array",
@@ -66,35 +66,22 @@
         
       map = new Map("map", { 
         basemap: "streets", 
-        // center: [-87.540526, 33.215858],
-        // zoom: 13, 
         showInfoWindowOnClick: false 
       });
 
       // map.on("click", mapClickHandler);
       
-      closestFacilityParams = new ClosestFacilityParameters();
-      closestFacilityParams.impedenceAttribute= "Miles";      
-      closestFacilityParams.defaultCutoff= 400;      
-      closestFacilityParams.returnIncidents=false;
-      closestFacilityParams.returnRoutes=true;
-      closestFacilityParams.returnDirections=true;
-      closestFacilityParams.defaultTargetFacilityCount=5;
+      params = new ClosestFacilityParameters();
+      params.impedenceAttribute= "Miles";      
+      params.defaultCutoff= 400;      
+      params.returnIncidents=false;
+      params.returnRoutes=true;
+      params.returnDirections=true;
+      params.defaultTargetFacilityCount=5;
       
       map.on("load", initFunc)
       map.on("load", function(evtObj) {
         var map = evtObj.target;
-
-        // var incidentPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 16,
-        //   new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([89,95,35]), 2),
-        //   new Color([130,159,83,0.40])
-        // );  
-
-        // incidentsGraphicsLayer = new GraphicsLayer();
-        
-        // var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
-        // incidentsGraphicsLayer.setRenderer(incidentsRenderer);
-        // map.addLayer(incidentsGraphicsLayer);
 
         // Render routes layer
         routeGraphicLayer = new GraphicsLayer();
@@ -151,12 +138,11 @@
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
         
-        closestFacilityParams.facilities = facilities;
-        closestFacilityParams.outSpatialReference = map.spatialReference;
+        params.facilities = facilities;
+        params.outSpatialReference = map.spatialReference;
 
-        // clearGraphics();
+        clearGraphics();
         dom.byId("directionsDiv").innerHTML="";
-        // var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
         var inPoint = new Point(location.coords.longitude, location.coords.latitude, map.spatialReference);
         var startPoint = new Graphic(inPoint);
         incidentsGraphicsLayer.add(startPoint);
@@ -165,11 +151,15 @@
         features.push(startPoint);
         var incidents = new FeatureSet();
         incidents.features = features;
-        closestFacilityParams.incidents = incidents;
-        
+        params.incidents = incidents;
+      });
+
+      map.on("load", solveRouteTask);
+
+      function solveRouteTask(){
         // Solve route task 
         var destinationArray = [];
-        closestFacilityTask.solve(closestFacilityParams, function(solveResult){
+        closestFacilityTask.solve(params, function(solveResult){
           console.log("Entered closest facility task");
           array.forEach(solveResult.routes, function(route, index){
             //build an array of route info
@@ -208,9 +198,8 @@
           
           map.graphics.add(highlightGraphic);
           dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
-        });        
-       
-      });
+        });
+      }
 
       var currLocation;
       var watchId;
@@ -287,7 +276,6 @@
         map.graphics.add(graphic);
       }
 
-      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
       closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
       // registry.byId("numLocations").on("change", function() {
