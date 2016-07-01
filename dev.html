@@ -143,6 +143,9 @@
         params.outSpatialReference = map.spatialReference;
 
         console.log("Facilities added to parameters");
+      });
+
+      map.on("load", function(mapLoadEvent) {
 
         // clearGraphics();
         // dom.byId("directionsDiv").innerHTML="";
