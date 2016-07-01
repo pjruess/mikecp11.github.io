@@ -170,6 +170,7 @@
         // Solve route task 
         var destinationArray = [];
         closestFacilityTask.solve(closestFacilityParams, function(solveResult){
+          console.log("Entered closest facility task");
           array.forEach(solveResult.routes, function(route, index){
             //build an array of route info
             var attr = array.map(solveResult.directions[index].features, function(feature){
