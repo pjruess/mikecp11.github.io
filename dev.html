@@ -143,15 +143,12 @@
         params.outSpatialReference = map.spatialReference;
 
         console.log("Facilities added to parameters");
-      });
-
-      map.on("load", function(mapLoadEvent) {
 
         // clearGraphics();
         // dom.byId("directionsDiv").innerHTML="";
         var inPoint = new Point(location.coords.longitude, location.coords.latitude, map.spatialReference);
         var startPoint = new Graphic(inPoint);
-        incidentsGraphicsLayer.add(startPoint);
+        // incidentsGraphicsLayer.add(startPoint);
         
         console.log("Test");
 
@@ -279,7 +276,8 @@
           new Color([210, 105, 30, 0.9])
         );
         graphic = new Graphic(pt, symbol);
-        map.graphics.add(graphic);
+        // map.graphics.add(graphic);
+        incidentsGraphicsLayer.add(graphic);
       }
 
       closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
