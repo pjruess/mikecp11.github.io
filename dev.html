@@ -66,8 +66,7 @@
         
       map = new Map("map", { 
         basemap: "streets", 
-        showInfoWindowOnClick: false,
-        "geometry":{"spatialReference":{"wkid":4326}}
+        showInfoWindowOnClick: false 
       });
 
       // map.on("click", mapClickHandler);
@@ -100,8 +99,6 @@
         var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
         facilitiesGraphicsLayer.setRenderer(facilityRenderer);
         map.addLayer(facilitiesGraphicsLayer);
-
-        var sr = new SpatialReference(4326);
         
         // Add facilities to facilities layer
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
@@ -137,10 +134,10 @@
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-87.546723,33.2216,sr)));
         
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
+        console.log("Facilities featureset initialized");
         
         params.facilities = facilities;
         params.outSpatialReference = map.spatialReference;
