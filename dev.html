@@ -81,7 +81,7 @@
       
       map.on("load", initFunc)
       map.on("load", function(evtObj) {
-        var map = evtObj.target;
+        // var map = evtObj.target;
 
         // Render routes layer
         routeGraphicLayer = new GraphicsLayer();
@@ -152,11 +152,7 @@
         var incidents = new FeatureSet();
         incidents.features = features;
         params.incidents = incidents;
-      });
-
-      map.on("load", solveRouteTask);
-
-      function solveRouteTask(){
+        
         // Solve route task 
         var destinationArray = [];
         closestFacilityTask.solve(params, function(solveResult){
@@ -198,8 +194,9 @@
           
           map.graphics.add(highlightGraphic);
           dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
-        });
-      }
+        });        
+       
+      });
 
       var currLocation;
       var watchId;
