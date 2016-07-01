@@ -153,6 +153,21 @@
         incidents.features = features;
         params.incidents = incidents;
         
+        map.graphics.enableMouseEvents();
+        console.log("Mouse events enabled");
+        // Show route directions on mouse-over
+        routeGraphicsLayer.on("mouse-over", function(evt){
+          //clear existing directions and highlight symbol
+          map.graphics.clear();
+          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
+          
+          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
+          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
+          
+          map.graphics.add(highlightGraphic);
+          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
+        });        
+
         // Solve route task 
         var destinationArray = [];
         console.log("Destination array created");
@@ -180,21 +195,6 @@
           if(solveResult.messages.length > 0){
             dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
           }
-        });
-
-        map.graphics.enableMouseEvents();
-        console.log("Mouse events enabled");
-        // Show route directions on mouse-over
-        routeGraphicsLayer.on("mouse-over", function(evt){
-          //clear existing directions and highlight symbol
-          map.graphics.clear();
-          dom.byId("directionsDiv").innerHTML= "Hover over the route to view directions";
-          
-          var highlightSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],0.25), 4.5);
-          var highlightGraphic = new Graphic(evt.graphic.geometry,highlightSymbol);
-          
-          map.graphics.add(highlightGraphic);
-          dom.byId("directionsDiv").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
         });        
        
       });
