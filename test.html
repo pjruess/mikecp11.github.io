@@ -55,7 +55,7 @@
       ClosestFacilityTask, ClosestFacilityParameters, 
       SimpleMarkerSymbol, SimpleLineSymbol
     ) {
-      var incidentsGraphicsLayer, routeGraphicLayer, closestFacilityTask;
+      var incidentsGraphicsLayer, routeGraphicLayer, facilitiesGraphicsLayer, closestFacilityTask;
    
       parser.parse();
       
@@ -71,106 +71,180 @@
         showInfoWindowOnClick: false 
       });
 
-      map.on("click", mapClickHandler);
+      // map.on("click", mapClickHandler);
       
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
       params.defaultCutoff= 400;      
-      params.returnIncidents=false;
+      params.returnIncidents=true;
       params.returnRoutes=true;
       params.returnDirections=true;
       //params.defaultTargetFacilityCount=5;
       
       map.on("load", function(evtObj) {
         var map = evtObj.target;
-        var facilityPointSymbol = new SimpleMarkerSymbol(
-          SimpleMarkerSymbol.STYLE_SQUARE, 
-          20,
-          new SimpleLineSymbol(
-            SimpleLineSymbol.STYLE_SOLID,
-            new Color([89,95,35]), 2
-          ),
-          new Color([130,159,83,0.40])
-        ); 
-
-        var incidentPointSymbol = new SimpleMarkerSymbol(
-          SimpleMarkerSymbol.STYLE_CIRCLE, 
-          16,
-          new SimpleLineSymbol(
-            SimpleLineSymbol.STYLE_SOLID,
-            new Color([89,95,35]), 2
-          ),
-          new Color([130,159,83,0.40])
-        );  
-
-        incidentsGraphicsLayer = new GraphicsLayer();
         
+        renderIncidents();
+        renderFacilities();
+        renderRoutes();
+        
+        loadFacilities();
+        loadIncidents();
+        
+        params.outSpatialReference = map.spatialReference;
+        
+        mapClickHandler();
+        // initFunc();
+
+      });
+      
+      function renderIncidents() {
+        // Render incidents layer
+        incidentsGraphicsLayer = new GraphicsLayer();
+        var incidentPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 16,
+          new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([89,95,35]), 2),
+          new Color([130,159,83,0.40]));  
         var incidentsRenderer = new SimpleRenderer(incidentPointSymbol);
         incidentsGraphicsLayer.setRenderer(incidentsRenderer);
         map.addLayer(incidentsGraphicsLayer);
-
-        routeGraphicLayer = new GraphicsLayer();
-        
-        var routePolylineSymbol = new SimpleLineSymbol(
-          SimpleLineSymbol.STYLE_SOLID, 
-          new Color([89,95,35]), 
-          4.0
-        );
-        var routeRenderer = new SimpleRenderer(routePolylineSymbol);
-        routeGraphicLayer.setRenderer(routeRenderer);
-
-        map.addLayer(routeGraphicLayer);
-
-        var facilitiesGraphicsLayer = new GraphicsLayer();
+      }
+      
+      function renderFacilities() {
+        // Render facilities layer
+        facilitiesGraphicsLayer = new GraphicsLayer();
+        var facilityPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 20,
+          new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([89,95,35]), 2),
+          new Color([130,159,83,0.40])); 
         var facilityRenderer = new SimpleRenderer(facilityPointSymbol);
         facilitiesGraphicsLayer.setRenderer(facilityRenderer);
-       
         map.addLayer(facilitiesGraphicsLayer);
-        
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736724,3915954,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9730781,3920702,map.spatialReference))); 
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9733535,3926914,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740003,3923150,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741618,3925577,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9737357,3927660,map.spatialReference)));
+      }
+      
+      function renderRoutes() {
+        // Render routes layer
+        routeGraphicLayer = new GraphicsLayer();
+        var routePolylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
+          new Color([89,95,35]), 4.0);
+        var routeRenderer = new SimpleRenderer(routePolylineSymbol);
+        routeGraphicLayer.setRenderer(routeRenderer);
+        map.addLayer(routeGraphicLayer);
+      }
+      
+      function loadFacilities() {
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9747535,3911614,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9744043,3912399,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9739868,3914969,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9736724,3915954,map.spatialReference))); 
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9730781,3920702,map.spatialReference))); 
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9733535,3926914,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9740003,3923150,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9741618,3925577,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9737357,3927660,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9742319,3929506,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9745587,3926974,map.spatialReference)));
         facilitiesGraphicsLayer.add(new Graphic(new Point(-9747498,3925474,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9748919,3929392,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9751928,3931523,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749396,3926593,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9755206,3927204,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9753961,3919552,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9749212,3919246,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744368,3919733,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739447,3916112,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9732664,3917186,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9731322,3924282,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9736491,3922677,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739739,3921100,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9741564,3921033,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9744947,3921339,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747249,3923021,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9747001,3923661,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9745042,3923470,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9743504,3922839,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
-        facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9748919,3929392,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9751928,3931523,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9749396,3926593,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9755206,3927204,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9753961,3919552,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9749212,3919246,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9744368,3919733,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9739447,3916112,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9732664,3917186,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9731322,3924282,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9736491,3922677,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9739739,3921100,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9741564,3921033,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9744947,3921339,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9747249,3923021,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9747001,3923661,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9745042,3923470,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9743504,3922839,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9740685,3923841,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9738354,3924177,map.spatialReference)));
+        // facilitiesGraphicsLayer.add(new Graphic(new Point(-9739797,3926823,map.spatialReference)));
 
-        
         var facilities = new FeatureSet();
         facilities.features = facilitiesGraphicsLayer.graphics;
-        
         params.facilities = facilities;
-        params.outSpatialReference = map.spatialReference;
-       
-      });
-      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
-      closestFacilityTask = new ClosestFacilityTask("http://utility.arcgis.com/usrsvcs/appservices/qQE8xiA9cWlijPjb/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      }
+
+      function loadIncidents() {
+        var startPoint = new Graphic(new Point(-9739797,3926823,map.spatialReference));
+        incidentsGraphicsLayer.add(startPoint);
+
+        // var features = [];
+        // features.push(startPoint);
+        // incidents.features = features;
+
+        var incidents = new FeatureSet();
+        incidents.features = incidentsGraphicsLayer.graphics;
+        params.incidents = incidents;
+      }
+/*      
+      function initFunc(map) {
+        if( navigator.geolocation ) {  
+          navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
+          watchId = navigator.geolocation.watchPosition(showLocation, locationError);
+        } else {
+          alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
+        }
+      }
+
+      function locationError(error) {
+        //error occurred so stop watchPosition
+        if( navigator.geolocation ) {
+          navigator.geolocation.clearWatch(watchId);
+        }
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert("Location not provided");
+            break;
+
+          case error.POSITION_UNAVAILABLE:
+            alert("Current location not available");
+            break;
+
+          case error.TIMEOUT:
+            alert("Timeout");
+            break;
+
+          default:
+            alert("unknown error");
+            break;
+        }
+      }
+
+      function zoomToLocation(location) {
+        var pt = new Point(location.coords.longitude, location.coords.latitude);
+        addGraphic(pt);
+        map.centerAndZoom(pt, 12);
+      }
+
+      function showLocation(location) {
+        //zoom to the users location and add a graphic
+        var pt = new Point(location.coords.longitude, location.coords.latitude);
+        if ( !graphic ) {
+          addGraphic(pt);
+        } else { // move the graphic if it already exists
+          graphic.setGeometry(pt);
+        }
+        map.centerAt(pt);
+      }
+      
+      function addGraphic(){
+        var pt = new Point(location.coords.longitude, location.coords.latitude);
+
+        var symbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_CIRCLE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
+          new Color([210, 105, 30, 0.5]), 8), new Color([210, 105, 30, 0.9]));
+        graphic = new Graphic(pt, symbol);
+        map.graphics.add(graphic);
+      }   
+*/
+      // closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
       registry.byId("numLocations").on("change", function() {
         params.defaultTargetFacilityCount = this.value;
@@ -185,19 +259,19 @@
         incidentsGraphicsLayer.clear();    
       } 
 
-      function mapClickHandler(evt) {
+      function mapClickHandler() {
         clearGraphics();
         dom.byId("directionsDiv").innerHTML= "";
-        var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
-        var location = new Graphic(inPoint);
-        incidentsGraphicsLayer.add(location);
+        // var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
+        // var location = new Graphic(inPoint);
+        // incidentsGraphicsLayer.add(location);
         
-        var features = [];
-        features.push(location);
-        var incidents = new FeatureSet();
-        incidents.features = features;
-        params.incidents = incidents;
-        
+        // var features = [];
+        // features.push(location);
+        // var incidents = new FeatureSet();
+        // incidents.features = features;
+        // params.incidents = incidents;
+
         map.graphics.enableMouseEvents();
        
         routeGraphicLayer.on("mouse-over", function(evt){
@@ -238,7 +312,6 @@
             dom.byId("directionsDiv").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
           }      
         });
-      
         
       }
       //alert(JSON.stringify(destinationArray[destinationArray.length - 1], null, 4));

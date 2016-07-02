@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>Closest Facilities</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
+  <style> 
+    body,html,#main{margin:0;padding:0;height:100%;width:100%;}
+    .panel {
+      border-radius: 6px;
+      box-shadow: 0px 6px 3px -3px #888;
+      border: 2px solid #86942A;
+      margin: 5px;
+    }
+  </style> 
+
+  <script src="https://js.arcgis.com/3.17/"></script>
+  <script>
+    require([
+        "esri/urlUtils", "esri/graphic", "esri/geometry/Point", "esri/tasks/FeatureSet", "esri/tasks/ClosestFacilityTask", "esri/tasks/ClosestFacilityParameters",
+        "esri/arcgis/utils", "dojo/query", "dojo/dom-class", "dojo/json", "dojo/domReady!"], function(
+        urlUtils, Graphic, Point, FeatureSet, ClosestFacilityTask, ClosestFacilityParameters,
+        arcgisUtils, query, domClass) {
+
+
+        urlUtils.addProxyRule({
+            urlPrefix: "route.arcgis.com",
+            proxyUrl: "/closest"
+        });
+
+        arcgisUtils.createMap("9a33727d54904de7b80687fb0810119a", 'map').then(function (response) {
+            var map = response.map;
+
+            var lay = map.getLayer(map.graphicsLayerIds[3]);
+            var facilities = new FeatureSet();
+            facilities.features = lay.graphics;
+
+            var params = new ClosestFacilityParameters();
+            params.travelMode = 5;
+            params.returnIncidents = false;
+            params.returnRoutes = true;
+            params.returnDirections = true;
+            params.defaultTargetFacilityCount = 1;
+            params.facilities = facilities;
+            params.outSpatialReference = map.spatialReference;
+
+            map.on('click', function(evt) {
+                var inPoint = new Point(evt.mapPoint.x, evt.mapPoint.y, map.spatialReference);
+                var location = new Graphic(inPoint);
+
+                var incidents = new FeatureSet();
+                incidents.features = [location];
+
+                params.incidents = incidents;
+
+                closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+
+                closestFacilityTask.solve(params, function(solveResult){
+                    console.log(solveResult);
+                });
+            });
+
+        });
+
+    });
+    </script>
+</head>
+
+<body class="claro">      
+  <div data-dojo-type="dijit/layout/BorderContainer" 
+       data-dojo-props="design:'headline', gutters:false" 
+       style="width:100%;height:100%;margin:0px;">
+
+    <div id="map" 
+         data-dojo-type="dijit/layout/ContentPane" 
+         data-dojo-props="region:'center'" class="panel">
+    </div>
+
+    <div id="directions" 
+         data-dojo-type="dijit/layout/ContentPane" 
+         data-dojo-props="region:'bottom'" class="panel" 
+         style="height:250px;">
+
+      <b>Click the map to find routes for the
+      <select id="numLocations" name="numLocations" data-dojo-type="dijit/form/ComboBox" value="1" style="width:60px;">
+          <option selected="selected">1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+      </select> closest facilities to the input point.</b> 
+      <div id="directionsDiv"></div>
+
+    </div>
+ </div>
+</body>
+</html>
