@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="icon" href="images/logo.png" >
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    
     <title>Flood HIPPO</title>
-    
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
-    
     <style>
       html, body {
         height: 100%;
@@ -20,50 +17,15 @@
         padding: 0px;
         width: 100%;
       }
-
-     @-webkit-keyframes
-       pulse
-      {
-        0%
-        {
-          opacity: 1.0;
-
-        }
-        45%
-        {
-          opacity: .20;
-
-        }
-        100%
-        {
-          opacity: 1.0;
-
-        }
+     @-webkit-keyframes pulse {
+        0%   {opacity: 1.0;}
+        45%  {opacity: .20;}
+        100% {opacity: 1.0;}
       }
-     @-moz-keyframes pulse
-      {
-        0%
-        {
-          opacity: 1.0;
-        }
-        45%
-        {
-          opacity: .20;
-
-        }
-        100%
-        {
-          opacity: 1.0;
-        }
-      }
-
-      #map_graphics_layer {
-        -webkit-animation-duration: 3s;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-name: pulse;
-        -moz-animation-duration: 3s;
-        -moz-animation-iteration-count: infinite;
-        -moz-animation-name: pulse;
+     @-moz-keyframes pulse {
+        0%   {opacity: 1.0;}
+        45%  {opacity: .20;}
+        100% {opacity: 1.0;}
       }
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
@@ -83,7 +45,6 @@
         "esri/layers/CSVLayer",
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
-        
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
         "dojo/domReady!"
@@ -112,8 +73,8 @@
           proxyUrl: "/sproxy/"
         });
         urlUtils.addProxyRule({
-          proxyUrl: "/proxy/",
-          urlPrefix: "mikecp11.github.io"
+          urlPrefix: "mikecp11.github.io",
+          proxyUrl: "/proxy/"
         });
 
         var map = new Map("map", {
@@ -140,15 +101,12 @@
             case error.PERMISSION_DENIED:
               alert("Location not provided");
               break;
-
             case error.POSITION_UNAVAILABLE:
               alert("Current location not available");
               break;
-
             case error.TIMEOUT:
               alert("Timeout");
               break;
-
             default:
               alert("unknown error");
               break;
@@ -158,8 +116,7 @@
         function initStart(position){
         	startLon = position.coords.longitude.toString();
         	startLat = position.coords.latitude.toString();
-
-		    startPoint = new Point(startLon, startLat);
+		      startPoint = new Point(startLon, startLat);
 
         	stopsArray.push(startPoint);
 	      	stopsArray.push(stopPoint);
@@ -180,7 +137,6 @@
           shelters.setInfoTemplate(template);
           map.addLayer(shelters);
       	}
-
 
         //default will point to ArcGIS world routing service
         setTimeout(startDirections, 1000);
@@ -203,7 +159,6 @@
         },"dir");
         directions.startup();
         }
-
       });
     </script>
   </head>
@@ -225,4 +180,3 @@
     </div>
   </body>
 </html>
-  
