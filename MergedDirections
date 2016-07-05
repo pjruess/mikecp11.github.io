@@ -7,7 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
     <title>Flood HIPPO</title>
+    
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
     
@@ -66,13 +68,8 @@
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
-      var map;
-      var graphic;
-      var currLocation;
-      var watchId;
-      var startPoint, stopPoint, lon, lat;
+      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv;
       var stopsArray = [];
-      var closestFacilityTask, params;
       require([
         "esri/urlUtils",
         "esri/map",
@@ -83,10 +80,10 @@
         "esri/graphic",
         "esri/Color",        
         "dojo/parser",
-
-        "esri/tasks/ClosestFacilityTask",
-        "esri/tasks/ClosestFacilityParameters",
-
+        "esri/layers/CSVLayer",
+        "esri/renderers/SimpleRenderer",
+        "esri/InfoTemplate",
+        
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
         "dojo/domReady!"
@@ -99,8 +96,10 @@
         SimpleLineSymbol,
         Graphic,
         Color,
-        ClosestFacilityTask, ClosestFacilityParameters,
-        parser
+        parser,
+        CSVLayer,
+        SimpleRenderer,
+        InfoTemplate
       ) {
         parser.parse();
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
@@ -112,19 +111,16 @@
           urlPrefix: "traffic.arcgis.com",
           proxyUrl: "/sproxy/"
         });
+        urlUtils.addProxyRule({
+          proxyUrl: "/proxy/",
+          urlPrefix: "mikecp11.github.io"
+        });
 
         var map = new Map("map", {
           basemap: "streets",
         });
         
         map.on("load", initFunc);
-
-        params = new ClosestFacilityParameters();
-	    params.impedenceAttribute= "Miles";
-	    params.defaultCutoff= 400;
-	    // params.returnIncidents=false;
-	    // params.returnRoutes=true;
-	    // params.returnDirections=true;
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -133,8 +129,6 @@
             alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
           }
         }
-
-        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function findStart(location) {
           var pt = new Point(location.coords.longitude, location.coords.latitude);
@@ -168,7 +162,6 @@
 		    startPoint = new Point(startLon, startLat);
 
         	stopsArray.push(startPoint);
-        	params.incidents = startPoint;
 	      	stopsArray.push(stopPoint);
         }
 
@@ -178,6 +171,14 @@
 
       	function initStops(){
       		stopPoint = new Point(-87.569, 33.210);
+      		shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
+        
+          var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
+          var CSVrenderer = new SimpleRenderer(marker);
+          shelters.setRenderer(CSVrenderer);
+          var template = new InfoTemplate("${LABEL}");
+          shelters.setInfoTemplate(template);
+          map.addLayer(shelters);
       	}
 
 
