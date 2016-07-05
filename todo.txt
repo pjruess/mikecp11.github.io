@@ -1,0 +1,8 @@
+FloodHIPPO To Do List
+
+. Import .csv shelter locations
+. Find closest shelter and set to stopPoint
+. Import polygon as .csv
+. Disjoint shelters from polygon to keep dry shelters only
+. Route task to closest dry shelter
+. Create live .csv file for interactive shelter activation/deactivation
