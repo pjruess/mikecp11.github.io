@@ -66,10 +66,11 @@
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
-var map;
+      var map;
       var graphic;
       var currLocation;
       var watchId;
+      var stopsArray = [];
       require([
         "esri/urlUtils",
         "esri/map",
@@ -127,21 +128,40 @@ var map;
             "style": "esriSLSSolid"
           }
         });
+        
+        var startSymbol = new SimpleMarkerSymbol({
+          "color": [0,0,250,150],
+          "size": 8,
+          "angle": 0,
+          "xoffset": 0,
+          "yoffset": 0,
+          "type": "esriSMS",
+          "style": "esriSMSCircle",
+          "outline": {
+            "color": [0,255,0,100],
+            "width": 1,
+            "type": "esriSLS",
+            "style": "esriSLSSolid"
+          }
+        });
+
+      	var stopPoint = new Point(-87.569, 33.210);
+      	var startPoint = new Point(-87.567, 33.211);
+      	var stopGraphic = new Graphic(stopPoint, stopSymbol);
+      	var startGraphic = new Graphic(startPoint, startSymbol);
+      	//stopsArray = [startGraphic,stopGraphic];
 
         function drawStops(){
-        	var stopPoint = new Point(-87.569, 33.210);
-        	var stopGraphic = new Graphic(stopPoint, stopSymbol);
         	map.graphics.add(stopGraphic);
-	        // map.graphics.add(new Graphic(new Point(-98.56,39.82,stopSymbol)));
+        	map.graphics.add(startGraphic);
         }
-        // map.graphics.add(new Graphic(new Point(-9744043,3912399,stopSymbol)));
 
 
         //default will point to ArcGIS world routing service
         var directions = new Directions({
           map: map,
-          dragging: false
-          //stops:[]
+          dragging: false,
+          stops: stopsArray
         },"dir");
         directions.startup();
         
@@ -161,6 +181,8 @@ var map;
           } else {
             alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
           }
+          // startPoint = new Graphic(new Point(location.coords.longitude, location.coords.latitude), startSymbol);
+          // console.log(startPoint);
           drawStops();
         }
 
@@ -192,6 +214,8 @@ var map;
           var pt = new Point(location.coords.longitude, location.coords.latitude);
           addGraphic(pt);
           map.centerAndZoom(pt, 12);
+          var startPos = new Graphic(pt,startSymbol);
+          stopsArray.push(startPos,stopGraphic);
         }
 
         function showLocation(location) {
