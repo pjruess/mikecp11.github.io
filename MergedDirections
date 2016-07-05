@@ -30,13 +30,16 @@
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
-      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv;
+      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv, shelters, params;
       var stopsArray = [];
       require([
         "esri/urlUtils",
         "esri/map",
         "esri/dijit/Directions",
         "esri/geometry/Point",
+        "esri/tasks/FeatureSet",
+        "esri/tasks/ClosestFacilityTask",
+        "esri/tasks/ClosestFacilityParameters",        
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/graphic",
@@ -53,6 +56,9 @@
         Map,
         Directions,
         Point,
+        FeatureSet, 
+        ClosestFacilityTask, 
+        ClosestFacilityParameters,
         SimpleMarkerSymbol,
         SimpleLineSymbol,
         Graphic,
@@ -83,11 +89,17 @@
         
         map.on("load", initFunc);
 
+        params = new ClosestFacilityParameters();
+        params.impedenceAttribute= "Miles";
+        params.defaultCutoff= 400;
+
+        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+
         function initFunc(map) {
           if( navigator.geolocation ) {  
             navigator.geolocation.getCurrentPosition(findStart, locationError);
           } else {
-            alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
+            alert("Geolocation unknown.");
           }
         }
 
@@ -118,8 +130,14 @@
         	startLat = position.coords.latitude.toString();
 		      startPoint = new Point(startLon, startLat);
 
+          var features = [];
+          features.push(startPoint);
+          var incidents = new FeatureSet();
+          incidents.features = features;
+          params.incidents = incidents;
+
         	stopsArray.push(startPoint);
-	      	stopsArray.push(stopPoint);
+          stopsArray.push(stopPoint);
         }
 
         navigator.geolocation.getCurrentPosition(initStart, locationError);
@@ -134,6 +152,12 @@
           var template = new InfoTemplate("${LABEL}");
           shelters.setInfoTemplate(template);
           map.addLayer(shelters);
+
+          var facilities = new FeatureSet();
+          facilities.features = shelters.graphics;
+
+          params.facilities = facilities;
+          // params.outSpatialReference = map.spatialReference;
 
           stopPoint = new Point(-87.569, 33.210);
       	}

@@ -30,27 +30,24 @@
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
-      var map;
-      var graphic;
-      var currLocation;
-      var watchId;
-      var startPoint, stopPoint, lon, lat;
+      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv, shelters, params;
       var stopsArray = [];
-      var closestFacilityTask, params;
       require([
         "esri/urlUtils",
         "esri/map",
         "esri/dijit/Directions",
         "esri/geometry/Point",
+        "esri/tasks/FeatureSet",
+        "esri/tasks/ClosestFacilityTask",
+        "esri/tasks/ClosestFacilityParameters",        
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/graphic",
         "esri/Color",        
         "dojo/parser",
-
-        "esri/tasks/ClosestFacilityTask",
-        "esri/tasks/ClosestFacilityParameters",
-
+        "esri/layers/CSVLayer",
+        "esri/renderers/SimpleRenderer",
+        "esri/InfoTemplate",
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
         "dojo/domReady!"
@@ -59,12 +56,17 @@
         Map,
         Directions,
         Point,
+        FeatureSet, 
+        ClosestFacilityTask, 
+        ClosestFacilityParameters,
         SimpleMarkerSymbol,
         SimpleLineSymbol,
         Graphic,
         Color,
-        ClosestFacilityTask, ClosestFacilityParameters,
-        parser
+        parser,
+        CSVLayer,
+        SimpleRenderer,
+        InfoTemplate
       ) {
         parser.parse();
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
@@ -76,6 +78,10 @@
           urlPrefix: "traffic.arcgis.com",
           proxyUrl: "/sproxy/"
         });
+        urlUtils.addProxyRule({
+          urlPrefix: "mikecp11.github.io",
+          proxyUrl: "/proxy/"
+        });
 
         var map = new Map("map", {
           basemap: "streets",
@@ -84,13 +90,10 @@
         map.on("load", initFunc);
 
         params = new ClosestFacilityParameters();
-      params.impedenceAttribute= "Miles";
-      params.defaultCutoff= 400;
-      // params.returnIncidents=false;
-      // params.returnRoutes=true;
-      // params.returnDirections=true;
-        params.defaultTargetFacilityCount=1;
+        params.impedenceAttribute= "Miles";
+        params.defaultCutoff= 400;
 
+        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -99,8 +102,6 @@
             alert("Geolocation unknown.");
           }
         }
-
-        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function findStart(location) {
           var pt = new Point(location.coords.longitude, location.coords.latitude);
@@ -112,15 +113,12 @@
             case error.PERMISSION_DENIED:
               alert("Location not provided");
               break;
-
             case error.POSITION_UNAVAILABLE:
               alert("Current location not available");
               break;
-
             case error.TIMEOUT:
               alert("Timeout");
               break;
-
             default:
               alert("unknown error");
               break;
@@ -130,12 +128,15 @@
         function initStart(position){
           startLon = position.coords.longitude.toString();
           startLat = position.coords.latitude.toString();
+          startPoint = new Point(startLon, startLat);
 
-        startPoint = new Point(startLon, startLat);
+          var features = [];
+          features.push(startPoint);
+          var incidents = new FeatureSet();
+          incidents.features = features;
+          params.incidents = incidents;
 
           stopsArray.push(startPoint);
-          params.incidents = startPoint;
-          stopsArray.push(stopPoint);
         }
 
         navigator.geolocation.getCurrentPosition(initStart, locationError);
@@ -143,9 +144,26 @@
         initStops();
 
         function initStops(){
-          stopPoint = new Point(-87.569, 33.210);
-        }
+          shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
+          var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
+          var csvRenderer = new SimpleRenderer(marker);
+          shelters.setRenderer(csvRenderer);
+          var template = new InfoTemplate("${LABEL}");
+          shelters.setInfoTemplate(template);
+          map.addLayer(shelters);
 
+          var facilities = new FeatureSet();
+          facilities.features = shelters.graphics;
+
+          params.facilities = facilities;
+          params.outSpatialReference = map.spatialReference;
+
+          // console.log(facilities);
+
+          stopPoint = new Point(-87.569, 33.210);
+
+          stopsArray.push(stopPoint);
+        }
 
         //default will point to ArcGIS world routing service
         setTimeout(startDirections, 1000);
@@ -168,11 +186,9 @@
         },"dir");
         directions.startup();
         }
-
       });
     </script>
   </head>
-
   <body class="claro">
     <div data-dojo-type="dijit/layout/BorderContainer"
          data-dojo-props="design:'headline', gutters:false"
@@ -182,7 +198,6 @@
            style="width:250px;">
         <div id="dir"></div>
       </div>
-    
       <div id="map"
          data-dojo-type="dijit/layout/ContentPane"
          data-dojo-props="region:'center'">
