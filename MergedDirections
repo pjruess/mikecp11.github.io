@@ -128,7 +128,12 @@ var map;
           }
         });
 
-        map.graphics.add(new Graphic(new Point(-98.56,39.82,stopSymbol)));
+        function drawStops(){
+        	var stopPoint = new Point(-87.569, 33.210);
+        	var stopGraphic = new Graphic(stopPoint, stopSymbol);
+        	map.graphics.add(stopGraphic);
+	        // map.graphics.add(new Graphic(new Point(-98.56,39.82,stopSymbol)));
+        }
         // map.graphics.add(new Graphic(new Point(-9744043,3912399,stopSymbol)));
 
 
@@ -156,6 +161,7 @@ var map;
           } else {
             alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
           }
+          drawStops();
         }
 
         function locationError(error) {
