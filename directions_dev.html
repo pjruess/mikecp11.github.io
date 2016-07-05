@@ -73,7 +73,10 @@
       "esri/urlUtils",
       "dojo/promise/all", "dojo/_base/array", "esri/Color",
       "dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/number",
-      "dgrid/Grid", "dojo/domReady!"
+      "dgrid/Grid", 
+      "esri/geometry/Point", "esri/symbols/SimpleMarkerSymbol",
+
+      "dojo/domReady!"
     ], function(
       Map, Locator, SpatialReference,
       RouteTask, RouteParameters,
@@ -83,7 +86,8 @@
       urlUtils,
       all, arrayUtils, Color,
       dom, domConstruct, on, number,
-      Grid
+      Grid, 
+      Point, SimpleMarkerSymbol
     ) {
       var locator, routeTask, routeParams = [], segmentGraphic, directionFeatures, grid;
 
@@ -101,6 +105,8 @@
         center: [-117.185, 34.065],
         zoom: 13
       });
+
+      map.on("load", initFunc);
 
       //Add a geocoding server as the locator. This locator will be used to find the origin and destination coordinates by input addresses.
       locator = new Locator("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
@@ -122,21 +128,88 @@
       routeTask.on("solve-complete", showRoute);
       routeTask.on("error", errorHandler);
 
+//--------------------------------------LOCATION SERVICES------------------------------------------------------
+
+      function initFunc(map) {
+        if( navigator.geolocation ) {  
+          navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
+          watchId = navigator.geolocation.watchPosition(showLocation, locationError);
+        } else {
+          alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
+        }
+      }
+
+      function locationError(error) {
+        //error occurred so stop watchPosition
+        if( navigator.geolocation ) {
+          navigator.geolocation.clearWatch(watchId);
+        }
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert("Location not provided");
+            break;
+
+          case error.POSITION_UNAVAILABLE:
+            alert("Current location not available");
+            break;
+
+          case error.TIMEOUT:
+            alert("Timeout");
+            break;
+
+          default:
+            alert("unknown error");
+            break;
+        }
+      }
+
+      function zoomToLocation(location) {
+        var pt = new Point(location.coords.longitude, location.coords.latitude);
+        addGraphic(pt);
+        map.centerAndZoom(pt, 12);
+      }
+
+      function showLocation(location) {
+        //zoom to the users location and add a graphic
+        var pt = new Point(location.coords.longitude, location.coords.latitude);
+        if ( !graphic ) {
+          addGraphic(pt);
+        } else { // move the graphic if it already exists
+          graphic.setGeometry(pt);
+        }
+        map.centerAt(pt);
+      }
+      
+      function addGraphic(pt){
+        var symbol = new SimpleMarkerSymbol(
+          SimpleMarkerSymbol.STYLE_CIRCLE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
+          new Color([210, 105, 30, 0.5]), 8), new Color([210, 105, 30, 0.9]));
+        graphic = new Graphic(pt, symbol);
+        map.graphics.add(graphic);
+      }
+
+//--------------------------------------LOCATION SERVICES END--------------------------------------------------
+
       //Execute a routing task when clicking "get direction".
       function getDirections() {
         routeParams.stops.features = [];
         map.graphics.clear();
 
+        var pt = new Point(location.coords.longitude, location.coords.latitude);
+        console.log(pt.toString());
+
         //Get origin address.
         var optionsFrom = {
           address: { "SingleLine": dom.byId("fromTxf").value },
+          // address: { "SingleLine": (location.coords.longitude, location.coords.latitude).toString() },
           outFields: ["Loc_name"]
         };
         var fromAddress = locator.addressToLocations(optionsFrom);
-      
+
         //Get destination address.
         var optionsTo = {
-          address: { "SingleLine": dom.byId("toTxf").value },
+          // address: { "SingleLine": dom.byId("toTxf").value },
+          address: { "SingleLine": "-87.541404,33.217499" },
           outFields: ["Loc_name"]
         };
         var toAddress = locator.addressToLocations(optionsTo);
@@ -144,7 +217,7 @@
         //Use dojo/promises/all to manage multiple asynchronous tasks. Once both geocodes finish, a route is calculated.
         //http://livedocs.dojotoolkit.org/dojo/promise/all
         all({
-          from: fromAddress, 
+          from: fromAddress,
           to: toAddress
         }).then(configureRoute);
       }
