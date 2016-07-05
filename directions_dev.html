@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="icon" href="images/logo.png" >
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Flood HIPPO</title>
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
-    
     <style>
       html, body {
         height: 100%;
@@ -18,50 +17,15 @@
         padding: 0px;
         width: 100%;
       }
-
-     @-webkit-keyframes
-       pulse
-      {
-        0%
-        {
-          opacity: 1.0;
-
-        }
-        45%
-        {
-          opacity: .20;
-
-        }
-        100%
-        {
-          opacity: 1.0;
-
-        }
+     @-webkit-keyframes pulse {
+        0%   {opacity: 1.0;}
+        45%  {opacity: .20;}
+        100% {opacity: 1.0;}
       }
-     @-moz-keyframes pulse
-      {
-        0%
-        {
-          opacity: 1.0;
-        }
-        45%
-        {
-          opacity: .20;
-
-        }
-        100%
-        {
-          opacity: 1.0;
-        }
-      }
-
-      #map_graphics_layer {
-        -webkit-animation-duration: 3s;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-name: pulse;
-        -moz-animation-duration: 3s;
-        -moz-animation-iteration-count: infinite;
-        -moz-animation-name: pulse;
+     @-moz-keyframes pulse {
+        0%   {opacity: 1.0;}
+        45%  {opacity: .20;}
+        100% {opacity: 1.0;}
       }
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
@@ -72,6 +36,7 @@
       var watchId;
       var startPoint, stopPoint, lon, lat;
       var stopsArray = [];
+      var closestFacilityTask, params;
       require([
         "esri/urlUtils",
         "esri/map",
@@ -82,7 +47,10 @@
         "esri/graphic",
         "esri/Color",        
         "dojo/parser",
-        
+
+        "esri/tasks/ClosestFacilityTask",
+        "esri/tasks/ClosestFacilityParameters",
+
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
         "dojo/domReady!"
@@ -95,6 +63,7 @@
         SimpleLineSymbol,
         Graphic,
         Color,
+        ClosestFacilityTask, ClosestFacilityParameters,
         parser
       ) {
         parser.parse();
@@ -114,13 +83,24 @@
         
         map.on("load", initFunc);
 
+        params = new ClosestFacilityParameters();
+      params.impedenceAttribute= "Miles";
+      params.defaultCutoff= 400;
+      // params.returnIncidents=false;
+      // params.returnRoutes=true;
+      // params.returnDirections=true;
+        params.defaultTargetFacilityCount=1;
+
+
         function initFunc(map) {
           if( navigator.geolocation ) {  
             navigator.geolocation.getCurrentPosition(findStart, locationError);
           } else {
-            alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
+            alert("Geolocation unknown.");
           }
         }
+
+        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function findStart(location) {
           var pt = new Point(location.coords.longitude, location.coords.latitude);
@@ -154,6 +134,7 @@
         startPoint = new Point(startLon, startLat);
 
           stopsArray.push(startPoint);
+          params.incidents = startPoint;
           stopsArray.push(stopPoint);
         }
 
