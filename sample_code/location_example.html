@@ -148,15 +148,8 @@
         
         function addGraphic(pt){
           var symbol = new SimpleMarkerSymbol(
-            SimpleMarkerSymbol.STYLE_CIRCLE, 
-            12, 
-            new SimpleLineSymbol(
-              SimpleLineSymbol.STYLE_SOLID,
-              new Color([210, 105, 30, 0.5]), 
-              8
-            ), 
-            new Color([210, 105, 30, 0.9])
-          );
+            SimpleMarkerSymbol.STYLE_CIRCLE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, 
+            new Color([210, 105, 30, 0.5]), 8), new Color([210, 105, 30, 0.9]));
           graphic = new Graphic(pt, symbol);
           map.graphics.add(graphic);
         }
