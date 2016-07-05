@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Geolocation API</title>
+    <title>Flood HIPPO</title>
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
     
@@ -70,6 +70,7 @@
       var graphic;
       var currLocation;
       var watchId;
+      var startPoint, stopPoint, lon, lat;
       var stopsArray = [];
       require([
         "esri/urlUtils",
@@ -109,88 +110,24 @@
 
         var map = new Map("map", {
           basemap: "streets",
-          center:[-98.56,39.82],
-          zoom: 4
         });
-
-        var stopSymbol = new SimpleMarkerSymbol({
-          "color": [0,255,0,100],
-          "size": 8,
-          "angle": 0,
-          "xoffset": 0,
-          "yoffset": 0,
-          "type": "esriSMS",
-          "style": "esriSMSCircle",
-          "outline": {
-            "color": [0,255,0,100],
-            "width": 1,
-            "type": "esriSLS",
-            "style": "esriSLSSolid"
-          }
-        });
-        
-        var startSymbol = new SimpleMarkerSymbol({
-          "color": [0,0,250,150],
-          "size": 8,
-          "angle": 0,
-          "xoffset": 0,
-          "yoffset": 0,
-          "type": "esriSMS",
-          "style": "esriSMSCircle",
-          "outline": {
-            "color": [0,255,0,100],
-            "width": 1,
-            "type": "esriSLS",
-            "style": "esriSLSSolid"
-          }
-        });
-
-      	var stopPoint = new Point(-87.569, 33.210);
-      	var startPoint = new Point(-87.567, 33.211);
-      	var stopGraphic = new Graphic(stopPoint, stopSymbol);
-      	var startGraphic = new Graphic(startPoint, startSymbol);
-      	//stopsArray = [startGraphic,stopGraphic];
-
-        function drawStops(){
-        	map.graphics.add(stopGraphic);
-        	map.graphics.add(startGraphic);
-        }
-
-
-        //default will point to ArcGIS world routing service
-        var directions = new Directions({
-          map: map,
-          dragging: false,
-          stops: stopsArray
-        },"dir");
-        directions.startup();
         
         map.on("load", initFunc);
 
-        function orientationChanged() {
-          if(map){
-            map.reposition();
-            map.resize();
-          }
-        }
-
         function initFunc(map) {
           if( navigator.geolocation ) {  
-            navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
-            watchId = navigator.geolocation.watchPosition(showLocation, locationError);
+            navigator.geolocation.getCurrentPosition(findStart, locationError);
           } else {
             alert("Browser doesn't support Geolocation. Visit http://caniuse.com to see browser support for the Geolocation API.");
           }
-          // startPoint = new Graphic(new Point(location.coords.longitude, location.coords.latitude), startSymbol);
-          // console.log(startPoint);
-          drawStops();
+        }
+
+        function findStart(location) {
+          var pt = new Point(location.coords.longitude, location.coords.latitude);
+          map.centerAndZoom(pt, 12);
         }
 
         function locationError(error) {
-          //error occurred so stop watchPosition
-          if( navigator.geolocation ) {
-            navigator.geolocation.clearWatch(watchId);
-          }
           switch (error.code) {
             case error.PERMISSION_DENIED:
               alert("Location not provided");
@@ -210,39 +147,47 @@
           }
         }
 
-        function zoomToLocation(location) {
-          var pt = new Point(location.coords.longitude, location.coords.latitude);
-          addGraphic(pt);
-          map.centerAndZoom(pt, 12);
-          var startPos = new Graphic(pt,startSymbol);
-          stopsArray.push(startPos,stopGraphic);
+        function initStart(position){
+        	startLon = position.coords.longitude.toString();
+        	startLat = position.coords.latitude.toString();
+
+		    startPoint = new Point(startLon, startLat);
+
+        	stopsArray.push(startPoint);
+	      	stopsArray.push(stopPoint);
         }
 
-        function showLocation(location) {
-          //zoom to the users location and add a graphic
-          var pt = new Point(location.coords.longitude, location.coords.latitude);
-          if ( !graphic ) {
-            addGraphic(pt);
-          } else { // move the graphic if it already exists
-            graphic.setGeometry(pt);
-          }
-          map.centerAt(pt);
+        navigator.geolocation.getCurrentPosition(initStart, locationError);
+
+        initStops();
+
+      	function initStops(){
+      		stopPoint = new Point(-87.569, 33.210);
+      	}
+
+
+        //default will point to ArcGIS world routing service
+        setTimeout(startDirections, 1000);
+
+        function startDirections(){
+        var directions = new Directions({
+          map: map,
+          dragging: false,
+          canModifyStops: false,
+          maxStops: 2,
+          minStops: 2,
+          showActivateButton: false,
+          showTravelModesOption: false,
+          // showMilesKilometersOption: false,
+          showReturnToStartOption: false,
+          // showTrafficOption: false,
+          traffic: true,
+          directionsLengthUnits: "esriMiles",
+          stops: stopsArray
+        },"dir");
+        directions.startup();
         }
-        
-        function addGraphic(pt){
-          var symbol = new SimpleMarkerSymbol(
-            SimpleMarkerSymbol.STYLE_CIRCLE, 
-            12, 
-            new SimpleLineSymbol(
-              SimpleLineSymbol.STYLE_SOLID,
-              new Color([210, 105, 30, 0.5]), 
-              8
-            ), 
-            new Color([210, 105, 30, 0.9])
-          );
-          graphic = new Graphic(pt, symbol);
-          map.graphics.add(graphic);
-        }
+
       });
     </script>
   </head>
