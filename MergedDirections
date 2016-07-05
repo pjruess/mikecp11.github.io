@@ -80,9 +80,8 @@ var map;
         "esri/graphic",
         "esri/Color",        
         "dojo/parser",
+        
         "dijit/layout/BorderContainer",
-
-
         "dijit/layout/ContentPane",
         "dojo/domReady!"
       ], function(
@@ -96,7 +95,7 @@ var map;
         Color,
         parser
       ) {
-parser.parse();
+        parser.parse();
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
         urlUtils.addProxyRule({
           urlPrefix: "route.arcgis.com",
@@ -113,9 +112,31 @@ parser.parse();
           zoom: 4
         });
 
+        var stopSymbol = new SimpleMarkerSymbol({
+          "color": [0,255,0,100],
+          "size": 8,
+          "angle": 0,
+          "xoffset": 0,
+          "yoffset": 0,
+          "type": "esriSMS",
+          "style": "esriSMSCircle",
+          "outline": {
+            "color": [0,255,0,100],
+            "width": 1,
+            "type": "esriSLS",
+            "style": "esriSLSSolid"
+          }
+        });
+
+        map.graphics.add(new Graphic(new Point(-98.56,39.82,stopSymbol)));
+        // map.graphics.add(new Graphic(new Point(-9744043,3912399,stopSymbol)));
+
+
         //default will point to ArcGIS world routing service
         var directions = new Directions({
-          map: map
+          map: map,
+          dragging: false
+          //stops:[]
         },"dir");
         directions.startup();
         
