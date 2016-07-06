@@ -31,6 +31,7 @@
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
       var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, params, incidents;
+      var closestFacilityTask;
       var stopsArray = [];
       var destinationArray = [];
       require([
@@ -138,7 +139,7 @@
               console.log("attr: ", attr);
               });
               route.setAttributes(attr);
-              destinationArray.push(route.attributes[route.attributes.length - 1]) 
+              destinationArray.push(route.attributes[route.attributes.length - 1])
               console.log(destinationArray[0]);
               stopPoint = new Point(destinationArray[0]);
               return stopPoint;
