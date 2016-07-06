@@ -76,9 +76,9 @@
       params = new ClosestFacilityParameters();
       params.impedenceAttribute= "Miles";      
       params.defaultCutoff= 400;      
-      params.returnIncidents=false;
-      params.returnRoutes=true;
-      params.returnDirections=true;
+      // params.returnIncidents=false;
+      // params.returnRoutes=true;
+      // params.returnDirections=true;
       //params.defaultTargetFacilityCount=5;
       
       map.on("load", function(evtObj) {
@@ -169,13 +169,13 @@
         params.outSpatialReference = map.spatialReference;
        
       });
-      //https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World
-      closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+      // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
-      registry.byId("numLocations").on("change", function() {
-        params.defaultTargetFacilityCount = this.value;
-        clearGraphics();
-      });
+      // registry.byId("numLocations").on("change", function() {
+      //   params.defaultTargetFacilityCount = this.value;
+      //   clearGraphics();
+      // });
 
       function clearGraphics() {
         //clear graphics
@@ -215,6 +215,7 @@
         //solve 
         var destinationArray = [];
         closestFacilityTask.solve(params, function(solveResult){
+          console.log("closestFacilityTask entered");
           array.forEach(solveResult.routes, function(route, index){
             //build an array of route info
             var attr = array.map(solveResult.directions[index].features, function(feature){
