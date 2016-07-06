@@ -30,8 +30,10 @@
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
-      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv, shelters, params;
+      var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents;
+      var closestFacilityTask;
       var stopsArray = [];
+      var destinationArray = [];
       require([
         "esri/urlUtils",
         "esri/map",
@@ -39,7 +41,10 @@
         "esri/geometry/Point",
         "esri/tasks/FeatureSet",
         "esri/tasks/ClosestFacilityTask",
-        "esri/tasks/ClosestFacilityParameters",        
+        "esri/tasks/ClosestFacilityParameters", 
+        "esri/tasks/RouteParameters",
+        "esri/layers/GraphicsLayer",
+        "esri/symbols/SimpleFillSymbol",   
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/graphic",
@@ -59,6 +64,9 @@
         FeatureSet, 
         ClosestFacilityTask, 
         ClosestFacilityParameters,
+        RouteParameters,
+        GraphicsLayer,
+        SimpleFillSymbol,
         SimpleMarkerSymbol,
         SimpleLineSymbol,
         Graphic,
@@ -88,6 +96,30 @@
         });
         
         map.on("load", initFunc);
+
+        routeParams = new RouteParameters();
+        polygonFeatureSet = new FeatureSet();
+        
+        var polygonBarrierSymbol = new SimpleFillSymbol();
+        var polygonGraphicsLayer = new GraphicsLayer();
+        var polygonRenderer = new SimpleRenderer(polygonBarrierSymbol);
+        polygonGraphicsLayer.setRenderer(polygonRenderer);
+
+        map.addLayer(polygonGraphicsLayer);
+
+        var polygon = {"geometry":{"rings":[[[-87.546723,33.2216],[-87.546551,33.21862],
+        [-87.545393,33.214886],[-87.543547,33.213019],//[-87.538183,33.211978],[-87.537324,33.20986],
+        [-87.538655,33.2081],[-87.542861,33.207705],[-87.54638,33.206449],[-87.550585,33.205479],
+        [-87.553675,33.208603],[-87.553461,33.212122],[-87.556551,33.214815],[-87.560585,33.217472],
+        [-87.554061,33.219626],[-87.549813,33.220667],[-87.546723,33.2216]]],"spatialReference":{"wkid":4326}},
+        "symbol":{"color":[0,255,255,100],"outline":{"color":[0,255,255,100],
+        "width":1,"type":"esriSLS","style":"esriSLSSolid"},
+        "type":"esriSFS","style":"esriSFSSolid"}};
+        var polygonGraphic = new Graphic(polygon, polygonBarrierSymbol);
+        polygonGraphicsLayer.add(polygonGraphic);
+        
+        polygonFeatureSet.features = polygonGraphicsLayer.graphics;
+        routeParams.polygonBarriers = polygonFeatureSet;
 
         params = new ClosestFacilityParameters();
         params.impedenceAttribute= "Miles";
@@ -125,26 +157,43 @@
           }
         }
 
-        function initStart(position){
-          startLon = position.coords.longitude.toString();
-          startLat = position.coords.latitude.toString();
-          startPoint = new Point(startLon, startLat);
-
-          var features = [];
-          features.push(startPoint);
-          var incidents = new FeatureSet();
-          incidents.features = features;
-          params.incidents = incidents;
-
-          stopsArray.push(startPoint);
-          stopsArray.push(stopPoint);
+        function solveClosestFacil(){
+          console.log("solveClosestFacil started");
+          console.log("params.facilities", params.facilities);
+          console.log("params.incidents", params.incidents);
+          closestFacilityTask.solve(params, function(solveResult){
+            console.log("closestFacilityTask entered");
+            array.forEach(solveResult.routes, function(route, index){
+              var attr = array.map(solveResult.directions[index].features, function(feature){
+                return feature.attributes.text;
+              console.log("attr: ", attr);
+              });
+              route.setAttributes(attr);
+              destinationArray.push(route.attributes[route.attributes.length - 1])
+              console.log(destinationArray[0]);
+              stopPoint = new Point(destinationArray[0]);
+              return stopPoint;
+            });
+          });
+        stopsArray.push(startPoint);
+        stopsArray.push(stopPoint);  
+          console.log(stopsArray);                
+          console.log("solveClosestFacil finished");
         }
 
-        navigator.geolocation.getCurrentPosition(initStart, locationError);
+        function initStart(position){
+          console.log("initStart started");
+          startPoint = new Point(position.coords.longitude, position.coords.latitude);
+          var incidents = new FeatureSet();
+          incidents.features = [startPoint];
+          params.incidents = incidents;
 
-        initStops();
+          solveClosestFacil();
+          console.log("initStart finished");
+        }
 
         function initStops(){
+          console.log("initStops started");
           shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
           var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
           var csvRenderer = new SimpleRenderer(marker);
@@ -154,36 +203,38 @@
           map.addLayer(shelters);
 
           var facilities = new FeatureSet();
-          facilities.features = shelters.graphics;
-
-          params.facilities = facilities;
-          params.outSpatialReference = map.spatialReference;
-
-          // console.log(facilities);
-
           stopPoint = new Point(-87.569, 33.210);
+          facilities.features = [stopPoint];
+          params.facilities = facilities;
+          console.log("initStops finished");
         }
 
-        //default will point to ArcGIS world routing service
+        initStops();
+        
+        navigator.geolocation.getCurrentPosition(initStart, locationError);
+
         setTimeout(startDirections, 1000);
 
+        console.log("startDirections timeout finished");
+
         function startDirections(){
-        var directions = new Directions({
-          map: map,
-          dragging: false,
-          canModifyStops: false,
-          maxStops: 2,
-          minStops: 2,
-          showActivateButton: false,
-          showTravelModesOption: false,
-          // showMilesKilometersOption: false,
-          showReturnToStartOption: false,
-          // showTrafficOption: false,
-          traffic: true,
-          directionsLengthUnits: "esriMiles",
-          stops: stopsArray
-        },"dir");
-        directions.startup();
+          console.log("startDirections started");
+          var directions = new Directions({
+            map: map,
+            routeParams: routeParams,
+            dragging: false,
+            canModifyStops: false,
+            maxStops: 2,
+            minStops: 2,
+            showActivateButton: false,
+            showTravelModesOption: false,
+            showReturnToStartOption: false,
+            traffic: false,
+            directionsLengthUnits: "esriMiles",
+            stops: stopsArray
+          },"dir");
+          directions.startup();
+          console.log("startDirections finished");
         }
       });
     </script>
