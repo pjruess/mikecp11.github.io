@@ -30,7 +30,7 @@
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
-      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv, shelters, params, incidents;
+      var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, params, incidents;
       var stopsArray = [];
       var destinationArray = [];
       require([
@@ -137,8 +137,6 @@
                 return feature.attributes.text;
               console.log("attr: ", attr);
               });
-              // var info = new InfoTemplate("Attributes", "${*}");
-              // route.setInfoTemplate(info);
               route.setAttributes(attr);
               destinationArray.push(route.attributes[route.attributes.length - 1]) 
               console.log(destinationArray[0]);
@@ -172,14 +170,11 @@
           var template = new InfoTemplate("${LABEL}");
           shelters.setInfoTemplate(template);
           map.addLayer(shelters);
-          // console.log("Shelters CSV Layer: ", shelters);
+
           var facilities = new FeatureSet();
-          // facilities.features = shelters.graphics;
           stopPoint = new Point(-87.569, 33.210);
-          stopPoint2 = new Point(-87.565, 33.212);
-          facilities.features = [stopPoint, stopPoint2];
+          facilities.features = [stopPoint];
           params.facilities = facilities;
-          // params.outSpatialReference = map.spatialReference;
           console.log("initStops finished");
         }
 
@@ -187,7 +182,6 @@
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
 
-        //default will point to ArcGIS world routing service
         setTimeout(startDirections, 5000);
 
         console.log("startDirections timeout finished");
@@ -202,9 +196,7 @@
             minStops: 2,
             showActivateButton: false,
             showTravelModesOption: false,
-            // showMilesKilometersOption: false,
             showReturnToStartOption: false,
-            // showTrafficOption: false,
             traffic: true,
             directionsLengthUnits: "esriMiles",
             stops: stopsArray
