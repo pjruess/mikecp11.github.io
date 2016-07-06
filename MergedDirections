@@ -32,6 +32,7 @@
     <script>
       var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv, shelters, params;
       var stopsArray = [];
+      var destinationArray = [];
       require([
         "esri/urlUtils",
         "esri/map",
@@ -126,26 +127,19 @@
         }
 
         function initStart(position){
-        	startLon = position.coords.longitude.toString();
-        	startLat = position.coords.latitude.toString();
-		      startPoint = new Point(startLon, startLat);
+          startLon = position.coords.longitude.toString();
+          startLat = position.coords.latitude.toString();
+          startPoint = new Point(startLon, startLat);
 
           var features = [];
           features.push(startPoint);
           var incidents = new FeatureSet();
           incidents.features = features;
           params.incidents = incidents;
-
-        	stopsArray.push(startPoint);
-          stopsArray.push(stopPoint);
         }
 
-        navigator.geolocation.getCurrentPosition(initStart, locationError);
-
-        initStops();
-
-      	function initStops(){
-      		shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
+        function initStops(){
+          shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
           var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
           var csvRenderer = new SimpleRenderer(marker);
           shelters.setRenderer(csvRenderer);
@@ -155,15 +149,38 @@
 
           var facilities = new FeatureSet();
           facilities.features = shelters.graphics;
-
           params.facilities = facilities;
           // params.outSpatialReference = map.spatialReference;
 
-          stopPoint = new Point(-87.569, 33.210);
-      	}
+          // stopPoint = new Point(-87.569, 33.210);
+        }
+
+        initStops();
+        
+        navigator.geolocation.getCurrentPosition(initStart, locationError);
+
+        function solveClosestFacil(){
+          closestFacilityTask.solve(params, function(solveResult){
+            array.forEach(solveResult.routes, function(route, index){
+              var attr = array.map(solveResult.directions[index].features, function(feature){
+                return feature.attributes.text;
+              });
+              // var info = new InfoTemplate("Attributes", "${*}");
+              // route.setInfoTemplate(info);
+              route.setAttributes(attr);
+              destinationArray.push(route.attributes[route.attributes.length - 1]) 
+              stopPoint = new Point(destinationArray[0]);
+            });
+          });
+        }
+
+        stopsArray.push(startPoint);
+        stopsArray.push(stopPoint);
+
+        setTimeout(solveClosestFacil, 1000);
 
         //default will point to ArcGIS world routing service
-        setTimeout(startDirections, 1000);
+        setTimeout(startDirections, 2000);
 
         function startDirections(){
         var directions = new Directions({
