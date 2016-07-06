@@ -137,6 +137,7 @@
           params.incidents = incidents;
 
           stopsArray.push(startPoint);
+          stopsArray.push(stopPoint);
         }
 
         navigator.geolocation.getCurrentPosition(initStart, locationError);
@@ -161,8 +162,6 @@
           // console.log(facilities);
 
           stopPoint = new Point(-87.569, 33.210);
-
-          stopsArray.push(stopPoint);
         }
 
         //default will point to ArcGIS world routing service

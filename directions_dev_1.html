@@ -30,7 +30,7 @@
     </style>
 <script src="https://js.arcgis.com/3.17/"></script>
     <script>
-      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv, shelters, params, incidents;
+      var map, graphic, currLocation, watchId, startPoint, stopPoint, lon, lat, csv, shelters, params, incident;
       var stopsArray = [];
       var destinationArray = [];
       require([
@@ -154,10 +154,17 @@
 
         function initStart(position){
           console.log("initStart started");
+          // startLon = position.coords.longitude.toString();
+          // startLat = position.coords.latitude.toString();
+          // startPoint = new Point(startLon, startLat);
           startPoint = new Point(position.coords.longitude, position.coords.latitude);
-          var incidents = new FeatureSet();
-          incidents.features = [startPoint];
-          params.incidents = incidents;
+
+          // var features = [];
+          // features.push(startPoint);
+          // var incidents = new FeatureSet();
+          // incidents.features = features;
+          params.incidents = [startPoint];
+          // console.log("params.incidents", params.incidents);
 
           solveClosestFacil();
           console.log("initStart finished");
@@ -176,9 +183,9 @@
           var facilities = new FeatureSet();
           // facilities.features = shelters.graphics;
           stopPoint = new Point(-87.569, 33.210);
-          stopPoint2 = new Point(-87.565, 33.212);
-          facilities.features = [stopPoint, stopPoint2];
+          facilities.features = [stopPoint];
           params.facilities = facilities;
+          // console.log("params.facilities: ", params.facilities);
           // params.outSpatialReference = map.spatialReference;
           console.log("initStops finished");
         }
