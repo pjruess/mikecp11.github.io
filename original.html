@@ -81,7 +81,7 @@
           proxyUrl: "/sproxy/"
         });
         urlUtils.addProxyRule({
-          urlPrefix: "github.com",
+          urlPrefix: "mikecp11.github.io",
           proxyUrl: "/proxy/"
         });
 
@@ -95,8 +95,8 @@
         params.impedenceAttribute= "Miles";
         params.defaultCutoff= 400;
 
-        // closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
         closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        // closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -132,20 +132,20 @@
           console.log("solveClosestFacil started");
           console.log("params.facilities", params.facilities);
           console.log("params.incidents", params.incidents);
-          // closestFacilityTask.solve(params, function(solveResult){
-          //   console.log("closestFacilityTask entered");
-          //   array.forEach(solveResult.routes, function(route, index){
-          //     var attr = array.map(solveResult.directions[index].features, function(feature){
-          //       return feature.attributes.text;
-          //     console.log("attr: ", attr);
-          //     });
-          //     route.setAttributes(attr);
-          //     destinationArray.push(route.attributes[route.attributes.length - 1])
-          //     console.log(destinationArray[0]);
-          //     stopPoint = new Point(destinationArray[0]);
-          //     return stopPoint;
-          //   });
-          // });
+          closestFacilityTask.solve(params, function(solveResult){
+            console.log("closestFacilityTask entered");
+            array.forEach(solveResult.routes, function(route, index){
+              var attr = array.map(solveResult.directions[index].features, function(feature){
+                return feature.attributes.text;
+              console.log("attr: ", attr);
+              });
+              route.setAttributes(attr);
+              destinationArray.push(route.attributes[route.attributes.length - 1])
+              console.log(destinationArray[0]);
+              stopPoint = new Point(destinationArray[0]);
+              return stopPoint;
+            });
+          });
         stopsArray.push(startPoint);
         stopsArray.push(stopPoint);  
           console.log(stopsArray);                
@@ -165,7 +165,7 @@
 
         function initStops(){
           console.log("initStops started");
-          shelters = new CSVLayer("https://github.com/mikecp11/mikecp11.github.io/blob/master/LocalStops.csv");
+          shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
           var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
           var csvRenderer = new SimpleRenderer(marker);
           shelters.setRenderer(csvRenderer);
@@ -184,7 +184,7 @@
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
 
-        setTimeout(startDirections, 1000);
+        setTimeout(startDirections, 5000);
 
         console.log("startDirections timeout finished");
 
