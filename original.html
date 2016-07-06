@@ -132,20 +132,20 @@
           console.log("solveClosestFacil started");
           console.log("params.facilities", params.facilities);
           console.log("params.incidents", params.incidents);
-          closestFacilityTask.solve(params, function(solveResult){
-            console.log("closestFacilityTask entered");
-            array.forEach(solveResult.routes, function(route, index){
-              var attr = array.map(solveResult.directions[index].features, function(feature){
-                return feature.attributes.text;
-              console.log("attr: ", attr);
-              });
-              route.setAttributes(attr);
-              destinationArray.push(route.attributes[route.attributes.length - 1])
-              console.log(destinationArray[0]);
-              stopPoint = new Point(destinationArray[0]);
-              return stopPoint;
-            });
-          });
+          // closestFacilityTask.solve(params, function(solveResult){
+          //   console.log("closestFacilityTask entered");
+          //   array.forEach(solveResult.routes, function(route, index){
+          //     var attr = array.map(solveResult.directions[index].features, function(feature){
+          //       return feature.attributes.text;
+          //     console.log("attr: ", attr);
+          //     });
+          //     route.setAttributes(attr);
+          //     destinationArray.push(route.attributes[route.attributes.length - 1])
+          //     console.log(destinationArray[0]);
+          //     stopPoint = new Point(destinationArray[0]);
+          //     return stopPoint;
+          //   });
+          // });
         stopsArray.push(startPoint);
         stopsArray.push(stopPoint);  
           console.log(stopsArray);                
@@ -165,7 +165,7 @@
 
         function initStops(){
           console.log("initStops started");
-          shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
+          shelters = new CSVLayer("https://github.com/mikecp11/mikecp11.github.io/LocalStops.csv");
           var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
           var csvRenderer = new SimpleRenderer(marker);
           shelters.setRenderer(csvRenderer);
