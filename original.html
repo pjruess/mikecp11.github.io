@@ -110,7 +110,7 @@
         map.addLayer(polygonGraphicsLayer);
 
         var polygon = {"geometry":{"rings":
-        
+
         [
           [
             [
@@ -5408,11 +5408,6 @@
         routeParams.polygonBarriers = polygonFeatureSet;
         
         routeParams.returnBarriers = true;
-        var barriers = solveResult.barriers;
-        var messages = solveResult.messages;
-        console.log("barriers: ", barriers);
-        console.log("messages: ", messages);
-
 
         params = new ClosestFacilityParameters();
         params.impedenceAttribute= "Miles";
