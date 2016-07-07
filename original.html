@@ -11767,7 +11767,7 @@
         polygonGraphicsLayer.add(polygonGraphicLarge);
 
         var polygonGraphicSmall = new Graphic(polygonSmall, polygonBarrierSymbol);
-        map.add(polygonGraphicSmall);
+        map.addLayer(polygonGraphicSmall);
         
         polygonFeatureSet.features = polygonGraphicsLayer.graphics;
         routeParams.polygonBarriers = polygonFeatureSet;
