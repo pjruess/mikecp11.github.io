@@ -103,15 +103,16 @@
         polygonFeatureSet = new FeatureSet();
         
         var polygonBarrierSymbol = new SimpleFillSymbol();
-        var polygonGraphicsLayer = new GraphicsLayer();
         var polygonRenderer = new SimpleRenderer(polygonBarrierSymbol);
-        polygonGraphicsLayer.setRenderer(polygonRenderer);
 
-        var polygonGraphicsLayerSmall = new GraphicsLayer();
-        polygonGraphicsLayerSmall.setRenderer(polygonRenderer);
+        var polygonGraphicsLayerFuture = new GraphicsLayer();
+        polygonGraphicsLayerFuture.setRenderer(polygonRenderer);
 
-        map.addLayer(polygonGraphicsLayerSmall);
-        map.addLayer(polygonGraphicsLayer);
+        var polygonGraphicsLayerCurrent = new GraphicsLayer();
+        polygonGraphicsLayerCurrent.setRenderer(polygonRenderer);
+
+        map.addLayer(polygonGraphicsLayerFuture);
+        map.addLayer(polygonGraphicsLayerCurrent);
 
         var polygonLarge = {"geometry":{"rings":
 
@@ -11767,12 +11768,12 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
-        var polygonGraphicLarge = new Graphic(polygonLarge, polygonBarrierSymbol);
-        var polygonGraphicSmall = new Graphic(polygonSmall, polygonBarrierSymbol);
-        polygonGraphicsLayerSmall.add(polygonGraphicLarge);
-        polygonGraphicsLayer.add(polygonGraphicSmall);
+        var polygonGraphicFuture = new Graphic(polygonLarge, polygonBarrierSymbol);
+        var polygonGraphicCurrent = new Graphic(polygonSmall, polygonBarrierSymbol);
+        polygonGraphicsLayerFuture.add(polygonGraphicFuture);
+        polygonGraphicsLayerCurrent.add(polygonGraphicCurrent);
         
-        polygonFeatureSet.features = polygonGraphicsLayer.graphics;
+        polygonFeatureSet.features = polygonGraphicsLayerCurrent.graphics;
         routeParams.polygonBarriers = polygonFeatureSet;
         
         routeParams.returnBarriers = true;
