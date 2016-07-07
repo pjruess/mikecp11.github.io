@@ -5425,7 +5425,7 @@
 
         function findStart(location) {
           var pt = new Point(location.coords.longitude, location.coords.latitude);
-          map.centerAndZoom(pt, 12);
+          map.centerAndZoom(pt, 14);
         }
 
         function locationError(error) {
@@ -5493,7 +5493,7 @@
           map.addLayer(shelters);
 
           var facilities = new FeatureSet();
-          stopPoint = new Point(-87.569, 33.210);
+          stopPoint = new Point(-87.54361720, 33.20484080);
           facilities.features = [stopPoint];
           params.facilities = facilities;
           console.log("initStops finished");
