@@ -51,6 +51,7 @@
         "esri/Color",        
         "dojo/parser",
         "esri/layers/CSVLayer",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
         "dijit/layout/BorderContainer",
@@ -73,6 +74,7 @@
         Color,
         parser,
         CSVLayer,
+        ArcGISDynamicMapServiceLayer,
         SimpleRenderer,
         InfoTemplate
       ) {
@@ -91,14 +93,6 @@
           proxyUrl: "/proxy/"
         });
 
-        // var mapid="8f2f8512042e4d2e97d8ffad24b46c2c"
-        // var mapDeferred = esri.arcgis.utils.createMap(mapid, "map", {
-        //   mapOptions: {
-        //     slider: true,
-        //     nav:false
-        //   }
-        // });
-
         var map = new Map("map", {
           basemap: "streets",
         });
@@ -108,26 +102,26 @@
         routeParams = new RouteParameters();
         polygonFeatureSet = new FeatureSet();
         
-        var polygonBarrierSymbol = new SimpleFillSymbol();
-        var polygonGraphicsLayer = new GraphicsLayer();
-        var polygonRenderer = new SimpleRenderer(polygonBarrierSymbol);
-        polygonGraphicsLayer.setRenderer(polygonRenderer);
+        // var polygonBarrierSymbol = new SimpleFillSymbol();
+        // var polygonGraphicsLayer = new GraphicsLayer();
+        // var polygonRenderer = new SimpleRenderer(polygonBarrierSymbol);
 
-        map.addLayer(polygonGraphicsLayer);
+        floodLayer = new esri.layers.ArcGISDynamicMapServiceLayer(
+          "https://utility.arcgis.com/usrsvcs/servers/78a4985bb5dc4abcac8d8c0d4225b0df/rest/services/USA_Flood_Risk/MapServer", {
+              hasAttributionData: true
+            }
+          );
+        console.log(floodLayer);
 
-        var polygon = {"geometry":{"rings":[[[-87.546723,33.2216],[-87.546551,33.21862],
-        [-87.545393,33.214886],[-87.543547,33.213019],//[-87.538183,33.211978],[-87.537324,33.20986],
-        [-87.538655,33.2081],[-87.542861,33.207705],[-87.54638,33.206449],[-87.550585,33.205479],
-        [-87.553675,33.208603],[-87.553461,33.212122],[-87.556551,33.214815],[-87.560585,33.217472],
-        [-87.554061,33.219626],[-87.549813,33.220667],[-87.546723,33.2216]]],"spatialReference":{"wkid":4326}},
-        "symbol":{"color":[0,255,255,100],"outline":{"color":[0,255,255,100],
-        "width":1,"type":"esriSLS","style":"esriSLSSolid"},
-        "type":"esriSFS","style":"esriSFSSolid"}};
-        var polygonGraphic = new Graphic(polygon, polygonBarrierSymbol);
-        polygonGraphicsLayer.add(polygonGraphic);
-        console.log(polygonGraphicsLayer);
+        // var polygonGraphicsLayer = new GraphicsLayer(floodLayer);
+        // polygonGraphicsLayer.setRenderer(polygonRenderer);
+
+        map.addLayer(floodLayer);
+
+        // var polygonGraphic = new Graphic(floodLayer, polygonBarrierSymbol);
+        // polygonGraphicsLayer.add(polygonGraphic);
         
-        polygonFeatureSet.features = polygonGraphicsLayer.graphics;
+        polygonFeatureSet.features = floodLayer.graphics;
         routeParams.polygonBarriers = polygonFeatureSet;
 
         params = new ClosestFacilityParameters();
@@ -212,7 +206,7 @@
           map.addLayer(shelters);
 
           var facilities = new FeatureSet();
-          stopPoint = new Point(-87.569, 33.210);
+          stopPoint = new Point(-87.55333960, 33.18456350);
           facilities.features = [stopPoint];
           params.facilities = facilities;
           console.log("initStops finished");
