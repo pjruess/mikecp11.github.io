@@ -11768,10 +11768,9 @@
         "type":"esriSFS","style":"esriSFSSolid"}};
 
         var polygonGraphicLarge = new Graphic(polygonLarge, polygonBarrierSymbol);
-        polygonGraphicsLayer.add(polygonGraphicLarge);
-
         var polygonGraphicSmall = new Graphic(polygonSmall, polygonBarrierSymbol);
-        polygonGraphicsLayerSmall.add(polygonGraphicSmall);
+        polygonGraphicsLayer.add(polyGraphicSmall);
+        polygonGraphicsLayerSmall.add(polygonGraphicLarge);
         
         polygonFeatureSet.features = polygonGraphicsLayer.graphics;
         routeParams.polygonBarriers = polygonFeatureSet;
