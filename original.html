@@ -109,7 +109,7 @@
 
         map.addLayer(polygonGraphicsLayer);
 
-        var polyline = {"paths":
+        var polylineJSON = {"paths":
 
           [[[-87.545393,33.214886], [-87.543547,33.213019],[-87.538655,33.2081],[-87.542861,33.207705]]]
 
@@ -118,6 +118,8 @@
           // "width":1,"type":"esriSLS","style":"esriSLSSolid"},
           // "type":"esriSFS","style":"esriSFSSolid"}
         };
+
+        var polyline = new Polyline(polylineJSON);
 
         // var polygon = {"geometry":{"rings":[[[-87.546723,33.2216],[-87.546551,33.21862],
         // [-87.545393,33.214886],[-87.543547,33.213019],//[-87.538183,33.211978],[-87.537324,33.20986],
