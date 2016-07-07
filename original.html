@@ -107,7 +107,11 @@
         var polygonRenderer = new SimpleRenderer(polygonBarrierSymbol);
         polygonGraphicsLayer.setRenderer(polygonRenderer);
 
+        var polygonGraphicsLayerSmall = new GraphicsLayer();
+        polygonGraphicsLayerSmall.setRenderer(polygonRenderer);
+
         map.addLayer(polygonGraphicsLayer);
+        map.addLayer(polygonGraphicsLayerSmall);
 
         var polygonLarge = {"geometry":{"rings":
 
@@ -11767,7 +11771,7 @@
         polygonGraphicsLayer.add(polygonGraphicLarge);
 
         var polygonGraphicSmall = new Graphic(polygonSmall, polygonBarrierSymbol);
-        map.addLayer(polygonGraphicSmall);
+        polygonGraphicsLayerSmall.add(polygonGraphicSmall);
         
         polygonFeatureSet.features = polygonGraphicsLayer.graphics;
         routeParams.polygonBarriers = polygonFeatureSet;
