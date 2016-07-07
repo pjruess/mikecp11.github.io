@@ -11759,7 +11759,7 @@
         ]
 
         ,"spatialReference":{"wkid":102100}},
-        "symbol":{"color":[0,255,0,100],"outline":{"color":[0,255,255,100],
+        "symbol":{"color":[0,255,255,100],"outline":{"color":[0,255,255,100],
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
@@ -11767,7 +11767,7 @@
         polygonGraphicsLayer.add(polygonGraphicLarge);
 
         var polygonGraphicSmall = new Graphic(polygonSmall, polygonBarrierSymbol);
-        polygonGraphicsLayer.add(polygonGraphicSmall);
+        map.add(polygonGraphicSmall);
         
         polygonFeatureSet.features = polygonGraphicsLayer.graphics;
         routeParams.polygonBarriers = polygonFeatureSet;
