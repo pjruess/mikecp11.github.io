@@ -86,10 +86,10 @@
           urlPrefix: "traffic.arcgis.com",
           proxyUrl: "/sproxy/"
         });
-        urlUtils.addProxyRule({
-          urlPrefix: "mikecp11.github.io",
-          proxyUrl: "/proxy/"
-        });
+        // urlUtils.addProxyRule({
+        //   urlPrefix: "mikecp11.github.io",
+        //   proxyUrl: "/proxy/"
+        // });
 
         var map = new Map("map", {
           basemap: "streets",
@@ -125,7 +125,7 @@
         params.impedenceAttribute= "Miles";
         params.defaultCutoff= 400;
 
-        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -221,6 +221,7 @@
           console.log("startDirections started");
           var directions = new Directions({
             map: map,
+            routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World",
             routeParams: routeParams,
             dragging: false,
             canModifyStops: false,
