@@ -49,7 +49,8 @@
 
         //default will point to ArcGIS world routing service
         var directions = new Directions({
-          map: map
+          map: map,
+          routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World"
         },"dir");
         directions.startup();
       });
