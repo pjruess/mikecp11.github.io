@@ -84,9 +84,11 @@
         esriConfig
       ) {
         parser.parse();
-        esriConfig.defaults.io.corsEnabledServers.push("mikecp11.github.io");
-        // esri.config.defaults.io.corsEnabledServe.add("https://mikecp11.github.io/");
-        //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
+        esriConfig.defaults.io.corsEnabledServers.push({
+          host: "mikecp11.github.io",
+          withCredentials: true
+        })
+        });
         urlUtils.addProxyRule({
           urlPrefix: "route.arcgis.com",
           proxyUrl: "/sproxy/"
