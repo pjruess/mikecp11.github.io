@@ -7,7 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
     <title>Flood HIPPO</title>
+    
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
     <style>
@@ -55,6 +57,7 @@
         "dojo/_base/array",
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
+        "esri/config",
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
         "dojo/domReady!"
@@ -77,22 +80,27 @@
         parser,
         array,
         SimpleRenderer,
-        InfoTemplate
+        InfoTemplate,
+        esriConfig
       ) {
         parser.parse();
-        //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
-        // urlUtils.addProxyRule({
-        //   urlPrefix: "route.arcgis.com",
-        //   proxyUrl: "/sproxy/"
-        // });
-        // urlUtils.addProxyRule({
-        //   urlPrefix: "traffic.arcgis.com",
-        //   proxyUrl: "/sproxy/"
-        // });
-        // urlUtils.addProxyRule({
-        //   urlPrefix: "route.arcgis.com",
-        //   proxyUrl: "/sproxy/"
-        // });
+        // esriConfig.defaults.io.corsEnabledServers.push({
+        //   host: "utility.arcgis.com",
+        //   withCredentials: false
+        // })
+        
+        urlUtils.addProxyRule({
+          urlPrefix: "route.arcgis.com",
+          proxyUrl: "/sproxy/"
+        });
+        urlUtils.addProxyRule({
+          urlPrefix: "traffic.arcgis.com",
+          proxyUrl: "/sproxy/"
+        });
+        urlUtils.addProxyRule({
+          urlPrefix: "utility.arcgis.com",
+          proxyUrl: "/sproxy/"
+        });
 
         var map = new Map("map", {
           basemap: "streets",
@@ -11787,7 +11795,7 @@
         params.returnRoutes= true;
         params.returnDirections= true;
 
-        // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
         // closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
@@ -12073,7 +12081,7 @@
 
           var directions = new Directions({
             map: map,
-            // routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World",
+            routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/RhvRW8u9rLICszxl/rest/services/World/Route/NAServer/Route_World",
             // routeTaskUrl: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",            
             routeParams: routeParams,
             dragging: true,
