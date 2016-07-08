@@ -11783,8 +11783,8 @@
         params.returnRoutes= true;
         params.returnDirections= true;
 
-        // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
-        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+       
+        closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/dy5zgJMvOc9KO3FT/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -11838,6 +11838,7 @@
               var stopPointY = params.facilities.features[stopId-1].geometry.y;
 
               stopPoint = new Point(stopPointX, stopPointY);
+              alert(JSON.stringify(stopPoint))
             });
           });
 
@@ -12070,8 +12071,8 @@
 
           var directions = new Directions({
             map: map,
-            // routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World",
-            routeTaskUrl: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",            
+            routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World",
+            //routeTaskUrl: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",            
             routeParams: routeParams,
             dragging: true,
             canModifyStops: true,
@@ -12085,7 +12086,7 @@
             stops: stopsArray
           },"dir");
           directions.startup();
-          console.log("startDirections finished");
+          //console.log("startDirections finished");
         }
       });
     </script>
