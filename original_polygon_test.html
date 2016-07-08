@@ -200,7 +200,7 @@
 
         function initStops(){
           console.log("initStops started");
-          shelters = new CSVLayer("https://mikecp11.github.io/LocalStops.csv");
+          shelters = new CSVLayer("https://mikecp11.github.io/RedCrossShelters.csv");
           var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
           var csvRenderer = new SimpleRenderer(marker);
           shelters.setRenderer(csvRenderer);
