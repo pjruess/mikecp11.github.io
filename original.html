@@ -82,7 +82,7 @@
         InfoTemplate
       ) {
         parser.parse();
-        esri.config.defaults.io.corsEnabledServe.push("https://mikecp11.github.io/);
+        esri.config.defaults.io.corsEnabledServe.add("https://mikecp11.github.io/);
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
         urlUtils.addProxyRule({
           urlPrefix: "route.arcgis.com",
