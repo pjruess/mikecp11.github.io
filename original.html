@@ -85,10 +85,10 @@
           urlPrefix: "route.arcgis.com",
           proxyUrl: "/sproxy/"
         });
-        urlUtils.addProxyRule({
-          urlPrefix: "traffic.arcgis.com",
-          proxyUrl: "/sproxy/"
-        });
+        // urlUtils.addProxyRule({
+        //   urlPrefix: "traffic.arcgis.com",
+        //   proxyUrl: "/sproxy/"
+        // });
 
         var map = new Map("map", {
           basemap: "streets",
@@ -11783,7 +11783,7 @@
         params.returnRoutes= true;
         params.returnDirections= true;
 
-        closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/dy5zgJMvOc9KO3FT/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
         // closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
