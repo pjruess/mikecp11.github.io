@@ -57,6 +57,7 @@
         "dojo/_base/array",
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
+        "esri/config",
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
         "dojo/domReady!"
@@ -79,10 +80,12 @@
         parser,
         array,
         SimpleRenderer,
-        InfoTemplate
+        InfoTemplate,
+        esriConfig
       ) {
         parser.parse();
-        esri.config.defaults.io.corsEnabledServe.add("https://mikecp11.github.io/");
+        esriConfig.defaults.io.corsEnabledServers.push("mikecp11.github.io");
+        // esri.config.defaults.io.corsEnabledServe.add("https://mikecp11.github.io/");
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
         urlUtils.addProxyRule({
           urlPrefix: "route.arcgis.com",
