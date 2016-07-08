@@ -7,7 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
     <title>Flood HIPPO</title>
+    
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
     <style>
@@ -80,6 +82,7 @@
         InfoTemplate
       ) {
         parser.parse();
+        esri.config.defaults.io.corsEnabledServe.push("https://mikecp11.github.io/"");
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
         urlUtils.addProxyRule({
           urlPrefix: "route.arcgis.com",
