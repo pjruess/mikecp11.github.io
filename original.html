@@ -85,7 +85,7 @@
       ) {
         parser.parse();
         esriConfig.defaults.io.corsEnabledServers.push({
-          host: "https://mikecp11.github.io/original.html",
+          host: "utility.arcgis.com",
           withCredentials: false
         })
         
@@ -98,7 +98,7 @@
           proxyUrl: "/sproxy/"
         });
         urlUtils.addProxyRule({
-          urlPrefix: "route.arcgis.com",
+          urlPrefix: "utility.arcgis.com",
           proxyUrl: "/sproxy/"
         });
 
