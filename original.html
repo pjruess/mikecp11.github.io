@@ -33,7 +33,8 @@
       var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents;
       var closestFacilityTask;
       var stopsArray = [];
-      var destinationArray = [];
+      var sheltersGraphicsLayer;
+      var stopId;
       require([
         "esri/urlUtils",
         "esri/map",
@@ -51,7 +52,7 @@
         "esri/graphic",
         "esri/Color",        
         "dojo/parser",
-        "esri/layers/CSVLayer",
+        "dojo/_base/array",
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
         "dijit/layout/BorderContainer",
@@ -74,7 +75,7 @@
         Graphic,
         Color,
         parser,
-        CSVLayer,
+        array,
         SimpleRenderer,
         InfoTemplate
       ) {
@@ -11777,8 +11778,13 @@
         params = new ClosestFacilityParameters();
         params.impedenceAttribute= "Miles";
         params.defaultCutoff= 400;
+        params.returnFacilities= true;
+        params.returnIncidents= false;
+        params.returnRoutes= true;
+        params.returnDirections= true;
 
         closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        // closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -11812,71 +11818,88 @@
 
         function solveClosestFacil(){
           console.log("solveClosestFacil started");
-          console.log("params.facilities", params.facilities);
-          console.log("params.incidents", params.incidents);
-          /*
+          // console.log("params.facilities", params.facilities);
+          // console.log("params.incidents", params.incidents);
+          
           closestFacilityTask.solve(params, function(solveResult){
-            console.log("closestFacilityTask entered");
             array.forEach(solveResult.routes, function(route, index){
               var attr = array.map(solveResult.directions[index].features, function(feature){
                 return feature.attributes.text;
-              console.log("attr: ", attr);
               });
               route.setAttributes(attr);
-              destinationArray.push(route.attributes[route.attributes.length - 1])
-              console.log(destinationArray[0]);
-              stopPoint = new Point(destinationArray[0]);
-              return stopPoint;
+              var destination = route.attributes[route.attributes.length - 1];
+              var destinationArray = destination.split(" ");
+              var destinationId = destinationArray[3];
+              stopId = +destinationId;
+
+              console.log("destinationInt: ", stopId);
+
+              var stopPointX = params.facilities.features[stopId-1].geometry.x;
+              var stopPointY = params.facilities.features[stopId-1].geometry.y;
+
+              stopPoint = new Point(stopPointX, stopPointY);
             });
           });
-          */
-          stopsArray.push(startPoint);
-          stopsArray.push(stopPoint);  
-          console.log(stopsArray);                
+
+          console.log("stopPoint: ", stopPoint);
+          console.log("Initial stops array: ",stopsArray);                
           console.log("solveClosestFacil finished");
         }
 
         function initStart(position){
           console.log("initStart started");
           startPoint = new Point(position.coords.longitude, position.coords.latitude);
-          var incidents = new FeatureSet();
-          incidents.features = [startPoint];
-          params.incidents = incidents;
           
+          var incidentsGraphicsLayer = new GraphicsLayer();
+          incidentsGraphicsLayer.add(new Graphic(startPoint));
+
+          var incidents = new FeatureSet();
+          incidents.features = incidentsGraphicsLayer.graphics;
+          params.incidents = incidents;
+
+          initStops();
+
           solveClosestFacil();
           console.log("initStart finished");
         }
 
         function initStops(){
           console.log("initStops started");
-          shelters = new CSVLayer("https://mikecp11.github.io/RedCrossShelters.csv");
-          var marker = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
-          var csvRenderer = new SimpleRenderer(marker);
-          shelters.setRenderer(csvRenderer);
-          var template = new InfoTemplate("${LABEL}");
-          shelters.setInfoTemplate(template);
-          map.addLayer(shelters);
+          sheltersGraphicsLayer = new GraphicsLayer();
+          var sheltersSymbol = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
+          var sheltersRenderer = new SimpleRenderer(sheltersSymbol);
+          sheltersGraphicsLayer.setRenderer(sheltersRenderer);
+          map.addLayer(sheltersGraphicsLayer);
+
+          sheltersGraphicsLayer.add(new Graphic(new Point(-87.5437, 33.2048)));
+          sheltersGraphicsLayer.add(new Graphic(new Point(-87.5440, 33.2040)));
+          sheltersGraphicsLayer.add(new Graphic(new Point(-87.5427, 33.2042)));
+          sheltersGraphicsLayer.add(new Graphic(new Point(-87.5427, 33.2053)));
 
           var facilities = new FeatureSet();
-          stopPoint = new Point(-87.54361720, 33.20484080);
-          facilities.features = [stopPoint];
+          facilities.features = sheltersGraphicsLayer.graphics;
           params.facilities = facilities;
+
           console.log("initStops finished");
         }
-
-        initStops();
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
 
-        setTimeout(startDirections, 1000);
+        setTimeout(startDirections, 5000);
 
         console.log("startDirections timeout finished");
 
         function startDirections(){
           console.log("startDirections started");
+
+          stopsArray.push(startPoint);
+          stopsArray.push(stopPoint);  
+          console.log(stopsArray);
+
           var directions = new Directions({
             map: map,
             routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World",
+            // routeTaskUrl: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",            
             routeParams: routeParams,
             dragging: true,
             canModifyStops: true,
