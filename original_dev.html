@@ -33,14 +33,14 @@
       var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents;
       var closestFacilityTask;
       var stopsArray = [];
-      var sheltersGraphicsLayer;
+      // var sheltersGraphicsLayer;
+      var sheltersCSVGraphicsLayer;
       var stopId;
       require([
         "esri/urlUtils",
         "esri/map",
         "esri/dijit/Directions",
         "esri/geometry/Point",
-        "esri/geometry/Polyline",
         "esri/tasks/FeatureSet",
         "esri/tasks/ClosestFacilityTask",
         "esri/tasks/ClosestFacilityParameters", 
@@ -53,6 +53,7 @@
         "esri/Color",        
         "dojo/parser",
         "dojo/_base/array",
+        "esri/layers/CSVLayer",
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
         "dijit/layout/BorderContainer",
@@ -63,7 +64,6 @@
         Map,
         Directions,
         Point,
-        Polyline,
         FeatureSet, 
         ClosestFacilityTask, 
         ClosestFacilityParameters,
@@ -76,6 +76,7 @@
         Color,
         parser,
         array,
+        CSVLayer,
         SimpleRenderer,
         InfoTemplate
       ) {
@@ -11818,8 +11819,8 @@
 
         function solveClosestFacil(){
           console.log("solveClosestFacil started");
-          // console.log("params.facilities", params.facilities);
-          // console.log("params.incidents", params.incidents);
+          console.log("params.facilities", params.facilities);
+          console.log("params.incidents", params.incidents);
           
           closestFacilityTask.solve(params, function(solveResult){
             array.forEach(solveResult.routes, function(route, index){
@@ -11866,12 +11867,14 @@
 
         function initStops(){
           console.log("initStops started");
-          sheltersGraphicsLayer = new GraphicsLayer();
+
+          // sheltersGraphicsLayer = new GraphicsLayer();
           var sheltersSymbol = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
           var sheltersRenderer = new SimpleRenderer(sheltersSymbol);
-          sheltersGraphicsLayer.setRenderer(sheltersRenderer);
-          map.addLayer(sheltersGraphicsLayer);
+          // sheltersGraphicsLayer.setRenderer(sheltersRenderer);
+          // map.addLayer(sheltersGraphicsLayer);
 
+/*
           // sheltersGraphicsLayer.add(new Graphic(new Point(-87.50889, 33.16818)));
           // sheltersGraphicsLayer.add(new Graphic(new Point(-87.50362, 33.16818)));
           // sheltersGraphicsLayer.add(new Graphic(new Point(-87.54112, 33.16818)));
@@ -12048,9 +12051,18 @@
           // sheltersGraphicsLayer.add(new Graphic(new Point(-87.57195, 33.2579)));
           // sheltersGraphicsLayer.add(new Graphic(new Point(-87.5889, 33.27289)));
           // sheltersGraphicsLayer.add(new Graphic(new Point(-87.60029, 33.28151)));
+*/
+
+/* -------------------- CSV LAYER TESTING --------------------  */
+          sheltersCSV = new CSVLayer("https://mikecp11.github.io/RedCrossShelters.csv");
+          sheltersCSVGraphicsLayer = new GraphicsLayer();
+          var sheltersCSVGraphicsLayer.setRenderer(sheltersRenderer);
+          var template = new InfoTemplate("${LABEL}");
+          sheltersCSVGraphicsLayer.setInfoTemplate(template);
+          map.addLayer(sheltersCSVGraphicsLayer);
 
           var facilities = new FeatureSet();
-          facilities.features = sheltersGraphicsLayer.graphics;
+          facilities.features = sheltersCSVGraphicsLayer.graphics;
           params.facilities = facilities;
 
           console.log("initStops finished");
