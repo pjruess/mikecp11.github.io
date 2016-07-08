@@ -11832,17 +11832,18 @@
               var destinationId = destinationArray[3];
               stopId = +destinationId;
 
-              console.log("destinationInt: ", stopId);
+              console.log("stopId: ", stopId);
 
               var stopPointX = params.facilities.features[stopId-1].geometry.x;
               var stopPointY = params.facilities.features[stopId-1].geometry.y;
 
               stopPoint = new Point(stopPointX, stopPointY);
+
+              console.log("stopPoint inside function: ", stopPoint);
+
             });
           });
 
-          console.log("stopPoint: ", stopPoint);
-          console.log("Initial stops array: ",stopsArray);                
           console.log("solveClosestFacil finished");
         }
 
@@ -11859,7 +11860,7 @@
 
           initStops();
 
-          solveClosestFacil();
+          setTimeout(solveClosestFacil,1000);
           console.log("initStart finished");
         }
 
@@ -12057,16 +12058,14 @@
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
 
-        setTimeout(startDirections, 1000);
-
-        console.log("startDirections timeout finished");
+        setTimeout(startDirections, 2000);
 
         function startDirections(){
           console.log("startDirections started");
 
           stopsArray.push(startPoint);
           stopsArray.push(stopPoint);  
-          console.log(stopsArray);
+          console.log("stopsArray for directions: ", stopsArray);
 
           var directions = new Directions({
             map: map,
