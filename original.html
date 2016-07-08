@@ -84,10 +84,10 @@
         esriConfig
       ) {
         parser.parse();
-        esriConfig.defaults.io.corsEnabledServers.push({
-          host: "utility.arcgis.com",
-          withCredentials: false
-        })
+        // esriConfig.defaults.io.corsEnabledServers.push({
+        //   host: "utility.arcgis.com",
+        //   withCredentials: false
+        // })
         
         urlUtils.addProxyRule({
           urlPrefix: "route.arcgis.com",
