@@ -82,7 +82,7 @@
         parser.parse();
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
         urlUtils.addProxyRule({
-          urlPrefix: "utility.arcgis.com",
+          urlPrefix: "route.arcgis.com",
           proxyUrl: "/sproxy/"
         });
         urlUtils.addProxyRule({
