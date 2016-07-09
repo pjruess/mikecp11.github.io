@@ -87,23 +87,13 @@
         esriConfig
       ) {
         parser.parse();
-        esriConfig.defaults.io.proxyUrl = "https://mikecp11.github.io/original.html"
-        esriConfig.defaults.io.alwaysUseProxy = false;
-        // esriConfig.defaults.io.corsEnabledServers.push({
-        //   host: "utility.arcgis.com",
-        //   withCredentials: false
-        // })
         
         urlUtils.addProxyRule({
-          urlPrefix: "utility.arcgis.com",
+          urlPrefix: "route.arcgis.com",
           proxyUrl: "/sproxy/"
         });
-        // urlUtils.addProxyRule({
-        //   urlPrefix: "traffic.arcgis.com",
-        //   proxyUrl: "/sproxy/"
-        // });
         urlUtils.addProxyRule({
-          urlPrefix: "utility.arcgis.com",
+          urlPrefix: "traffic.arcgis.com",
           proxyUrl: "/sproxy/"
         });
 
@@ -11800,8 +11790,8 @@
         params.returnRoutes= true;
         params.returnDirections= true;
 
-        closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
-        // closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -11857,11 +11847,8 @@
               console.log("stopPoint inside function: ", stopPoint);
 
               startDirections();
-
             });
           });
-
-          console.log("solveClosestFacil finished");
         }
 
         function initStart(position){
@@ -11877,8 +11864,7 @@
 
           initStops();
 
-          solveClosestFacil();
-          console.log("initStart finished");
+          setTimeout(solveClosestFacil,1000);
         }
 
         function initStops(){
@@ -12069,8 +12055,6 @@
           var facilities = new FeatureSet();
           facilities.features = sheltersGraphicsLayer.graphics;
           params.facilities = facilities;
-
-          console.log("initStops finished");
         }
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
@@ -12084,8 +12068,8 @@
 
           var directions = new Directions({
             map: map,
-            routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/RhvRW8u9rLICszxl/rest/services/World/Route/NAServer/Route_World",
-            // routeTaskUrl: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",            
+            // routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/RhvRW8u9rLICszxl/rest/services/World/Route/NAServer/Route_World",
+            routeTaskUrl: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",            
             routeParams: routeParams,
             dragging: true,
             canModifyStops: true,
@@ -12099,7 +12083,6 @@
             stops: stopsArray
           },"dir");
           directions.startup();
-          console.log("startDirections finished");
         }
       });
     </script>

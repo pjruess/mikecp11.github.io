@@ -129,7 +129,8 @@
         params.impedenceAttribute= "Miles";
         params.defaultCutoff= 400;
 
-        closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/Iw4BHES4lDJXoLge/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
+        closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
         function initFunc(map) {
           if( navigator.geolocation ) {  
@@ -179,9 +180,9 @@
               return stopPoint;
             });
           });
-        stopsArray.push(startPoint);
-        stopsArray.push(stopPoint);  
-          console.log(stopsArray);                
+          stopsArray.push(startPoint);
+          stopsArray.push(stopPoint);
+          console.log(stopsArray);
           console.log("solveClosestFacil finished");
         }
 
@@ -217,15 +218,14 @@
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
 
-        setTimeout(startDirections, 5000);
-
         console.log("startDirections timeout finished");
 
         function startDirections(){
           console.log("startDirections started");
           var directions = new Directions({
             map: map,
-            routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World",
+            // routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/RhvRW8u9rLICszxl/rest/services/World/Route/NAServer/Route_World",
+            routeTaskUrl: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
             routeParams: routeParams,
             dragging: true,
             canModifyStops: true,
