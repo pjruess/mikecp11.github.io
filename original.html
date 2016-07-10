@@ -63,6 +63,11 @@
         urlPrefix: "route.arcgis.com",  
         proxyUrl: "/sproxy/"
       });
+      urlUtils.addProxyRule({
+        urlPrefix: "utility.arcgis.com",  
+        proxyUrl: "/sproxy/"
+      });
+      
         
       map = new Map("map", { 
         basemap: "streets", 
