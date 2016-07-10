@@ -89,7 +89,7 @@
       ) {
         parser.parse();
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
-		
+	esriConfig.defaults.io.proxyUrl = "https://mikecp11.github.io/PHP/proxy.php";	
         urlUtils.addProxyRule({
           urlPrefix: "https://route.arcgis.com",
           proxyUrl: "https://mikecp11.github.io/PHP/proxy.php"
