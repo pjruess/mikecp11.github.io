@@ -91,11 +91,11 @@
         //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
 		
         urlUtils.addProxyRule({
-          urlPrefix: "route.arcgis.com",
+          urlPrefix: "https://route.arcgis.com",
           proxyUrl: "https://mikecp11.github.io/PHP/proxy.php"
         });
         urlUtils.addProxyRule({
-          urlPrefix: "traffic.arcgis.com",
+          urlPrefix: "https://traffic.arcgis.com",
           proxyUrl: "https://mikecp11.github.io/PHP/proxy.php"
         });
 		
