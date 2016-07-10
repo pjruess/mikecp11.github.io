@@ -87,8 +87,8 @@
         esriConfig
       ) {
         parser.parse();
-        esriConfig.defaults.io.proxyUrl = "https://mikecp11.github.io/original.html"
-        esriConfig.defaults.io.alwaysUseProxy = false;
+        // esriConfig.defaults.io.proxyUrl = "https://mikecp11.github.io/original.html"
+        // esriConfig.defaults.io.alwaysUseProxy = false;
         // esriConfig.defaults.io.corsEnabledServers.push({
         //   host: "utility.arcgis.com",
         //   withCredentials: false
@@ -102,10 +102,10 @@
         //   urlPrefix: "traffic.arcgis.com",
         //   proxyUrl: "/sproxy/"
         // });
-        urlUtils.addProxyRule({
-          urlPrefix: "utility.arcgis.com",
-          proxyUrl: "/sproxy/"
-        });
+        // urlUtils.addProxyRule({
+        //   urlPrefix: "utility.arcgis.com",
+        //   proxyUrl: "/sproxy/"
+        // });
 
         var map = new Map("map", {
           basemap: "streets",
