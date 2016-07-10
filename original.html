@@ -96,8 +96,7 @@
         urlUtils.addProxyRule({
           urlPrefix: "traffic.arcgis.com",
           proxyUrl: "/sproxy/"
-        });
-        
+
         var map = new Map("map", {
           basemap: "streets",
         });
@@ -11865,7 +11864,7 @@
 
           var incidents = new FeatureSet();
           incidents.features = incidentsGraphicsLayer.graphics;
-          params.incidents = incidents;
+          paramsCF.incidents = incidents;
 
           initStops();
 
