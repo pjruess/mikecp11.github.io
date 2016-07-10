@@ -36,6 +36,7 @@
       var sheltersGraphicsLayer;
       var sheltersCSV;
       var stopId;
+      var sheltersFeatureLayer;
       require([
         "esri/urlUtils",
         "esri/map",
@@ -47,6 +48,8 @@
         "esri/tasks/ClosestFacilityParameters", 
         "esri/tasks/RouteParameters",
         "esri/layers/GraphicsLayer",
+        "esri/layers/FeatureLayer",
+        "esri/tasks/query",
         "esri/symbols/SimpleFillSymbol",   
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
@@ -71,6 +74,8 @@
         ClosestFacilityParameters,
         RouteParameters,
         GraphicsLayer,
+        FeatureLayer,
+        Query,
         SimpleFillSymbol,
         SimpleMarkerSymbol,
         SimpleLineSymbol,
@@ -11870,6 +11875,14 @@
           console.log("initStart finished");
         }
 
+        // function queryCompleteHandler(queryResult){
+        //   console.log("Query completed: ", queryResults);
+        // }
+
+        // function queryErrorHandler(queryError){
+        //   console.log("Query error: ", queryError.error.details);
+        // }
+
         function initStops(){
           console.log("initStops started");
 
@@ -12063,30 +12076,48 @@
           var sheltersRenderer = new SimpleRenderer(sheltersSymbol);          
 
           sheltersCSV = new CSVLayer("https://mikecp11.github.io/RedCrossShelters_shortened.csv");
-          sheltersGraphicsLayer = new GraphicsLayer();
+          // sheltersGraphicsLayer = new GraphicsLayer();
+          // sheltersFeatureLayer = new FeatureSet();
+          // map.addLayer(sheltersFeatureLayer);
+          // sheltersFeatureLayer.features = sheltersCSV.graphics;
+          // console.log("SheltersFL: ", sheltersFeatureLayer);
+
+          // var query = new Query();
+          // query.returnGeometry = true;
+          // query.objectIds = [features[0].attributes.OBJECTID];
+          // query.outFields = [ "*" ];
+
+          // sheltersFeatureLayer.queryFeatures(query, function(featureSet){
+          //   console.log("featureSet: ",featureSet);
+          // });
+
+          // console.log("Shelters query: ", sheltersQuery);
+
+          // queryTask.on("complete", queryCompleteHandler);
+          // queryTask.on("error", queryErrorHandler);
+
+          console.log("Shelters tester: ", sheltersCSV);
+
+          console.log("CAPABILITIES: ", sheltersCSV.capabilities);
 
           sheltersCSV.setRenderer(sheltersRenderer);
-          sheltersGraphicsLayer.setRenderer(sheltersRenderer);
+          // sheltersGraphicsLayer.setRenderer(sheltersRenderer);
 
-          var template = new InfoTemplate("${LABEL}");
+          var template = new InfoTemplate("${Name}", "Active: ${Active}");
           sheltersCSV.setInfoTemplate(template);
-          sheltersGraphicsLayer.setInfoTemplate(template);
+          // sheltersGraphicsLayer.setInfoTemplate(template);
 
           map.addLayer(sheltersCSV);
 
-          console.log("SCGL.graphics:",sheltersGraphicsLayer.graphics);
-          console.log("SC.graphics:",sheltersCSV.graphics);
-
-          sheltersGraphicsLayer.graphics = sheltersCSV.graphics[0];
-          map.addLayer(sheltersGraphicsLayer);
-
-          console.log("sheltersGraphicsLayer graphics info: ", sheltersGraphicsLayer.graphics);
-
-          console.log("sheltersCSV graphics info: ", sheltersCSV.graphics);
+          // sheltersGraphicsLayer.graphics = sheltersCSV.graphics;
+          // map.addLayer(sheltersGraphicsLayer);
 
           var facilities = new FeatureSet();
-          facilities.features = sheltersGraphicsLayer.graphics;
+          facilities.features = sheltersCSV.graphics;
+
           params.facilities = facilities;
+
+          console.log("params.facilities: ", params.facilities);
 
           console.log("initStops finished");
         }
