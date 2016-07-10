@@ -34,7 +34,7 @@
       var closestFacilityTask;
       var stopsArray = [];
       // var sheltersGraphicsLayer;
-      var sheltersCSVGraphicsLayer;
+      var sheltersCSV;
       var stopId;
       require([
         "esri/urlUtils",
@@ -90,6 +90,10 @@
           urlPrefix: "traffic.arcgis.com",
           proxyUrl: "/sproxy/"
         });
+        urlUtils.addProxyRule({
+          urlPrefix: "mikecp11.github.io",
+          proxyUrl: "/sproxy/"
+        })
 
         var map = new Map("map", {
           basemap: "streets",
@@ -12055,14 +12059,15 @@
 
 /* -------------------- CSV LAYER TESTING --------------------  */
           sheltersCSV = new CSVLayer("https://mikecp11.github.io/RedCrossShelters.csv");
-          sheltersCSVGraphicsLayer = new GraphicsLayer();
-          var sheltersCSVGraphicsLayer.setRenderer(sheltersRenderer);
-          var template = new InfoTemplate("${LABEL}");
-          sheltersCSVGraphicsLayer.setInfoTemplate(template);
-          map.addLayer(sheltersCSVGraphicsLayer);
+          // sheltersCSVGraphicsLayer = new GraphicsLayer();
+          // var sheltersCSVGraphicsLayer.setRenderer(sheltersRenderer);
+          sheltersCSV.setRenderer(sheltersRenderer);
+          // var template = new InfoTemplate("${LABEL}");
+          // sheltersCSVGraphicsLayer.setInfoTemplate(template);
+          map.addLayer(sheltersCSV);
 
           var facilities = new FeatureSet();
-          facilities.features = sheltersCSVGraphicsLayer.graphics;
+          facilities.features = sheltersCSV.graphics;
           params.facilities = facilities;
 
           console.log("initStops finished");
