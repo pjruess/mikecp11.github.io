@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Document>
+<Placemark>
+<description>0</description>
+<name>Central Church of Christ</name>
+<Point><coordinates>-87.54001,33.19067,206.69</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Elizabeth Baptist Church</name>
+<Point><coordinates>-87.56667,33.19067,177.17</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Tenth Street Missionary Baptist Church</name>
+<Point><coordinates>-87.57751,33.19151,200.13</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Church of the Living God</name>
+<Point><coordinates>-87.57556,33.19234,200.13</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Friendship Baptist Church</name>
+<Point><coordinates>-87.57278,33.19234,190.29</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>South Side Second Presbyterian Church (historical)</name>
+<Point><coordinates>-87.56306,33.19234,193.57</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Faith Mission Church of God</name>
+<Point><coordinates>-87.56306,33.19262,200.13</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Oakdale Primitive Baptist Church</name>
+<Point><coordinates>-87.59806,33.19373,160.76</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Tabernacle Baptist Church</name>
+<Point><coordinates>-87.58028,33.19373,187.01</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Church of God in Christ</name>
+<Point><coordinates>-87.5739,33.19373,200.13</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Triumph Church</name>
+<Point><coordinates>-87.57167,33.19373,190.29</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Weeping Mary Baptist Church</name>
+<Point><coordinates>-87.56973,33.19401,187.01</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Forest Lake Baptist Church</name>
+<Point><coordinates>-87.53806,33.19401,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Nineteenth Street Church of Christ</name>
+<Point><coordinates>-87.55223,33.19429,203.41</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>West Highland Baptist Church</name>
+<Point><coordinates>-87.5814,33.19429,180.45</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Truevine Baptist Church</name>
+<Point><coordinates>-87.55306,33.19484,213.25</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>New Home Church of God in Christ</name>
+<Point><coordinates>-87.5814,33.19484,180.45</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Forest Lake United Methodist Church</name>
+<Point><coordinates>-87.54001,33.19512,226.38</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Morning Star Baptist Church</name>
+<Point><coordinates>-87.54834,33.1954,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Miracle House of Prayer</name>
+<Point><coordinates>-87.57834,33.1954,200.13</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Truevine Primitive Baptist Church</name>
+<Point><coordinates>-87.56501,33.1954,190.29</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Saint John Baptist Church</name>
+<Point><coordinates>-87.55056,33.19567,209.97</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Bethlehem Spiritual Church</name>
+<Point><coordinates>-87.57834,33.19567,200.13</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Nineteenth Street Pentecostal Church</name>
+<Point><coordinates>-87.57528,33.19567,200.13</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Temple Baptist Church</name>
+<Point><coordinates>-87.50945,33.19623,282.15</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Double Portion Baptist Church</name>
+<Point><coordinates>-87.5639,33.19623,209.97</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Christ Lutheran Church</name>
+<Point><coordinates>-87.57278,33.19651,196.85</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Saint Marks African Methodist Episcopal Church</name>
+<Point><coordinates>-87.57056,33.19651,190.29</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Apostolic Gospel Church</name>
+<Point><coordinates>-87.48528,33.19679,396.98</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>First Community Methodist Church</name>
+<Point><coordinates>-87.56973,33.19679,187.01</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Druid City Baptist Church</name>
+<Point><coordinates>-87.52917,33.19706,223.1</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Church of God</name>
+<Point><coordinates>-87.55251,33.19734,213.25</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Southside Baptist Church (historical)</name>
+<Point><coordinates>-87.56167,33.19762,223.1</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Mission House of Prayer</name>
+<Point><coordinates>-87.5814,33.19762,183.73</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Bible Methodist Church</name>
+<Point><coordinates>-87.48556,33.19817,413.39</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Knox Temple</name>
+<Point><coordinates>-87.57251,33.19817,190.29</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Solid Rock Spiritual Church</name>
+<Point><coordinates>-87.5814,33.19845,187.01</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Woodhaven Church of the Nazarene</name>
+<Point><coordinates>-87.48417,33.19901,423.23</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Williamson Prayer Chapel</name>
+<Point><coordinates>-87.58334,33.19956,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Druid Hills United Methodist Church</name>
+<Point><coordinates>-87.485,33.19984,426.51</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Brown Memorial Presbyterian Church</name>
+<Point><coordinates>-87.58251,33.2004,223.1</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Saint Paul Baptist Church</name>
+<Point><coordinates>-87.58167,33.2004,213.25</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>African Methodist Episcopal Zion Tabernacle</name>
+<Point><coordinates>-87.52917,33.20095,226.38</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Thompson Chapel</name>
+<Point><coordinates>-87.57723,33.20234,190.29</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>West End Presbyterian Church (historical)</name>
+<Point><coordinates>-87.5814,33.20262,216.54</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Alberta Church of Christ (historical)</name>
+<Point><coordinates>-87.50445,33.2029,295.28</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Hopewell Baptist Church</name>
+<Point><coordinates>-87.48695,33.20373,419.95</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Alberta United Methodist Church</name>
+<Point><coordinates>-87.51056,33.20373,311.68</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Bethel Spiritual Church</name>
+<Point><coordinates>-87.56417,33.20401,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Bailey Christian Methodist Episcopal Temple</name>
+<Point><coordinates>-87.56334,33.20401,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>West End Baptist Church</name>
+<Point><coordinates>-87.5814,33.20429,216.54</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Richards Memorial Catholic Church</name>
+<Point><coordinates>-87.55528,33.20456,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>First African Baptist Church</name>
+<Point><coordinates>-87.57056,33.20456,216.54</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Hunters African Methodist Episcopal Zion Chapel</name>
+<Point><coordinates>-87.56278,33.20456,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Saint Gregory Orthodox Church (historical)</name>
+<Point><coordinates>-87.54362,33.20484,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>West End Methodist Church</name>
+<Point><coordinates>-87.58279,33.20484,223.1</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>First Presbyterian Church</name>
+<Point><coordinates>-87.56751,33.2054,223.1</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Holy Cross Lutheran Church</name>
+<Point><coordinates>-87.51806,33.20567,291.99</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Saint Pauls Church (historical)</name>
+<Point><coordinates>-87.56334,33.20567,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>First Christian Church</name>
+<Point><coordinates>-87.54501,33.20567,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Calvary Baptist Church</name>
+<Point><coordinates>-87.55306,33.20595,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Trinity United Methodist Church</name>
+<Point><coordinates>-87.54667,33.20595,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>Tuscaloosa Life Church</name>
+<Point><coordinates>-87.50445,33.20623,324.8</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Saint Johns Holy Name Catholic Church</name>
+<Point><coordinates>-87.5689,33.20623,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Alberta Baptist Church</name>
+<Point><coordinates>-87.50889,33.20651,291.99</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>First United Methodist Church</name>
+<Point><coordinates>-87.56723,33.20651,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>0</description>
+<name>University Lutheran Church</name>
+<Point><coordinates>-87.54195,33.20679,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Second Baptist Church (historical)</name>
+<Point><coordinates>-87.55528,33.20679,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Brandon Memorial Methodist Church (historical)</name>
+<Point><coordinates>-87.55362,33.20679,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Riverwood Presbyterian Church</name>
+<Point><coordinates>-87.55362,33.20679,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>First Baptist Church of Tuscaloosa</name>
+<Point><coordinates>-87.56667,33.20734,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Saint Phillips Church (historical)</name>
+<Point><coordinates>-87.57084,33.20762,216.54</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Canterbury Chapel Episcopal Church</name>
+<Point><coordinates>-87.54251,33.2079,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>All Nations Church of Jesus Christ</name>
+<Point><coordinates>-87.56473,33.2079,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>University Presbyterian Church</name>
+<Point><coordinates>-87.55278,33.20817,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Baptist Student Center</name>
+<Point><coordinates>-87.54112,33.20817,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Christ Episcopal Church</name>
+<Point><coordinates>-87.56862,33.20817,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Faith Chapel</name>
+<Point><coordinates>-87.56445,33.20845,219.82</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Alberta Church of the Nazarene</name>
+<Point><coordinates>-87.50695,33.20873,321.52</coordinates></Point>
+</Placemark>
+<Placemark>
+<description>1</description>
+<name>Beacon Light Baptist Church</name>
+<Point><coordinates>-87.56612,33.20873,219.82</coordinates></Point>
+</Placemark>
+</Document>
+</kml>

@@ -1,81 +1,81 @@
-LONGITUDE,LATITUDE,FID,OBJECTID,LABEL,NOTES,TYPE,ELEVATION,COMMENT,URL,Active
--87.54001,33.19067,126,133,Central Church of Christ, ,Church,206.69, ,,0
--87.56667,33.19067,127,134,Elizabeth Baptist Church, ,Church,177.17, ,,0
--87.57751,33.19151,130,137,Tenth Street Missionary Baptist Church, ,Church,200.13, ,,0
--87.57556,33.19234,133,140,Church of the Living God, ,Church,200.13, ,,0
--87.57278,33.19234,134,141,Friendship Baptist Church, ,Church,190.29, ,,1
--87.56306,33.19234,135,142,South Side Second Presbyterian Church (historical), ,Church,193.57, ,,1
--87.56306,33.19262,136,143,Faith Mission Church of God, ,Church,200.13, ,,1
--87.59806,33.19373,139,146,Oakdale Primitive Baptist Church, ,Church,160.76, ,,1
--87.58028,33.19373,140,147,Tabernacle Baptist Church, ,Church,187.01, ,,1
--87.5739,33.19373,141,148,Church of God in Christ, ,Church,200.13, ,,1
--87.57167,33.19373,142,149,Triumph Church, ,Church,190.29, ,,1
--87.56973,33.19401,143,150,Weeping Mary Baptist Church, ,Church,187.01, ,,1
--87.53806,33.19401,144,151,Forest Lake Baptist Church, ,Church,219.82, ,,1
--87.55223,33.19429,145,152,Nineteenth Street Church of Christ, ,Church,203.41, ,,1
--87.5814,33.19429,146,153,West Highland Baptist Church, ,Church,180.45, ,,1
--87.55306,33.19484,147,154,Truevine Baptist Church, ,Church,213.25, ,,0
--87.5814,33.19484,148,155,New Home Church of God in Christ, ,Church,180.45, ,,0
--87.54001,33.19512,149,156,Forest Lake United Methodist Church, ,Church,226.38, ,,0
--87.54834,33.1954,150,157,Morning Star Baptist Church, ,Church,219.82, ,,0
--87.57834,33.1954,151,158,Miracle House of Prayer, ,Church,200.13, ,,0
--87.56501,33.1954,152,159,Truevine Primitive Baptist Church, ,Church,190.29, ,,0
--87.55056,33.19567,153,160,Saint John Baptist Church, ,Church,209.97, ,,0
--87.57834,33.19567,154,161,Bethlehem Spiritual Church, ,Church,200.13, ,,1
--87.57528,33.19567,155,162,Nineteenth Street Pentecostal Church, ,Church,200.13, ,,1
--87.50945,33.19623,157,164,Temple Baptist Church, ,Church,282.15, ,,1
--87.5639,33.19623,158,165,Double Portion Baptist Church, ,Church,209.97, ,,1
--87.57278,33.19651,159,166,Christ Lutheran Church, ,Church,196.85, ,,1
--87.57056,33.19651,160,167,Saint Marks African Methodist Episcopal Church, ,Church,190.29, ,,1
--87.48528,33.19679,161,168,Apostolic Gospel Church, ,Church,396.98, ,,1
--87.56973,33.19679,162,169,First Community Methodist Church, ,Church,187.01, ,,0
--87.52917,33.19706,163,170,Druid City Baptist Church, ,Church,223.1, ,,0
--87.55251,33.19734,164,171,Church of God, ,Church,213.25, ,,0
--87.56167,33.19762,165,172,Southside Baptist Church (historical), ,Church,223.1, ,,1
--87.5814,33.19762,166,173,Mission House of Prayer, ,Church,183.73, ,,1
--87.48556,33.19817,167,174,Bible Methodist Church, ,Church,413.39, ,,1
--87.57251,33.19817,168,175,Knox Temple, ,Church,190.29, ,,1
--87.5814,33.19845,169,176,Solid Rock Spiritual Church, ,Church,187.01, ,,1
--87.48417,33.19901,170,177,Woodhaven Church of the Nazarene, ,Church,423.23, ,,1
--87.58334,33.19956,171,178,Williamson Prayer Chapel, ,Church,219.82, ,,1
--87.485,33.19984,172,179,Druid Hills United Methodist Church, ,Church,426.51, ,,1
--87.58251,33.2004,173,180,Brown Memorial Presbyterian Church, ,Church,223.1, ,,1
--87.58167,33.2004,174,181,Saint Paul Baptist Church, ,Church,213.25, ,,1
--87.52917,33.20095,175,182,African Methodist Episcopal Zion Tabernacle, ,Church,226.38, ,,0
--87.57723,33.20234,177,184,Thompson Chapel, ,Church,190.29, ,,1
--87.5814,33.20262,178,185,West End Presbyterian Church (historical), ,Church,216.54, ,,1
--87.50445,33.2029,180,187,Alberta Church of Christ (historical), ,Church,295.28, ,,1
--87.48695,33.20373,181,188,Hopewell Baptist Church, ,Church,419.95, ,,1
--87.51056,33.20373,182,189,Alberta United Methodist Church, ,Church,311.68, ,,0
--87.56417,33.20401,183,190,Bethel Spiritual Church, ,Church,219.82, ,,1
--87.56334,33.20401,184,191,Bailey Christian Methodist Episcopal Temple, ,Church,219.82, ,,1
--87.5814,33.20429,185,192,West End Baptist Church, ,Church,216.54, ,,1
--87.55528,33.20456,186,193,Richards Memorial Catholic Church, ,Church,219.82, ,,1
--87.57056,33.20456,187,194,First African Baptist Church, ,Church,216.54, ,,1
--87.56278,33.20456,188,195,Hunters African Methodist Episcopal Zion Chapel, ,Church,219.82, ,,1
--87.54362,33.20484,189,196,Saint Gregory Orthodox Church (historical), ,Church,219.82, ,,1
--87.58279,33.20484,190,197,West End Methodist Church, ,Church,223.1, ,,0
--87.56751,33.2054,191,199,First Presbyterian Church, ,Church,223.1, ,,1
--87.51806,33.20567,192,200,Holy Cross Lutheran Church, ,Church,291.99, ,,1
--87.56334,33.20567,193,201,Saint Pauls Church (historical), ,Church,219.82, ,,0
--87.54501,33.20567,194,202,First Christian Church, ,Church,219.82, ,,0
--87.55306,33.20595,195,203,Calvary Baptist Church, ,Church,219.82, ,,0
--87.54667,33.20595,196,204,Trinity United Methodist Church, ,Church,219.82, ,,0
--87.50445,33.20623,197,205,Tuscaloosa Life Church, ,Church,324.8, ,,0
--87.5689,33.20623,198,206,Saint Johns Holy Name Catholic Church, ,Church,219.82, ,,1
--87.50889,33.20651,199,207,Alberta Baptist Church, ,Church,291.99, ,,1
--87.56723,33.20651,200,208,First United Methodist Church, ,Church,219.82, ,,1
--87.54195,33.20679,201,209,University Lutheran Church, ,Church,219.82, ,,0
--87.55528,33.20679,202,210,Second Baptist Church (historical), ,Church,219.82, ,,1
--87.55362,33.20679,203,211,Brandon Memorial Methodist Church (historical), ,Church,219.82, ,,1
--87.55362,33.20679,204,212,Riverwood Presbyterian Church, ,Church,219.82, ,,1
--87.56667,33.20734,205,213,First Baptist Church of Tuscaloosa, ,Church,219.82, ,,1
--87.57084,33.20762,206,214,Saint Phillips Church (historical), ,Church,216.54, ,,1
--87.54251,33.2079,208,216,Canterbury Chapel Episcopal Church, ,Church,219.82, ,,1
--87.56473,33.2079,209,217,All Nations Church of Jesus Christ, ,Church,219.82, ,,1
--87.55278,33.20817,210,218,University Presbyterian Church, ,Church,219.82, ,,1
--87.54112,33.20817,211,219,Baptist Student Center, ,Church,219.82, ,,1
--87.56862,33.20817,212,220,Christ Episcopal Church, ,Church,219.82, ,,1
--87.56445,33.20845,213,221,Faith Chapel, ,Church,219.82, ,,1
--87.50695,33.20873,214,222,Alberta Church of the Nazarene, ,Church,321.52, ,,1
--87.56612,33.20873,215,223,Beacon Light Baptist Church, ,Church,219.82, ,,1
+Active,Name,Elevation,Latitude,Longitude
+0,Central Church of Christ,206.69,33.19067,-87.54001
+0,Elizabeth Baptist Church,177.17,33.19067,-87.56667
+0,Tenth Street Missionary Baptist Church,200.13,33.19151,-87.57751
+0,Church of the Living God,200.13,33.19234,-87.57556
+1,Friendship Baptist Church,190.29,33.19234,-87.57278
+1,South Side Second Presbyterian Church (historical),193.57,33.19234,-87.56306
+1,Faith Mission Church of God,200.13,33.19262,-87.56306
+1,Oakdale Primitive Baptist Church,160.76,33.19373,-87.59806
+1,Tabernacle Baptist Church,187.01,33.19373,-87.58028
+1,Church of God in Christ,200.13,33.19373,-87.5739
+1,Triumph Church,190.29,33.19373,-87.57167
+1,Weeping Mary Baptist Church,187.01,33.19401,-87.56973
+1,Forest Lake Baptist Church,219.82,33.19401,-87.53806
+1,Nineteenth Street Church of Christ,203.41,33.19429,-87.55223
+1,West Highland Baptist Church,180.45,33.19429,-87.5814
+0,Truevine Baptist Church,213.25,33.19484,-87.55306
+0,New Home Church of God in Christ,180.45,33.19484,-87.5814
+0,Forest Lake United Methodist Church,226.38,33.19512,-87.54001
+0,Morning Star Baptist Church,219.82,33.1954,-87.54834
+0,Miracle House of Prayer,200.13,33.1954,-87.57834
+0,Truevine Primitive Baptist Church,190.29,33.1954,-87.56501
+0,Saint John Baptist Church,209.97,33.19567,-87.55056
+1,Bethlehem Spiritual Church,200.13,33.19567,-87.57834
+1,Nineteenth Street Pentecostal Church,200.13,33.19567,-87.57528
+1,Temple Baptist Church,282.15,33.19623,-87.50945
+1,Double Portion Baptist Church,209.97,33.19623,-87.5639
+1,Christ Lutheran Church,196.85,33.19651,-87.57278
+1,Saint Marks African Methodist Episcopal Church,190.29,33.19651,-87.57056
+1,Apostolic Gospel Church,396.98,33.19679,-87.48528
+0,First Community Methodist Church,187.01,33.19679,-87.56973
+0,Druid City Baptist Church,223.1,33.19706,-87.52917
+0,Church of God,213.25,33.19734,-87.55251
+1,Southside Baptist Church (historical),223.1,33.19762,-87.56167
+1,Mission House of Prayer,183.73,33.19762,-87.5814
+1,Bible Methodist Church,413.39,33.19817,-87.48556
+1,Knox Temple,190.29,33.19817,-87.57251
+1,Solid Rock Spiritual Church,187.01,33.19845,-87.5814
+1,Woodhaven Church of the Nazarene,423.23,33.19901,-87.48417
+1,Williamson Prayer Chapel,219.82,33.19956,-87.58334
+1,Druid Hills United Methodist Church,426.51,33.19984,-87.485
+1,Brown Memorial Presbyterian Church,223.1,33.2004,-87.58251
+1,Saint Paul Baptist Church,213.25,33.2004,-87.58167
+0,African Methodist Episcopal Zion Tabernacle,226.38,33.20095,-87.52917
+1,Thompson Chapel,190.29,33.20234,-87.57723
+1,West End Presbyterian Church (historical),216.54,33.20262,-87.5814
+1,Alberta Church of Christ (historical),295.28,33.2029,-87.50445
+1,Hopewell Baptist Church,419.95,33.20373,-87.48695
+0,Alberta United Methodist Church,311.68,33.20373,-87.51056
+1,Bethel Spiritual Church,219.82,33.20401,-87.56417
+1,Bailey Christian Methodist Episcopal Temple,219.82,33.20401,-87.56334
+1,West End Baptist Church,216.54,33.20429,-87.5814
+1,Richards Memorial Catholic Church,219.82,33.20456,-87.55528
+1,First African Baptist Church,216.54,33.20456,-87.57056
+1,Hunters African Methodist Episcopal Zion Chapel,219.82,33.20456,-87.56278
+1,Saint Gregory Orthodox Church (historical),219.82,33.20484,-87.54362
+0,West End Methodist Church,223.1,33.20484,-87.58279
+1,First Presbyterian Church,223.1,33.2054,-87.56751
+1,Holy Cross Lutheran Church,291.99,33.20567,-87.51806
+0,Saint Pauls Church (historical),219.82,33.20567,-87.56334
+0,First Christian Church,219.82,33.20567,-87.54501
+0,Calvary Baptist Church,219.82,33.20595,-87.55306
+0,Trinity United Methodist Church,219.82,33.20595,-87.54667
+0,Tuscaloosa Life Church,324.8,33.20623,-87.50445
+1,Saint Johns Holy Name Catholic Church,219.82,33.20623,-87.5689
+1,Alberta Baptist Church,291.99,33.20651,-87.50889
+1,First United Methodist Church,219.82,33.20651,-87.56723
+0,University Lutheran Church,219.82,33.20679,-87.54195
+1,Second Baptist Church (historical),219.82,33.20679,-87.55528
+1,Brandon Memorial Methodist Church (historical),219.82,33.20679,-87.55362
+1,Riverwood Presbyterian Church,219.82,33.20679,-87.55362
+1,First Baptist Church of Tuscaloosa,219.82,33.20734,-87.56667
+1,Saint Phillips Church (historical),216.54,33.20762,-87.57084
+1,Canterbury Chapel Episcopal Church,219.82,33.2079,-87.54251
+1,All Nations Church of Jesus Christ,219.82,33.2079,-87.56473
+1,University Presbyterian Church,219.82,33.20817,-87.55278
+1,Baptist Student Center,219.82,33.20817,-87.54112
+1,Christ Episcopal Church,219.82,33.20817,-87.56862
+1,Faith Chapel,219.82,33.20845,-87.56445
+1,Alberta Church of the Nazarene,321.52,33.20873,-87.50695
+1,Beacon Light Baptist Church,219.82,33.20873,-87.56612

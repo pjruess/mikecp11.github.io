@@ -33,12 +33,13 @@
       var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents;
       var closestFacilityTask;
       var stopsArray = [];
-      // var sheltersGraphicsLayer;
+      var sheltersGraphicsLayer;
       var sheltersCSV;
       var stopId;
       require([
         "esri/urlUtils",
         "esri/map",
+        "esri/SpatialReference",
         "esri/dijit/Directions",
         "esri/geometry/Point",
         "esri/tasks/FeatureSet",
@@ -62,6 +63,7 @@
       ], function(
         urlUtils,
         Map,
+        SpatialReference,
         Directions,
         Point,
         FeatureSet, 
@@ -87,16 +89,12 @@
           proxyUrl: "/sproxy/"
         });
         urlUtils.addProxyRule({
-          urlPrefix: "traffic.arcgis.com",
-          proxyUrl: "/sproxy/"
-        });
-        urlUtils.addProxyRule({
           urlPrefix: "mikecp11.github.io",
           proxyUrl: "/sproxy/"
         })
 
         var map = new Map("map", {
-          basemap: "streets",
+          basemap: "streets"
         });
         
         map.on("load", initFunc);
@@ -11782,7 +11780,7 @@
 
         params = new ClosestFacilityParameters();
         params.impedenceAttribute= "Miles";
-        params.defaultCutoff= 5;
+        params.defaultCutoff= 20;
         params.returnFacilities= true;
         params.returnIncidents= false;
         params.returnRoutes= true;
@@ -11846,6 +11844,7 @@
 
               console.log("stopPoint inside function: ", stopPoint);
 
+              startDirections();
             });
           });
 
@@ -11863,9 +11862,11 @@
           incidents.features = incidentsGraphicsLayer.graphics;
           params.incidents = incidents;
 
+          console.log("incidents: ", incidents.features);
+
           initStops();
 
-          setTimeout(solveClosestFacil,1000);
+          solveClosestFacil();
           console.log("initStart finished");
         }
 
@@ -11873,8 +11874,8 @@
           console.log("initStops started");
 
           // sheltersGraphicsLayer = new GraphicsLayer();
-          var sheltersSymbol = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
-          var sheltersRenderer = new SimpleRenderer(sheltersSymbol);
+          // var sheltersSymbol = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
+          // var sheltersRenderer = new SimpleRenderer(sheltersSymbol);
           // sheltersGraphicsLayer.setRenderer(sheltersRenderer);
           // map.addLayer(sheltersGraphicsLayer);
 
@@ -12058,24 +12059,39 @@
 */
 
 /* -------------------- CSV LAYER TESTING --------------------  */
-          sheltersCSV = new CSVLayer("https://mikecp11.github.io/RedCrossShelters.csv");
-          // sheltersCSVGraphicsLayer = new GraphicsLayer();
-          // var sheltersCSVGraphicsLayer.setRenderer(sheltersRenderer);
+          var sheltersSymbol = new SimpleMarkerSymbol("solid", 6, null, new Color([238, 69, 0, 0.5]));
+          var sheltersRenderer = new SimpleRenderer(sheltersSymbol);          
+
+          sheltersCSV = new CSVLayer("https://mikecp11.github.io/RedCrossShelters_shortened.csv");
+          sheltersGraphicsLayer = new GraphicsLayer();
+
           sheltersCSV.setRenderer(sheltersRenderer);
-          // var template = new InfoTemplate("${LABEL}");
-          // sheltersCSVGraphicsLayer.setInfoTemplate(template);
+          sheltersGraphicsLayer.setRenderer(sheltersRenderer);
+
+          var template = new InfoTemplate("${LABEL}");
+          sheltersCSV.setInfoTemplate(template);
+          sheltersGraphicsLayer.setInfoTemplate(template);
+
           map.addLayer(sheltersCSV);
 
+          console.log("SCGL.graphics:",sheltersGraphicsLayer.graphics);
+          console.log("SC.graphics:",sheltersCSV.graphics);
+
+          sheltersGraphicsLayer.graphics = sheltersCSV.graphics[0];
+          map.addLayer(sheltersGraphicsLayer);
+
+          console.log("sheltersGraphicsLayer graphics info: ", sheltersGraphicsLayer.graphics);
+
+          console.log("sheltersCSV graphics info: ", sheltersCSV.graphics);
+
           var facilities = new FeatureSet();
-          facilities.features = sheltersCSV.graphics;
+          facilities.features = sheltersGraphicsLayer.graphics;
           params.facilities = facilities;
 
           console.log("initStops finished");
         }
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
-
-        setTimeout(startDirections, 2000);
 
         function startDirections(){
           console.log("startDirections started");
