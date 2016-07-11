@@ -11808,7 +11808,7 @@
 
         function findStart(location) {
           var pt = new Point(location.coords.longitude, location.coords.latitude);
-          map.centerAndZoom(pt, 15);
+          map.centerAndZoom(pt, 14);
         }
 
         function locationError(error) {
@@ -11881,7 +11881,8 @@
           console.log("initStops started");
 
           var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 8, null, new Color([0, 255, 0, 0.5]));
-          var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 8, null, new Color([255, 0, 0, 0.5]));
+          var sheltersInactiveSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_X, 7, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+            new Color([255, 0, 0, 0.5]), 4));
 
           var sheltersActiveRenderer = new SimpleRenderer(sheltersActiveSymbol); 
           var sheltersInactiveRenderer = new SimpleRenderer(sheltersInactiveSymbol);         
