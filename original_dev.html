@@ -60,7 +60,7 @@
         "esri/Color",        
         "dojo/parser",
         "dojo/_base/array",
-        "esri/layers/CSVLayer",
+        "esri/geometry/geometryEngine",
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
         "dijit/layout/BorderContainer",
@@ -86,7 +86,7 @@
         Color,
         parser,
         array,
-        CSVLayer,
+        geometryEngine,
         SimpleRenderer,
         InfoTemplate
       ) {
@@ -122,7 +122,7 @@
         map.addLayer(polygonGraphicsLayerFuture);
         map.addLayer(polygonGraphicsLayerCurrent);
 
-        var polygonLarge = {"geometry":{"rings":
+        var polygonFuture = {"geometry":{"rings":
 
         [
           [
@@ -5414,7 +5414,7 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
-        var polygonSmall = {"geometry":{"rings":
+        var polygonCurrent = {"geometry":{"rings":
 
         [
           [
@@ -11776,8 +11776,8 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
-        var polygonGraphicFuture = new Graphic(polygonLarge, polygonBarrierSymbol);
-        var polygonGraphicCurrent = new Graphic(polygonSmall, polygonBarrierSymbol);
+        var polygonGraphicFuture = new Graphic(polygonFuture, polygonBarrierSymbol);
+        var polygonGraphicCurrent = new Graphic(polygonCurrent, polygonBarrierSymbol);
         polygonGraphicsLayerFuture.add(polygonGraphicFuture);
         polygonGraphicsLayerCurrent.add(polygonGraphicCurrent);
         
@@ -11793,6 +11793,7 @@
         params.returnIncidents= false;
         params.returnRoutes= true;
         params.returnDirections= true;
+        params.polygonBarriers = polygonFeatureSet;
 
         // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
         closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
@@ -11850,8 +11851,6 @@
 
               stopPoint = new Point(stopPointX, stopPointY);
 
-              console.log("stopPoint inside function: ", stopPoint);
-
               startDirections();
             });
           });
@@ -11881,8 +11880,8 @@
         function initStops(){
           console.log("initStops started");
 
-          var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 6, null, new Color([0, 255, 0, 0.5]));
-          var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 6, null, new Color([255, 0, 0, 0.5]));
+          var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 8, null, new Color([0, 255, 0, 0.5]));
+          var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 8, null, new Color([255, 0, 0, 0.5]));
 
           var sheltersActiveRenderer = new SimpleRenderer(sheltersActiveSymbol); 
           var sheltersInactiveRenderer = new SimpleRenderer(sheltersInactiveSymbol);         
@@ -11893,8 +11892,9 @@
           sheltersActive.setRenderer(sheltersActiveRenderer);
           sheltersInactive.setRenderer(sheltersInactiveRenderer);
 
-          // var template = new InfoTemplate("${Name}", "Active: ${Active}");
-          // sheltersGraphicsLayer.setInfoTemplate(template);
+          var template = new InfoTemplate("${Name}", "Active: ${Active}");
+          // sheltersActive.setInfoTemplate(template);
+          // sheltersInactive.setInfoTemplate(template);
 
           map.addLayer(sheltersActive);
           map.addLayer(sheltersInactive);
@@ -11920,13 +11920,17 @@
           var csvArrays = $.csv.toArrays(csvData);
 
           console.log("csvarray[0]: ",csvArrays[1][0]);
-          for(i=1; i <csvArrays.length; i++){
+          for(i=1; i < csvArrays.length; i++){
             current = csvArrays[i];
+            shelter = new Point(current[4], current[3]); 
+            // console.log("shelter: ", shelter);
+            // console.log("polygonFuture: ", polygonGraphicsLayerFuture);
+            // disjoint = geometryEngine.disjoint(shelter,polygonGraphicsLayerFuture);
             if (current[0] == 1) {
-              sheltersActive.add(new Graphic(new Point(current[4], current[3]))); 
+              sheltersActive.add(new Graphic(shelter)); 
             }
             else if (current[0] == 0) {
-              sheltersInactive.add(new Graphic(new Point(current[4], current[3])));
+              sheltersInactive.add(new Graphic(shelter));
             } 
           }
 
