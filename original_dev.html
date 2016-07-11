@@ -11860,8 +11860,14 @@
 
         function initStart(position){
           console.log("initStart started");
-          startPoint = new Point(position.coords.longitude, position.coords.latitude);
           
+          startPoint = new Point(-87.541460, 33.217496);
+
+          if (position.coords.longitude){
+            console.log("User location found");
+            startPoint = new Point(position.coords.longitude, position.coords.latitude);
+          }
+
           var incidentsGraphicsLayer = new GraphicsLayer();
           incidentsGraphicsLayer.add(new Graphic(startPoint));
 
