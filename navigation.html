@@ -11848,6 +11848,8 @@
           if (position.coords.longitude){
             console.log("User location found");
             startPoint = new Point(position.coords.longitude, position.coords.latitude);
+          } else {
+            alert("Location services not provided. Start point default set to National Water Center in Tuscaloosa, AL.");
           }
 
           var incidents = new FeatureSet();
