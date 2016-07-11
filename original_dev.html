@@ -11925,9 +11925,9 @@
             shelter = new Point(current[4], current[3]); 
             // console.log("shelter: ", shelter);
             // console.log("polygonFuture: ", polygonGraphicsLayerFuture);
-            // disjoint = geometryEngine.disjoint(shelter,polygonGraphicsLayerFuture);
+            // disjoint = geometryEngine.disjoint(polygonGraphicsLayerFuture,shelter);
             if (current[0] == 1) {
-              sheltersActive.add(new Graphic(shelter)); 
+              sheltersActive.add(new Graphic(shelter));
             }
             else if (current[0] == 0) {
               sheltersInactive.add(new Graphic(shelter));
