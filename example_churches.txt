@@ -1,0 +1,48 @@
+LONGITUDE = -87.54195
+LATITUDE = 33.20679
+FID = 201
+OBJECTID = 209
+LABEL = University Lutheran Church
+TYPE = Church
+ELEVATION = 219.82
+Active = 0
+__OBJECTID = 105
+
+
+
+Canterbury Chapel Episcopal Church
+LONGITUDE = -87.54251
+LATITUDE = 33.2079
+FID = 208
+OBJECTID = 216
+LABEL = Canterbury Chapel Episcopal Church
+TYPE = Church
+ELEVATION = 219.82
+Active = 1
+__OBJECTID = 111
+
+
+
+Baptist Student Center
+LONGITUDE = -87.54112
+LATITUDE = 33.20817
+FID = 211
+OBJECTID = 219
+LABEL = Baptist Student Center
+TYPE = Church
+ELEVATION = 219.82
+Active = 1
+__OBJECTID = 114
+
+
+
+University Presbyterian Church
+LONGITUDE = -87.55278
+LATITUDE = 33.20817
+FID = 210
+OBJECTID = 218
+LABEL = University Presbyterian Church
+TYPE = Church
+ELEVATION = 219.82
+Active = 1
+__OBJECTID = 113
