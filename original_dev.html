@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <link rel="icon" href="images/logo.png" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.min.js" type="text/javascript"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,6 +12,7 @@
     <title>Flood HIPPO</title>
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
+   
     <style>
       html, body {
         height: 100%;
@@ -28,9 +31,12 @@
         100% {opacity: 1.0;}
       }
     </style>
-<script src="https://js.arcgis.com/3.17/"></script>
-    <script>
-      var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents;
+    <script src="https://js.arcgis.com/3.17/"></script>
+    <!-- <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script> -->
+    <!-- <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script> -->
+    <!-- <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script> -->
+    <script type="text/javascript">
+      var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents, csvData;
       var closestFacilityTask;
       var stopsArray = [];
       var sheltersGraphicsLayer;
@@ -12096,21 +12102,68 @@
           // queryTask.on("complete", queryCompleteHandler);
           // queryTask.on("error", queryErrorHandler);
 
-          console.log("Shelters tester: ", sheltersCSV);
-
-          console.log("CAPABILITIES: ", sheltersCSV.capabilities);
-
-          sheltersCSV.setRenderer(sheltersRenderer);
           // sheltersGraphicsLayer.setRenderer(sheltersRenderer);
 
-          var template = new InfoTemplate("${Name}", "Active: ${Active}");
-          sheltersCSV.setInfoTemplate(template);
           // sheltersGraphicsLayer.setInfoTemplate(template);
 
-          map.addLayer(sheltersCSV);
+          // sheltersCSV.setRenderer(sheltersRenderer);
+          // var template = new InfoTemplate("${Name}", "Active: ${Active}");
+          // sheltersCSV.setInfoTemplate(template);
+          // map.addLayer(sheltersCSV);
 
           // sheltersGraphicsLayer.graphics = sheltersCSV.graphics;
           // map.addLayer(sheltersGraphicsLayer);
+          function getShelters( scriptUrl ) {
+            // console.log('Inside called');
+            var result = null;
+            //var scriptUrl = path;
+            $.ajax({
+              url: scriptUrl,
+              type: 'get',
+              dataType: 'text',
+              async: false,
+              success: function(data) {
+              // console.log('success mother fucker!');
+                  result = data;
+              } 
+            });
+            return result;
+          }
+          
+          $(document).ready(function(){
+            csvData = getShelters("https://mikecp11.github.io/RedCrossShelters_shortened.csv");   
+          });
+          
+          var csvArrays = $.csv.toArrays(csvData);
+
+          var headings = csvArrays[0];
+
+          for (i = 0; i < headings.length; i++) {
+            console.log("Heading " + i + ": ", headings[i]);
+          }
+
+          console.log("csvarrays test: ",csvArrays);
+
+          // var parsedCSV = $.csv.toObjects(csvData);
+
+          // console.log("parsed CSV: ", parsedCSV);
+
+          // function processCSV(allTextLines) {
+          //   var allRows = allTextLines.split('\n');
+          //   var numRows = allRows.length;
+          //   var headings = allRows[0];
+          //   for (i = 0, i < headings.length, i++) {
+          //     if (headings[i] === "Active") {
+          //       console.log("For loop worked: ",headings[i]);
+          //     }
+          //   }
+          //   for (i = 1; i < numRows; i++){
+          //   }
+
+          //   console.log("csv testing: ",headings);
+          // }
+
+          // console.log("CSV DATA: ", csvData);
 
           var facilities = new FeatureSet();
           facilities.features = sheltersCSV.graphics;
