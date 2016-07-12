@@ -11929,25 +11929,22 @@
           console.log("csvarray[0]: ",csvArrays[1][0]);
           for(i=1; i < csvArrays.length; i++){
             current = csvArrays[i];
+
             var shelterGraphic = new GraphicsLayer();
-
-            shelter = {"geometry": {
-              "x" : -118.15, "y" : 33.80, "spatialReference" : {"wkid" : 4326}
-            }};
-
-            shelter = new Point(+current[4], +current[3],map.spatialReference); 
+            var shelter = new Point(+current[4], +current[3]); 
+            // console.log("SHELTER: ", shelter);
             shelterGraphic.add(new Graphic(shelter));
+
             var shelterGeometry = shelterGraphic.graphics[0].geometry;
             var polygonGeometry = polygonGraphicsLayerFuture.graphics[0].geometry;
 
-            if (i == 1) {console.log("sheltergraphic: ", shelterGeometry);}
-            if (i == 1) {console.log("polygonFuture: ", polygonGeometry);}
             disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
-            console.log("Disjoint passed: ", disjoint);
-            if (current[0] == 1) {
+            // console.log("Disjoint passed: ", disjoint);
+
+            if (current[0] == 1 && disjoint) {
               sheltersActive.add(new Graphic(shelter));
             }
-            else if (current[0] == 0) {
+            else if (current[0] == 0 || !disjoint) {
               sheltersInactive.add(new Graphic(shelter));
             } 
             shelterGraphic.clear();
