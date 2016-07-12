@@ -60,7 +60,7 @@ Active,Name,Elevation,Latitude,Longitude
 0,Saint Pauls Church (historical),219.82,33.20567,-87.56334
 0,First Christian Church,219.82,33.20567,-87.54501
 0,Calvary Baptist Church,219.82,33.20595,-87.55306
-0,Trinity United Methodist Church,219.82,33.20595,-87.54667
+1,Trinity United Methodist Church,219.82,33.20595,-87.54667
 0,Tuscaloosa Life Church,324.8,33.20623,-87.50445
 1,Saint Johns Holy Name Catholic Church,219.82,33.20623,-87.5689
 1,Alberta Baptist Church,291.99,33.20651,-87.50889
@@ -80,4 +80,3 @@ Active,Name,Elevation,Latitude,Longitude
 1,Alberta Church of the Nazarene,321.52,33.20873,-87.50695
 1,Beacon Light Baptist Church,219.82,33.20873,-87.56612
 1,Southside Methodist Church,180.45,33.18734,-87.55751
-1,Trinity United Methodist Church,219.82,33.20595,-87.54667

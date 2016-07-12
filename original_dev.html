@@ -11936,6 +11936,7 @@
             shelterGraphic.add(new Graphic(shelter));
 
             var shelterGeometry = shelterGraphic.graphics[0].geometry;
+            console.log("SHELTER GEOMETRY: ", shelterGeometry);
             var polygonGeometry = polygonGraphicsLayerFuture.graphics[0].geometry;
 
             var disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
