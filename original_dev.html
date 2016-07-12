@@ -11814,7 +11814,7 @@
         function locationError(error) {
           switch (error.code) {
             case error.PERMISSION_DENIED:
-              alert("Location not provided");
+              alert("Location not provided. Please turn on location services and try again.");
               break;
             case error.POSITION_UNAVAILABLE:
               alert("Current location not available");
@@ -11863,10 +11863,9 @@
           
           if (position.coords.longitude){
             startPoint = new Point(position.coords.longitude, position.coords.latitude);
-            alert("User location found.");
           } else {
             startPoint = new Point(-87.541460, 33.217496);
-            alert("Location services not provided. Start point default set to National Water Center in Tuscaloosa, AL.");
+            alert("Location services not provided. Start point set to National Water Center in Tuscaloosa, AL.");
           }
 
           var incidentsGraphicsLayer = new GraphicsLayer();
@@ -11930,16 +11929,28 @@
           console.log("csvarray[0]: ",csvArrays[1][0]);
           for(i=1; i < csvArrays.length; i++){
             current = csvArrays[i];
-            shelter = new Point(current[4], current[3]); 
-            // console.log("shelter: ", shelter);
-            // console.log("polygonFuture: ", polygonGraphicsLayerFuture);
-            // disjoint = geometryEngine.disjoint(polygonGraphicsLayerFuture,shelter);
+            var shelterGraphic = new GraphicsLayer();
+
+            shelter = {"geometry": {
+              "x" : -118.15, "y" : 33.80, "spatialReference" : {"wkid" : 4326}
+            }};
+
+            shelter = new Point(+current[4], +current[3],map.spatialReference); 
+            shelterGraphic.add(new Graphic(shelter));
+            var shelterGeometry = shelterGraphic.graphics[0].geometry;
+            var polygonGeometry = polygonGraphicsLayerFuture.graphics[0].geometry;
+
+            if (i == 1) {console.log("sheltergraphic: ", shelterGeometry);}
+            if (i == 1) {console.log("polygonFuture: ", polygonGeometry);}
+            disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
+            console.log("Disjoint passed: ", disjoint);
             if (current[0] == 1) {
               sheltersActive.add(new Graphic(shelter));
             }
             else if (current[0] == 0) {
               sheltersInactive.add(new Graphic(shelter));
             } 
+            shelterGraphic.clear();
           }
 
           var facilities = new FeatureSet();
