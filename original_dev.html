@@ -11938,13 +11938,18 @@
             var shelterGeometry = shelterGraphic.graphics[0].geometry;
             var polygonGeometry = polygonGraphicsLayerFuture.graphics[0].geometry;
 
-            disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
+            var disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
             // console.log("Disjoint passed: ", disjoint);
 
-            if (current[0] == 1 && disjoint) {
+            if (i == 81) {
+              console.log("TEST CHURCH DATA: ", current[1]); 
+              console.log("DISJOINT: ", disjoint);
+            }
+
+            if (current[0] == 1 && disjoint == true) {
               sheltersActive.add(new Graphic(shelter));
             }
-            else if (current[0] == 0 || !disjoint) {
+            else if (current[0] == 0 || disjoint == false) {
               sheltersInactive.add(new Graphic(shelter));
             } 
             shelterGraphic.clear();
