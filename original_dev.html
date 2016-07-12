@@ -36,6 +36,7 @@
       var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents, csvData;
       var closestFacilityTask;
       var stopsArray = [];
+      var disjArray = [];
       var sheltersGraphicsLayer;
       var sheltersCSV;
       var stopId;
@@ -53,6 +54,7 @@
         "esri/layers/GraphicsLayer",
         "esri/layers/FeatureLayer",
         "esri/tasks/query",
+        "esri/geometry/Polygon",
         "esri/symbols/SimpleFillSymbol",   
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
@@ -79,6 +81,7 @@
         GraphicsLayer,
         FeatureLayer,
         Query,
+        Polygon,
         SimpleFillSymbol,
         SimpleMarkerSymbol,
         SimpleLineSymbol,
@@ -11776,6 +11779,8 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
+        var polytest = new Polygon(polygonFuture);
+
         var polygonGraphicFuture = new Graphic(polygonFuture, polygonBarrierSymbol);
         var polygonGraphicCurrent = new Graphic(polygonCurrent, polygonBarrierSymbol);
         polygonGraphicsLayerFuture.add(polygonGraphicFuture);
@@ -11926,25 +11931,60 @@
           
           var csvArrays = $.csv.toArrays(csvData);
 
-          console.log("csvarray[0]: ",csvArrays[1][0]);
+          // var polytest = new Polygon(new SpatialReference({wkid:4326}));
+          
+          polytest.addRing([[[-100,10],[-110,10],[-110,5],[-100,5],[-100,10]],[[-80, 30], [-80, 40], [-90, 40], [-90,30], [-80, 30]]]);
+
+          console.log("POLYTEST POLYGON: ", polytest.rings);
+
+          console.log("FUTURE POLYGON: ", polygonFuture.geometry.rings);
+
+          var testPoint = new Point(-87.55751,33.18734)
+          map.addLayer(testPoint); 
+
+          // for (i = 0; i < polytest.rings[0].length; i++) {
+          //   var polyArray = polytest.rings[0][i];
+          //   console.log("POLYTEST: ",polyArray.toString());
+          //   var newtestpoly = new Polygon(polyArray);
+          //   console.log("POLYTEST NEWTESTPOLY: ", newtestpoly);
+          //   console.log("Contains????? ", newtestpoly.contains(testPoint));
+          // }
+
+/* NEED TO TEST WHETHER USING DIFFERENT SPATIAL REFERENCES SCREWS UP ".CONTAINS" IN POLYTEST FOR-LOOP */
+
+          for (j = 0; j < polygonFuture.geometry.rings.length; j++) {
+            var polyArray = polygonFuture.geometry.rings[j];
+            console.log("FUTURE TEST ARRAY: ",polyArray.toString());
+            var newtestpoly = new Polygon(polyArray);
+            console.log("NEWTESTPOLY: ", newtestpoly);
+            console.log("Contains????? ", newtestpoly.contains(testPoint));
+            if (newtestpoly.contains(testPoint) == true) { console.log("HOLY SHIT I GOT IT!!!"); }
+          }
+
           for(i=1; i < csvArrays.length; i++){
             current = csvArrays[i];
 
             var shelterGraphic = new GraphicsLayer();
             var shelter = new Point(+current[4], +current[3]); 
-            // console.log("SHELTER: ", shelter);
             shelterGraphic.add(new Graphic(shelter));
 
             var shelterGeometry = shelterGraphic.graphics[0].geometry;
-            console.log("SHELTER GEOMETRY: ", shelterGeometry);
             var polygonGeometry = polygonGraphicsLayerFuture.graphics[0].geometry;
 
             var disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
-            // console.log("Disjoint passed: ", disjoint);
+            var intersects = geometryEngine.intersects(polygonGeometry,shelterGeometry);
 
-            if (i == 81) {
+            disjArray.push(polytest.contains(shelter)); 
+
+            // console.log("Disjoint passed: ", disjoint);
+            // console.log("Intersect passed: ", intersects);
+
+            if (i == 62) {
               console.log("TEST CHURCH DATA: ", current[1]); 
               console.log("DISJOINT: ", disjoint);
+              console.log("INTERSECT: ", intersects);
+              console.log("SHELTER IN POLYGON: ", polytest.contains(shelter));
+              console.log("TESTPOINT IN POLYGON: ", polytest.contains(testPoint));
             }
 
             if (current[0] == 1 && disjoint == true) {
@@ -11955,6 +11995,8 @@
             } 
             shelterGraphic.clear();
           }
+
+          console.log(disjArray);
 
           var facilities = new FeatureSet();
           facilities.features = sheltersActive.graphics;
