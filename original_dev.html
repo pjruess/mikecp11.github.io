@@ -11896,9 +11896,9 @@
           console.log("initStops started");
 
           var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([0, 100, 0, 0.5]));
-          var sheltersInactiveSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_X, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+          var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([128, 128, 128, 0.5]));
+          var sheltersFloodedSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_X, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
             new Color([255, 0, 0, 0.5]), 4));
-          var sheltersFloodedSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([255, 0, 0, 0.5]));
 
           var sheltersActiveRenderer = new SimpleRenderer(sheltersActiveSymbol); 
           var sheltersInactiveRenderer = new SimpleRenderer(sheltersInactiveSymbol);         
