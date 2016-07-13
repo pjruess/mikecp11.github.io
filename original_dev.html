@@ -36,7 +36,7 @@
       var map, graphic, currLocation, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents, csvData;
       var closestFacilityTask;
       var stopsArray = [];
-      var disjArray = [];
+      var containsArray = [];
       var sheltersGraphicsLayer;
       var sheltersCSV;
       var stopId;
@@ -59,7 +59,8 @@
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleLineSymbol",
         "esri/graphic",
-        "esri/Color",        
+        "esri/Color",
+        "esri/geometry/webMercatorUtils",        
         "dojo/parser",
         "dojo/_base/array",
         "esri/geometry/geometryEngine",
@@ -87,6 +88,7 @@
         SimpleLineSymbol,
         Graphic,
         Color,
+        webMercatorUtils,
         parser,
         array,
         geometryEngine,
@@ -5416,6 +5418,14 @@
         "symbol":{"color":[0,255,255,100],"outline":{"color":[0,255,255,100],
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
+
+        // var polygonValuesFuture = new Polygon(new SpatialReference({wkid:4326}));
+
+        // for (j = 0; j < polygonFuture.geometry.rings.length; j++) {
+        //   var polyArray = polygonFuture.geometry.rings[j];
+        //   // console.log("POLYARRAY: ", polyArray);
+        //   polygonValuesFuture.addRing(polyArray);
+        // }
 
         var polygonCurrent = {"geometry":{"rings":
 
@@ -11779,7 +11789,7 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
-        var polytest = new Polygon(polygonFuture);
+        // var polytest = new Polygon(new SpatialReference({wkid:4326}));
 
         var polygonGraphicFuture = new Graphic(polygonFuture, polygonBarrierSymbol);
         var polygonGraphicCurrent = new Graphic(polygonCurrent, polygonBarrierSymbol);
@@ -11834,10 +11844,7 @@
         }
 
         function solveClosestFacil(){
-          console.log("solveClosestFacil started");
-          console.log("params.facilities", params.facilities);
-          console.log("params.incidents", params.incidents);
-          
+          console.log("solveClosestFacil started");          
           closestFacilityTask.solve(params, function(solveResult){
             array.forEach(solveResult.routes, function(route, index){
               var attr = array.map(solveResult.directions[index].features, function(feature){
@@ -11849,8 +11856,6 @@
               var destinationId = destinationArray[3];
               stopId = +destinationId;
 
-              console.log("stopId: ", stopId);
-
               var stopPointX = params.facilities.features[stopId-1].geometry.x;
               var stopPointY = params.facilities.features[stopId-1].geometry.y;
 
@@ -11859,8 +11864,6 @@
               startDirections();
             });
           });
-
-          console.log("solveClosestFacil finished");
         }
 
         function initStart(position){
@@ -11880,12 +11883,9 @@
           incidents.features = incidentsGraphicsLayer.graphics;
           params.incidents = incidents;
 
-          console.log("incidents: ", incidents.features);
-
           initStops();
 
           solveClosestFacil();
-          console.log("initStart finished");
         }
 
         function initStops(){
@@ -11931,34 +11931,53 @@
           
           var csvArrays = $.csv.toArrays(csvData);
 
-          // var polytest = new Polygon(new SpatialReference({wkid:4326}));
+          var polytest = new Polygon(new SpatialReference({wkid:4326}));
           
-          polytest.addRing([[[-100,10],[-110,10],[-110,5],[-100,5],[-100,10]],[[-80, 30], [-80, 40], [-90, 40], [-90,30], [-80, 30]]]);
+          polytest = {"geometry": {"rings":
 
-          console.log("POLYTEST POLYGON: ", polytest.rings);
+          [[[-100,10],[-110,10],[-110,5],[-100,5],[-100,10]],[[-80, 30], [-80, 40], [-90, 40], [-90,30], [-80, 30]]]
 
-          console.log("FUTURE POLYGON: ", polygonFuture.geometry.rings);
+          ,"spatialReference":{"wkid":102100}},
+          "symbol":{"color":[255,0,0,150],"outline":{"color":[0,255,255,100],
+          "width":1,"type":"esriSLS","style":"esriSLSSolid"},
+          "type":"esriSFS","style":"esriSFSSolid"}};
 
-          var testPoint = new Point(-87.55751,33.18734)
+          // polytest.addRing([[[-100,10],[-110,10],[-110,5],[-100,5],[-100,10]],[[-80, 30], [-80, 40], [-90, 40], [-90,30], [-80, 30]]]);
+
+          // console.log("POLYTEST POLYGON: ", polytest.rings);
+          console.log("POLYTEST POLYGON: ", polytest.geometry);
+          console.log("FUTURE POLYGON: ", polygonFuture.geometry);
+          // console.log("VALUES FUTURE POLYGON: ", polygonValuesFuture.rings);
+
+          var testPoint = new Point(-87.55751,33.18734);
           map.addLayer(testPoint); 
+
+          var testPoint2 = new Point(-85,35);
+          map.addLayer(testPoint2); 
 
           // for (i = 0; i < polytest.rings[0].length; i++) {
           //   var polyArray = polytest.rings[0][i];
-          //   console.log("POLYTEST: ",polyArray.toString());
-          //   var newtestpoly = new Polygon(polyArray);
-          //   console.log("POLYTEST NEWTESTPOLY: ", newtestpoly);
-          //   console.log("Contains????? ", newtestpoly.contains(testPoint));
+          //   var thisPolygon = new Polygon(polyArray);
+          //   // console.log("POLYTEST: ",polyArray.toString());
+          //   // console.log("Contains????? ", newtestpoly.contains(testPoint));
+          //   if (thisPolygon.contains(testPoint2)) { console.log("WHY DOES IT ONLY WORK OVER HERE???"); }
           // }
+
+          for (j = 0; j < polytest.geometry.rings.length; j++) {
+            var polyArray = polytest.geometry.rings[j];
+            var thisPolygon = new Polygon(polyArray);
+            if (thisPolygon.contains(testPoint2)) { console.log("HMM THIS MAY BE IT"); }
+          }
 
 /* NEED TO TEST WHETHER USING DIFFERENT SPATIAL REFERENCES SCREWS UP ".CONTAINS" IN POLYTEST FOR-LOOP */
 
           for (j = 0; j < polygonFuture.geometry.rings.length; j++) {
             var polyArray = polygonFuture.geometry.rings[j];
-            console.log("FUTURE TEST ARRAY: ",polyArray.toString());
-            var newtestpoly = new Polygon(polyArray);
-            console.log("NEWTESTPOLY: ", newtestpoly);
-            console.log("Contains????? ", newtestpoly.contains(testPoint));
-            if (newtestpoly.contains(testPoint) == true) { console.log("HOLY SHIT I GOT IT!!!"); }
+            var thisPolygon = new Polygon(polyArray);
+            // console.log("FUTURE TEST ARRAY: ",polyArray.toString());
+            // console.log("CURRENT POLYGON: ", thisPolygon);
+            // console.log("Contains????? ", thisPolygon.contains(testPoint));
+            if (thisPolygon.contains(testPoint)) { console.log("HOLY SHIT I GOT IT!!!"); }
           }
 
           for(i=1; i < csvArrays.length; i++){
@@ -11971,38 +11990,36 @@
             var shelterGeometry = shelterGraphic.graphics[0].geometry;
             var polygonGeometry = polygonGraphicsLayerFuture.graphics[0].geometry;
 
-            var disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
-            var intersects = geometryEngine.intersects(polygonGeometry,shelterGeometry);
+            // var disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
+            // var intersects = geometryEngine.intersects(polygonGeometry,shelterGeometry);
 
-            disjArray.push(polytest.contains(shelter)); 
+            containsArray.push(polytest.contains(shelter)); 
 
             // console.log("Disjoint passed: ", disjoint);
             // console.log("Intersect passed: ", intersects);
 
             if (i == 62) {
               console.log("TEST CHURCH DATA: ", current[1]); 
-              console.log("DISJOINT: ", disjoint);
-              console.log("INTERSECT: ", intersects);
+              // console.log("DISJOINT: ", disjoint);
+              // console.log("INTERSECT: ", intersects);
               console.log("SHELTER IN POLYGON: ", polytest.contains(shelter));
               console.log("TESTPOINT IN POLYGON: ", polytest.contains(testPoint));
             }
 
-            if (current[0] == 1 && disjoint == true) {
+            if (current[0] == 1) {
               sheltersActive.add(new Graphic(shelter));
             }
-            else if (current[0] == 0 || disjoint == false) {
+            else if (current[0] == 0) {
               sheltersInactive.add(new Graphic(shelter));
             } 
             shelterGraphic.clear();
           }
 
-          console.log(disjArray);
+          console.log(containsArray);
 
           var facilities = new FeatureSet();
           facilities.features = sheltersActive.graphics;
           params.facilities = facilities;
-
-          console.log("initStops finished");
         }
         
         navigator.geolocation.getCurrentPosition(initStart, locationError);
@@ -12012,7 +12029,6 @@
 
           stopsArray.push(startPoint);
           stopsArray.push(stopPoint);  
-          console.log("stopsArray for directions: ", stopsArray);
 
           var directions = new Directions({
             map: map,
@@ -12031,7 +12047,6 @@
             stops: stopsArray
           },"dir");
           directions.startup();
-          console.log("startDirections finished");
         }
       });
     </script>
