@@ -5419,6 +5419,27 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
+        var tempPoly = new Polygon(new SpatialReference({wkid:4326}));
+
+        for (i = 0; i < polygonFuture.geometry.rings.length; i++) {
+          var polyArray = polygonFuture.geometry.rings[i];
+          var tempArray = [];
+          for (j = 0; j < polyArray.length; j++) {
+            var tempX = polyArray[j][0];
+            var tempY = polyArray[j][1];
+            var tempLngLat = webMercatorUtils.xyToLngLat(tempX,tempY);
+            tempArray.push(tempLngLat);
+          }
+          tempPoly.addRing(tempArray);
+        }
+        console.log("TEMP POLY TESTING: ", tempPoly);
+        console.log("TEMP POLY SEARCH: ", tempPoly.rings.length);
+
+        var polygonFuture_TEST = webMercatorUtils.xyToLngLat(polygonFuture.geometry.rings);
+
+        console.log("FUTURE POLYGON IN WEB MERCATOR: ", polygonFuture);
+        console.log("FUTURE POLYGON IN GEOGRAPHIC: ", polygonFuture_TEST);
+
         var polygonFutureValues = new Polygon(new SpatialReference({wkid:102100}));
 
         polygonFutureValues.addRing(
@@ -10709,6 +10730,10 @@
         ] 
 
         );
+
+        var polygonFutureValues_TEST = webMercatorUtils.webMercatorToGeographic(polygonFutureValues.rings);
+
+        console.log("POLYFUTUREVALUES IN GEOGRAPHIC: ", polygonFutureValues_TEST);
 
         // for (j = 0; j < polygonFuture.geometry.rings.length; j++) {
         //   var polyArray = polygonFuture.geometry.rings[j];
@@ -17080,6 +17105,8 @@
 
         var polytest = new Polygon(new SpatialReference({wkid:4326}));
 
+        // polytest.addRing([[[-9000000,3500000],[-9500000,3500000],[-9500000,4000000],[-9000000,4000000],[-9000000,3500000]], [[-3000000,3000000],[-4000000,3000000],[-4000000,4000000],[-3000000,4000000],[-3000000,3000000]]]);
+
         polytest.addRing([[[-100,10],[-110,10],[-110,5],[-100,5],[-100,10]],[[-80, 30], [-80, 40], [-90, 40], [-90,30], [-80, 30]]]);
 
         var polygonGraphicFuture = new Graphic(polygonFuture, polygonBarrierSymbol);
@@ -17185,15 +17212,19 @@
           var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([0, 100, 0, 0.5]));
           var sheltersInactiveSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_X, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
             new Color([255, 0, 0, 0.5]), 4));
+          var sheltersFloodedSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([255, 0, 0, 0.5]));
 
           var sheltersActiveRenderer = new SimpleRenderer(sheltersActiveSymbol); 
           var sheltersInactiveRenderer = new SimpleRenderer(sheltersInactiveSymbol);         
+          var sheltersFloodedRenderer = new SimpleRenderer(sheltersFloodedSymbol);         
 
           sheltersActive = new GraphicsLayer();
           sheltersInactive = new GraphicsLayer();
+          sheltersFlooded = new GraphicsLayer();
 
           sheltersActive.setRenderer(sheltersActiveRenderer);
           sheltersInactive.setRenderer(sheltersInactiveRenderer);
+          sheltersFlooded.setRenderer(sheltersFloodedRenderer);
 
           var template = new InfoTemplate("${Name}", "Active: ${Active}");
           // sheltersActive.setInfoTemplate(template);
@@ -17201,6 +17232,7 @@
 
           map.addLayer(sheltersActive);
           map.addLayer(sheltersInactive);
+          map.addLayer(sheltersFlooded);
 
           function getShelters( scriptUrl ) {
             var result = null;
@@ -17229,28 +17261,29 @@
           var testPoint = new Point(-87.55751,33.18734);
           // map.addLayer(testPoint); 
 
-          var testPoint2 = new Point(-85,35);
+          var testPoint2 = new Point(-85,32);
           // map.addLayer(testPoint2); 
 
           var testPoint_WMU = webMercatorUtils.geographicToWebMercator(testPoint);
           // map.addLayer(testPoint_WMU);
 
+          var testPoint2_WMU = webMercatorUtils.geographicToWebMercator(testPoint2);
+
           console.log("TEST POINT: ", testPoint);
           console.log("TEST POINT 2: ", testPoint2);
           console.log("TEST POINT WMU: ", testPoint_WMU);
+          console.log("TEST POINT WMU 2: ", testPoint2_WMU);
 
           console.log("POLY FUTURE VALUES TESTING: ", polygonFutureValues);
           console.log("POLYTEST VALUES TESTING: ", polytest);
 
           console.log("JUST A CURIOSITY TEST: ", new Polygon(polygonFutureValues.rings[0]).contains(testPoint_WMU));
-          console.log("ANOTHER CURIOSITY TEST: ", new Polygon(polytest.rings[0]).contains(testPoint2));
+          console.log("ANOTHER CURIOSITY TEST: ", new Polygon(tempPoly.rings[0]).contains(testPoint));
 
-          for (i = 0; i < polytest.rings[0].length; i++) {
-            var polyArray = polytest.rings[0][i];
+          for (i = 0; i < tempPoly.rings.length; i++) {
+            var polyArray = tempPoly.rings[i];
             var thisPolygon = new Polygon(polyArray);
-            // console.log("POLYTEST: ",polyArray.toString());
-            // console.log("Contains????? ", newtestpoly.contains(testPoint));
-            if (thisPolygon.contains(testPoint2)) { console.log("WHY DOES IT ONLY WORK OVER HERE???"); }
+            if (thisPolygon.contains(testPoint)) { console.log("WHY DOES IT ONLY WORK OVER HERE???"); }
           }
 
           for (i = 0; i < polygonFutureValues.rings[0].length; i++) {
@@ -17266,9 +17299,6 @@
           for (j = 0; j < polygonFuture.geometry.rings.length; j++) {
             var polyArray = polygonFuture.geometry.rings[j];
             var thisPolygon = new Polygon(polyArray);
-            // console.log("FUTURE TEST ARRAY: ",polyArray.toString());
-            // console.log("CURRENT POLYGON: ", thisPolygon);
-            // console.log("Contains????? ", thisPolygon.contains(testPoint));
             if (thisPolygon.contains(testPoint_WMU)) { console.log("HOLY SHIT I GOT IT!!!"); }
           }
 
@@ -17277,39 +17307,16 @@
 
             var shelterGraphic = new GraphicsLayer();
             var shelter = new Point(+thisPoint[4], +thisPoint[3]); 
-            // console.log("SHELTER POINT: ", shelter);
-            var shelter_WMU = webMercatorUtils.geographicToWebMercator(shelter);
-            // console.log("SHELTER WMU POINT: ", shelter_WMU);
             shelterGraphic.add(new Graphic(shelter));
 
             var shelterGeometry = shelterGraphic.graphics[0].geometry;
             var polygonGeometry = polygonGraphicsLayerFuture.graphics[0].geometry;
 
-            // var disjoint = geometryEngine.disjoint(polygonGeometry,shelterGeometry);
-            // var intersects = geometryEngine.intersects(polygonGeometry,shelterGeometry);
-
-            for (j = 0; j < polygonFutureValues.rings[0].length; j++) {
-              var polyArray = polygonFutureValues.rings[0][j];
+            for (j = 0; j < tempPoly.rings.length; j++) {
+              var polyArray = tempPoly.rings[j];
               var thisPolygon = new Polygon(polyArray);
-              // console.log("POLYTEST: ",polyArray.toString());
-              // console.log("Contains (" + shelter_WMU.x + ", " + shelter_WMU.y + " ????? ", thisPolygon.contains(shelter_WMU));
-              if (thisPolygon.contains(shelter_WMU)) { console.log("HMM THIS MAY BE IT..."); }
-              containsArray.push(thisPolygon.contains(shelter_WMU));
+              containsArray.push(thisPolygon.contains(shelter));
             }
-
-
-            // containsArray.push("CONTAINS ARRAY (SHELTERS in POLYGONS): ", polygonFutureValues.contains(shelter_WMU)); 
-
-            // console.log("Disjoint passed: ", disjoint);
-            // console.log("Intersect passed: ", intersects);
-
-            // if (i == 62) {
-            //   console.log("TEST CHURCH DATA: ", thisPoint[1]); 
-            //   // console.log("DISJOINT: ", disjoint);
-            //   // console.log("INTERSECT: ", intersects);
-            //   console.log("SHELTER IN POLYGON: ", polytest.contains(shelter));
-            //   console.log("TESTPOINT IN POLYGON: ", polytest.contains(testPoint));
-            // }
 
             if (thisPoint[0] == 1) {
               sheltersActive.add(new Graphic(shelter));
