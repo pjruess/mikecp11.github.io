@@ -1,10 +1,10 @@
 Active,Name,Elevation,Latitude,Longitude
+0,First Christian Church,219.82,33.20567,-87.54501
 0,Central Church of Christ,206.69,33.19067,-87.54001
 0,Elizabeth Baptist Church,177.17,33.19067,-87.56667
 0,Tenth Street Missionary Baptist Church,200.13,33.19151,-87.57751
 0,Church of the Living God,200.13,33.19234,-87.57556
 1,Friendship Baptist Church,190.29,33.19234,-87.57278
-1,South Side Second Presbyterian Church (historical),193.57,33.19234,-87.56306
 1,Faith Mission Church of God,200.13,33.19262,-87.56306
 1,Oakdale Primitive Baptist Church,160.76,33.19373,-87.59806
 1,Tabernacle Baptist Church,187.01,33.19373,-87.58028
@@ -31,7 +31,6 @@ Active,Name,Elevation,Latitude,Longitude
 0,First Community Methodist Church,187.01,33.19679,-87.56973
 0,Druid City Baptist Church,223.1,33.19706,-87.52917
 0,Church of God,213.25,33.19734,-87.55251
-1,Southside Baptist Church (historical),223.1,33.19762,-87.56167
 1,Mission House of Prayer,183.73,33.19762,-87.5814
 1,Bible Methodist Church,413.39,33.19817,-87.48556
 1,Knox Temple,190.29,33.19817,-87.57251
@@ -43,8 +42,6 @@ Active,Name,Elevation,Latitude,Longitude
 1,Saint Paul Baptist Church,213.25,33.2004,-87.58167
 0,African Methodist Episcopal Zion Tabernacle,226.38,33.20095,-87.52917
 1,Thompson Chapel,190.29,33.20234,-87.57723
-1,West End Presbyterian Church (historical),216.54,33.20262,-87.5814
-1,Alberta Church of Christ (historical),295.28,33.2029,-87.50445
 1,Hopewell Baptist Church,419.95,33.20373,-87.48695
 0,Alberta United Methodist Church,311.68,33.20373,-87.51056
 1,Bethel Spiritual Church,219.82,33.20401,-87.56417
@@ -56,8 +53,6 @@ Active,Name,Elevation,Latitude,Longitude
 0,West End Methodist Church,223.1,33.20484,-87.58279
 1,First Presbyterian Church,223.1,33.2054,-87.56751
 1,Holy Cross Lutheran Church,291.99,33.20567,-87.51806
-0,Saint Pauls Church (historical),219.82,33.20567,-87.56334
-1,First Christian Church,219.82,33.20567,-87.54501
 0,Calvary Baptist Church,219.82,33.20595,-87.55306
 1,Trinity United Methodist Church,219.82,33.20595,-87.54667
 0,Tuscaloosa Life Church,324.8,33.20623,-87.50445
@@ -65,11 +60,8 @@ Active,Name,Elevation,Latitude,Longitude
 1,Alberta Baptist Church,291.99,33.20651,-87.50889
 1,First United Methodist Church,219.82,33.20651,-87.56723
 0,University Lutheran Church,219.82,33.20679,-87.54195
-1,Second Baptist Church (historical),219.82,33.20679,-87.55528
-1,Brandon Memorial Methodist Church (historical),219.82,33.20679,-87.55362
 1,Riverwood Presbyterian Church,219.82,33.20679,-87.55362
 1,First Baptist Church of Tuscaloosa,219.82,33.20734,-87.56667
-1,Saint Phillips Church (historical),216.54,33.20762,-87.57084
 0,Canterbury Chapel Episcopal Church,219.82,33.2079,-87.54251
 1,All Nations Church of Jesus Christ,219.82,33.2079,-87.56473
 1,University Presbyterian Church,219.82,33.20817,-87.55278
