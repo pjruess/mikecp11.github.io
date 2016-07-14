@@ -66,6 +66,7 @@
         "esri/renderers/SimpleRenderer",
         "esri/InfoTemplate",
         "esri/dijit/Legend",
+        "esri/layers/layer",
         "dojo/_base/array",
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
@@ -94,8 +95,9 @@
         parser,
         geometryEngine,
         SimpleRenderer,
-        InfoTemplate, 
-        Legend, 
+        InfoTemplate,
+        Legend,
+        Layer,
         array
       ) {
         parser.parse();
@@ -12053,33 +12055,35 @@
            },"dir");
           directions.startup();
           
-          var layerDefinition = {
-            "geometryType": "esriGeometryPolygon",
-            "fields": [{
-              "name": "BUFF_DIST",
-              "type": "esriFieldTypeInteger",
-              "alias": "Buffer Distance"
-            }]
-          }
+          // var layerDefinition = {
+          //   "geometryType": "esriGeometryPolygon",
+          //   "fields": [{
+          //     "name": "BUFF_DIST",
+          //     "type": "esriFieldTypeInteger",
+          //     "alias": "Buffer Distance"
+          //   }]
+          // }
 
-          var featureCollection = {
-            layerDefinition: layerDefinition,
-            featureSet: polygonFeatureSet
-          };
+          // var featureCollection = {
+          //   layerDefinition: layerDefinition,
+          //   featureSet: polygonFeatureSet
+          // };
 
-          featureLayer = new FeatureLayer(featureCollection);
+          // featureLayer = new FeatureLayer(featureCollection);
+
+          var layerTest = new Laye;
 
           var legend = new Legend({
           map: map,
           // layerInfos: layerInfo
-          layerInfos: [{
-            layer: polygonGraphicsLayerFuture,
-            // layer: featureLayer, 
-            title: "test"
-          }]
+          // layerInfos: [{
+          //   layer: layerTest,
+          //   title: "test"
+          // }]
           }, "legendDiv");
 
           legend.startup();
+          legend.refresh([{layer:layerTest, title:'Test Layer'}]);
         }
       });
     </script>
