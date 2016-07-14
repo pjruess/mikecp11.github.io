@@ -33,7 +33,7 @@
     </style>
     <script src="https://js.arcgis.com/3.17/"></script>
     <script type="text/javascript">
-      var map, graphic, startPoint, stopPoint, lon, lat, csv, shelters, routeParams, params, incidents, csvData;
+      var map, graphic, startPoint, stopPoint, startPointTracker, lon, lat, csv, shelters, routeParams, params, incidents, csvData;
       var closestFacilityTask;
       var stopsArray = [];
       var containsArray = [];
@@ -11887,6 +11887,7 @@
 
         function initStops(){
           console.log("initStops started");
+          console.log("STARTPOINT TESTING: ", startPoint);
 
           var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([0, 100, 0, 0.5]));
           var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([128, 128, 128, 0.5]));
@@ -11936,6 +11937,7 @@
           for(i=1; i < csvArrays.length; i++){
             thisPoint = csvArrays[i];
             var thisPointTracker = 0;
+            startPointTracker = 0;
 
             var shelterGraphic = new GraphicsLayer();
             var shelter = new Point(+thisPoint[4], +thisPoint[3]); 
@@ -11950,6 +11952,9 @@
               if (thisPolygon.contains(shelter)) {
                 thisPointTracker++;
               }
+              if (thisPolygon.contains(startPoint)) {
+                startPointTracker++;
+              }
             }
 
             if (thisPoint[0] == 1 && thisPointTracker == 0) {
@@ -11962,6 +11967,10 @@
               sheltersFlooded.add(new Graphic(shelter));
             }
             shelterGraphic.clear();
+          }
+
+          if (startPointTracker > 0) {
+            alert("YOU ARE CURRENTLY IN A FLOODED AREA. MOVE IMMEDIATELY TO ENSURE YOUR SAFETY");
           }
 
           var facilities = new FeatureSet();
