@@ -73,6 +73,7 @@
         "esri/InfoTemplate",
         "dijit/layout/BorderContainer",
         "dijit/layout/ContentPane",
+        "dijit/form/TextBox",
         "dojo/domReady!"
       ], function(
         urlUtils,
@@ -11902,12 +11903,12 @@
         function initStops(){
 
           // Initialize shelter layers and their symbologies, and add layers to map
-          var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([0, 100, 0, 0.5]));
+          var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([0, 100, 0, 0.7]));
           var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 12, null, 
-            new Color([128, 128, 128, 0.5]));
+            new Color([128, 128, 128, 0.7]));
           var sheltersFloodedSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_X, 10, 
             new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-            new Color([255, 0, 0, 0.5]), 4));
+            new Color([255, 0, 0, 0.7]), 4));
 
           var sheltersActiveRenderer = new SimpleRenderer(sheltersActiveSymbol); 
           var sheltersInactiveRenderer = new SimpleRenderer(sheltersInactiveSymbol);         
@@ -11945,7 +11946,7 @@
           }
           
           $(document).ready(function(){
-            csvData = getShelters("https://mikecp11.github.io/RedCrossShelters_shortened.csv");   
+            csvData = getShelters("https://mikecp11.github.io/RedCrossShelters_shortened.csv");  
           });
           
           var csvArrays = $.csv.toArrays(csvData);
@@ -12018,6 +12019,14 @@
             stops: stopsArray
           },"dir");
           directions.startup();
+
+          setTimeout(checkWidget,5000);
+        }
+        function checkWidget() {
+          dojo.ready(function() {
+            var widget = dijit.byId("esri_dijit_Search_2_input");
+              alert("Widget: ", widget);
+          })
         }
       });
     </script>
