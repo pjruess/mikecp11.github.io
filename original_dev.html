@@ -33,14 +33,19 @@
     </style>
     <script src="https://js.arcgis.com/3.17/"></script>
     <script type="text/javascript">
-      var map, graphic, startPoint, stopPoint, startPointTracker, lon, lat, csv, shelters, routeParams, params, incidents, csvData;
+      var map; 
+      var graphic; 
+      var startPoint; 
+      var stopPoint; 
+      var startPointTracker; 
+      var shelters; 
+      var routeParams; 
+      var params;
+      var incidents; 
+      var csvData;
       var closestFacilityTask;
       var stopsArray = [];
-      var containsArray = [];
-      var sheltersGraphicsLayer;
-      var sheltersCSV;
       var stopId;
-      var sheltersFeatureLayer;
       require([
         "esri/urlUtils",
         "esri/map",
@@ -95,8 +100,10 @@
         SimpleRenderer,
         InfoTemplate
       ) {
+
         parser.parse();
-        //all requests to route.arcgis.com will proxy to the proxyUrl defined in this object.
+
+        // Establish proxy URL connections
         urlUtils.addProxyRule({
           urlPrefix: "route.arcgis.com",
           proxyUrl: "/sproxy/"
@@ -106,27 +113,31 @@
           proxyUrl: "/sproxy/"
         })
 
+        // Create map
         var map = new Map("map", {
           basemap: "streets"
         });
 
+        // Find current location
         navigator.geolocation.getCurrentPosition(findStart, locationError);
 
+        // Initialize route task parameters
         routeParams = new RouteParameters();
+
+        // Establish flood polygon graphics layers and symbology
         polygonFeatureSet = new FeatureSet();
-        
         var polygonBarrierSymbol = new SimpleFillSymbol();
         var polygonRenderer = new SimpleRenderer(polygonBarrierSymbol);
-
         var polygonGraphicsLayerFuture = new GraphicsLayer();
         polygonGraphicsLayerFuture.setRenderer(polygonRenderer);
-
         var polygonGraphicsLayerCurrent = new GraphicsLayer();
         polygonGraphicsLayerCurrent.setRenderer(polygonRenderer);
 
+        // Add flood polygon graphics layers to map
         map.addLayer(polygonGraphicsLayerFuture);
         map.addLayer(polygonGraphicsLayerCurrent);
 
+        // Create future flood extent geometry from JSON polygon array
         var polygonFuture = {"geometry":{"rings":
 
         [
@@ -5419,8 +5430,8 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
+        // Create and populate analysis polygon for ".contains" testing
         var analysisPolygonFuture = new Polygon(new SpatialReference({wkid:4326}));
-
         for (i = 0; i < polygonFuture.geometry.rings.length; i++) {
           var polyArray = polygonFuture.geometry.rings[i];
           var tempArray = [];
@@ -5433,6 +5444,7 @@
           analysisPolygonFuture.addRing(tempArray);
         }
 
+        // Create current flood extent geometry from JSON polygon array
         var polygonCurrent = {"geometry":{"rings":
 
         [
@@ -11795,16 +11807,18 @@
         "width":1,"type":"esriSLS","style":"esriSLSSolid"},
         "type":"esriSFS","style":"esriSFSSolid"}};
 
+        // Add future and current flood extents to graphics layers
         var polygonGraphicFuture = new Graphic(polygonFuture, polygonBarrierSymbol);
         var polygonGraphicCurrent = new Graphic(polygonCurrent, polygonBarrierSymbol);
         polygonGraphicsLayerFuture.add(polygonGraphicFuture);
         polygonGraphicsLayerCurrent.add(polygonGraphicCurrent);
-        
+
+        // Populate polygon-related route task parameters
         polygonFeatureSet.features = polygonGraphicsLayerCurrent.graphics;
         routeParams.polygonBarriers = polygonFeatureSet;
-        
         routeParams.returnBarriers = true;
 
+        // Initialize closest facility task parameters and populate
         params = new ClosestFacilityParameters();
         params.impedenceAttribute= "Miles";
         params.defaultCutoff= 20;
@@ -11817,15 +11831,15 @@
         // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
         closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
 
+        // Determining current position
         function findStart(location) {
           console.log("findStart started");
           startPoint = new Point(location.coords.longitude, location.coords.latitude);
           map.centerAndZoom(startPoint, 14);
-          console.log("CURRENT LOCATION: ",startPoint);
-
           initStart(startPoint);
         }
 
+        // Location error alert when location services are unavailable
         function locationError(error) {
           switch (error.code) {
             case error.PERMISSION_DENIED:
@@ -11841,11 +11855,14 @@
               alert("Unknown error. Starting from National Water Center, Tuscaloosa, AL.");
               break;
           }
+
+          // Default location set to National Water Center, AL when location services are unavailable
           startPoint = new Point(-87.541460, 33.217496);
           map.centerAndZoom(startPoint, 14);
           initStart(startPoint);
         }
 
+        // Solve closest facility task based on incidents, facilities, and polygon barriers
         function solveClosestFacil(){
           console.log("solveClosestFacil started");          
           closestFacilityTask.solve(params, function(solveResult){
@@ -11854,44 +11871,42 @@
                 return feature.attributes.text;
               });
               route.setAttributes(attr);
+
+              // Pull and process stop ID number from closest facility task
               var destination = route.attributes[route.attributes.length - 1];
               var destinationArray = destination.split(" ");
               var destinationId = destinationArray[3];
               stopId = +destinationId;
 
+              // Define directions widget stop point as closest facility
               var stopPointX = params.facilities.features[stopId-1].geometry.x;
               var stopPointY = params.facilities.features[stopId-1].geometry.y;
-
               stopPoint = new Point(stopPointX, stopPointY);
-
               startDirections();
             });
           });
         }
 
+        // Initialize params.incidents as starting point for closest facility task and directions widget
         function initStart(startPoint){
-          console.log("initStart started");
-          console.log("START POINT: ", startPoint);
-
           var incidentsGraphicsLayer = new GraphicsLayer();
           incidentsGraphicsLayer.add(new Graphic(startPoint));
-
           var incidents = new FeatureSet();
           incidents.features = incidentsGraphicsLayer.graphics;
           params.incidents = incidents;
-
           initStops();
-
           solveClosestFacil();
         }
 
+        // Create shelter layers depending on shelter inundation and "active/inactive" status 
         function initStops(){
-          console.log("initStops started");
-          console.log("STARTPOINT TESTING: ", startPoint);
 
+          // Initialize shelter layers and their symbologies, and add layers to map
           var sheltersActiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([0, 100, 0, 0.5]));
-          var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 12, null, new Color([128, 128, 128, 0.5]));
-          var sheltersFloodedSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_X, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+          var sheltersInactiveSymbol = new SimpleMarkerSymbol("solid", 12, null, 
+            new Color([128, 128, 128, 0.5]));
+          var sheltersFloodedSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_X, 10, 
+            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
             new Color([255, 0, 0, 0.5]), 4));
 
           var sheltersActiveRenderer = new SimpleRenderer(sheltersActiveSymbol); 
@@ -11914,6 +11929,7 @@
           map.addLayer(sheltersInactive);
           map.addLayer(sheltersFlooded);
 
+          // Retrieve shelters from online .csv file
           function getShelters( scriptUrl ) {
             var result = null;
             $.ajax({
@@ -11934,6 +11950,8 @@
           
           var csvArrays = $.csv.toArrays(csvData);
 
+          // Write shelters to different shelter layers depending on the "active" column in .csv file
+          // If shelters are inundated, write to sheltersFlooded layer 
           for(i=1; i < csvArrays.length; i++){
             thisPoint = csvArrays[i];
             var thisPointTracker = 0;
@@ -11968,22 +11986,21 @@
             }
             shelterGraphic.clear();
           }
-
+          // If starting location is in a flood polygon, alert user to move immediately
           if (startPointTracker > 0) {
             alert("YOU ARE CURRENTLY IN A FLOODED AREA. MOVE IMMEDIATELY TO ENSURE YOUR SAFETY");
           }
 
+          // Initialize params.facilities layer for closest facility task
           var facilities = new FeatureSet();
           facilities.features = sheltersActive.graphics;
           params.facilities = facilities;
         }        
 
+        // Start directions widget
         function startDirections(){
-          console.log("startDirections started");
-
           stopsArray.push(startPoint);
           stopsArray.push(stopPoint);  
-
           var directions = new Directions({
             map: map,
             // routeTaskUrl: "https://utility.arcgis.com/usrsvcs/appservices/UHoPnXFhxTAQ3pF3/rest/services/World/Route/NAServer/Route_World",
