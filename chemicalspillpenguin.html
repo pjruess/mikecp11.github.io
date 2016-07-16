@@ -97362,9 +97362,12 @@
         function initStops(){
           var polyArray = polygonBuffer.geometry.rings[0];
           var thisPolygon = new Polygon(polyArray);
-          if (thisPolygon.contains(startPoint)) {
-            alert("YOU ARE CURRENTLY NEAR A CHEMICAL SPILL.");
+          function checkCurrentLocation(){
+            if (thisPolygon.contains(startPoint)) {
+              alert("YOU ARE CURRENTLY NEAR A CHEMICAL SPILL.");
+            }
           }
+          setTimeout(checkCurrentLocation,2000);
         }
       });
     </script>
