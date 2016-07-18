@@ -127,7 +127,7 @@
         navigator.geolocation.getCurrentPosition(findStart, locationError);
 
         // Establish flood polygon graphics layers and symbology
-        var polylineBarrierSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255,255,0],255), 6);
+        var polylineBarrierSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0,255,255],255), 6);
         var polylineRenderer = new SimpleRenderer(polylineBarrierSymbol);
         var polylineGraphicsLayerCurrent = new GraphicsLayer();
         polylineGraphicsLayerCurrent.setRenderer(polylineRenderer);
