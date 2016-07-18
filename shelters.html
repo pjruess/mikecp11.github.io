@@ -5463,6 +5463,7 @@
         params.returnIncidents= false;
         params.returnRoutes= true;
         params.returnDirections= true;
+        params.defaultTargetFacilityCount= 1;
 
         // closestFacilityTask = new ClosestFacilityTask("https://utility.arcgis.com/usrsvcs/appservices/WxqHoL9WgtN2bZik/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
         closestFacilityTask = new ClosestFacilityTask("https://route.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World");
@@ -5481,7 +5482,6 @@
 
         // Determining current position
         function findStart(location) {
-          console.log("findStart started");
           startPoint = new Point(location.coords.longitude, location.coords.latitude);
           map.centerAndZoom(startPoint, 14);
           initStart(startPoint);
@@ -5512,14 +5512,12 @@
 
         // Solve closest facility task based on incidents, facilities, and polygon barriers
         function solveClosestFacil(){
-          console.log("solveClosestFacil started");          
           closestFacilityTask.solve(params, function(solveResult){
             array.forEach(solveResult.routes, function(route, index){
               var attr = array.map(solveResult.directions[index].features, function(feature){
                 return feature.attributes.text;
               });
               var routeInfoTemplate = new InfoTemplate("Attributes", "${*}");
-              console.log("ROUTE INFO TEMPLATE: ",routeInfoTemplate);
               route.setInfoTemplate(routeInfoTemplate);
               route.setAttributes(attr);
               routeGraphicsLayer.add(route);
@@ -5530,6 +5528,7 @@
               // esriLang.substitute(destination,)
 
               dom.byId("dir").innerHTML = "Hover over the route to view directions";
+              map.on("load", solveClosestFacil());
             });
           if(solveResult.messages.length > 0) {
             dom.byId("dir").innerHTML = "<b>Error:</b> " + solveResult.messages[0];
@@ -5554,8 +5553,6 @@
             var fancyAttributes = "";
             // dom.byId("dir").innerHTML = esriLang.substitute(evt.graphic.attributes,"${*}");
             for (i = 0; i < currentAttributes.length; i++) {
-              console.log("Current value...", currentAttributes[i]);
-              console.log("FANCY TEST: ",fancyAttributes);
               if (currentAttributes[i].includes("Start at")) {
                 continue;
               } 
@@ -5632,7 +5629,7 @@
           }
           
           $(document).ready(function(){
-            csvData = getShelters("https://mikecp11.github.io/RedCrossShelters_shortened.csv");   
+            csvData = getShelters("https://mikecp11.github.io/RedCrossShelters_shortened_shelters.csv");   
           });
           
           var csvArrays = $.csv.toArrays(csvData);
