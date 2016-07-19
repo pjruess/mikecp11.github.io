@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Flood HIPPO</title>
+    <title>HIPPO Shelters</title>
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
    
@@ -5510,6 +5510,8 @@
           initStart(startPoint);
         }
 
+        dom.byId("dir").innerHTML = "Hover over the route to view directions";
+
         // Solve closest facility task based on incidents, facilities, and polygon barriers
         function solveClosestFacil(){
           closestFacilityTask.solve(params, function(solveResult){
@@ -5525,9 +5527,7 @@
               var destination = route.attributes[route.attributes.length - 1];
               var destinationArray = destination.split(" ");
               var destinationId = destinationArray[3];
-              // esriLang.substitute(destination,)
 
-              dom.byId("dir").innerHTML = "Hover over the route to view directions";
               map.on("load", solveClosestFacil());
             });
           if(solveResult.messages.length > 0) {
@@ -5539,7 +5539,6 @@
 
         function drawRoutes(){
           map.graphics.enableMouseEvents();
-         
           routeGraphicsLayer.on("mouse-over", function(evt){
             //clear existing directions and highlight symbol
             map.graphics.clear();
